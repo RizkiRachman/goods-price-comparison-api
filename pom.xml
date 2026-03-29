@@ -26,14 +26,6 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
-        <!-- SonarCloud Configuration -->
-        <sonar.organization>rizkirachman</sonar.organization>
-        <sonar.projectKey>RizkiRachman_goods-price-comparison-api</sonar.projectKey>
-        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.java.checkstyle.reportPaths>target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
-        <sonar.exclusions>target/generated-sources/**/*</sonar.exclusions>
-        
         <!-- OpenAPI Generator -->
         <openapi-generator.version>7.1.0</openapi-generator.version>
         <swagger-annotations.version>2.2.20</swagger-annotations.version>
