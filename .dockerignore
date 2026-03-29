@@ -1,0 +1,65 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts (will be generated in container)
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Node.js (installed in container)
+node_modules/
+package.json
+package-lock.json
+
+# Logs
+*.log
+logs/
+
+# Documentation
+docs/
+*.md
+!.spectral.yaml
+
+# CI/CD configs
+.github/
+.gitlab-ci.yml
+Jenkinsfile
+
+# Test reports
+target/site/
+target/surefire-reports/
+
+# Coverage
+*.exec
+jacoco.exec
+target/jacoco/
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Misc
+*.zip
+*.tar.gz
+*.rar

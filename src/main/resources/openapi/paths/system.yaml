@@ -1,0 +1,28 @@
+openapi: 3.0.3
+info:
+  title: System Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/version:
+    get:
+      summary: Get API version information
+      description: |
+        Returns current API version, supported versions, and deprecation notices.
+        Use this endpoint to check API compatibility.
+      operationId: getApiVersion
+      tags:
+        - System
+      responses:
+        '200':
+          description: Version information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ApiVersionResponse'
+          headers:
+            X-API-Version:
+              description: Current API version
+              schema:
+                type: string
+                example: "v1"

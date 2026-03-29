@@ -1,0 +1,158 @@
+openapi: 3.0.3
+info:
+  title: Goods Price Comparison API
+  description: |
+    REST API for the Goods Price Comparison Service.
+    This API provides endpoints for:
+    - Receipt upload and OCR processing
+    - Price comparison across stores
+    - Shopping route optimization
+    - Price trend analysis
+    - Price alerts
+
+    ## API Versioning
+
+    This API uses URL path versioning. The current version is **v1**.
+
+    ### Versioning Strategy
+    - **URL Path**: Version is included in the URL path (e.g., `/v1/receipts/upload`)
+    - **Breaking Changes**: Only introduced in new major versions (v2, v3, etc.)
+    - **Deprecation**: Previous versions supported for 30 days after new version release
+    - **Version Header**: `X-API-Version` header included in all responses
+
+    ### Supported Versions
+    - **v1** (current) - `/v1/*` - Initial release
+    - **v2** (beta) - `/v2/*` - Enhanced features
+
+    ### Version Lifecycle
+    - **Beta**: Early access, may have breaking changes without notice
+    - **Stable**: Production ready, fully supported
+    - **Deprecated**: Still functional but will be removed
+    - **Sunset**: No longer available
+  version: 1.0.0
+  x-api-id: goods-price-comparison-api
+  x-api-version: v1
+  contact:
+    name: API Support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.goodsprice.com
+    description: Production server
+
+tags:
+  - name: System
+    description: System and API information endpoints
+  - name: Receipts
+    description: Receipt upload and OCR processing
+  - name: Prices
+    description: Price search and comparison
+  - name: Shopping
+    description: Shopping route optimization
+  - name: Products
+    description: Product information and trends
+  - name: Alerts
+    description: Price alert subscriptions
+
+paths:
+  /v1/version:
+    $ref: './paths/system.yaml#/paths/~1v1~1version'
+  /v1/receipts/upload:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1upload'
+  /v1/receipts/{id}/status:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1status'
+  /v1/receipts/{id}/results:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1results'
+  /v1/prices/search:
+    $ref: './paths/prices.yaml#/paths/~1v1~1prices~1search'
+  /v2/prices/search:
+    $ref: './paths/prices.yaml#/paths/~1v2~1prices~1search'
+  /v1/shopping/optimize:
+    $ref: './paths/shopping.yaml#/paths/~1v1~1shopping~1optimize'
+  /v1/products/trend/{productId}:
+    $ref: './paths/products.yaml#/paths/~1v1~1products~1trend~1{productId}'
+  /v1/alerts/subscribe:
+    $ref: './paths/alerts.yaml#/paths/~1v1~1alerts~1subscribe'
+
+components:
+  schemas:
+    # Common schemas
+    DateRange:
+      $ref: './schemas/common.yaml#/components/schemas/DateRange'
+    ErrorResponse:
+      $ref: './schemas/common.yaml#/components/schemas/ErrorResponse'
+    ErrorDetails:
+      $ref: './schemas/common.yaml#/components/schemas/ErrorDetails'
+    ValidationError:
+      $ref: './schemas/common.yaml#/components/schemas/ValidationError'
+    ApiVersionResponse:
+      $ref: './schemas/common.yaml#/components/schemas/ApiVersionResponse'
+    
+    # Request schemas
+    PriceSearchRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/PriceSearchRequest'
+    PriceSearchRequestV2:
+      $ref: './schemas/v2/prices.yaml#/components/schemas/PriceSearchRequestV2'
+    ShoppingOptimizeRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/ShoppingOptimizeRequest'
+    ShoppingPreferences:
+      $ref: './schemas/requests.yaml#/components/schemas/ShoppingPreferences'
+    AlertSubscriptionRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/AlertSubscriptionRequest'
+    
+    # Response schemas
+    ReceiptUploadResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ReceiptUploadResponse'
+    ReceiptStatusResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ReceiptStatusResponse'
+    ReceiptResultResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ReceiptResultResponse'
+    PriceSearchResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/PriceSearchResponse'
+    PriceSearchResponseV2:
+      $ref: './schemas/v2/prices.yaml#/components/schemas/PriceSearchResponseV2'
+    ShoppingOptimizeResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ShoppingOptimizeResponse'
+    ProductTrendResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ProductTrendResponse'
+    AlertSubscriptionResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/AlertSubscriptionResponse'
+    
+    # Model schemas
+    ReceiptItem:
+      $ref: './schemas/models.yaml#/components/schemas/ReceiptItem'
+    PriceResult:
+      $ref: './schemas/models.yaml#/components/schemas/PriceResult'
+    PriceResultV2:
+      $ref: './schemas/v2/prices.yaml#/components/schemas/PriceResultV2'
+    CheapestPrice:
+      $ref: './schemas/models.yaml#/components/schemas/CheapestPrice'
+    StoreVisit:
+      $ref: './schemas/models.yaml#/components/schemas/StoreVisit'
+    ShoppingItem:
+      $ref: './schemas/models.yaml#/components/schemas/ShoppingItem'
+    ShoppingSavings:
+      $ref: './schemas/models.yaml#/components/schemas/ShoppingSavings'
+    TrendDataPoint:
+      $ref: './schemas/models.yaml#/components/schemas/TrendDataPoint'
+
+  headers:
+    X-RateLimit-Limit:
+      description: Rate limit per minute
+      schema:
+        type: integer
+        example: 100
+    X-RateLimit-Remaining:
+      description: Remaining requests in current window
+      schema:
+        type: integer
+        example: 95
+    X-RateLimit-Reset:
+      description: Unix timestamp when limit resets
+      schema:
+        type: integer
+        example: 1648556400

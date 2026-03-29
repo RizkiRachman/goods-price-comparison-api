@@ -1,0 +1,180 @@
+openapi: 3.0.3
+info:
+  title: Model Schemas
+  version: 1.0.0
+
+components:
+  schemas:
+    ReceiptItem:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Product name
+          example: "Ultra Milk Plain Slim 200ml"
+        category:
+          type: string
+          description: Product category
+          example: "Dairy"
+        quantity:
+          type: number
+          format: double
+          description: Quantity purchased
+          example: 48.0
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600.00
+        totalPrice:
+          type: number
+          format: double
+          description: Total price for this item
+          example: 268800.00
+        unit:
+          type: string
+          description: Unit of measurement
+          example: "bottle"
+
+    PriceResult:
+      type: object
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store identifier
+          example: 1
+        storeName:
+          type: string
+          description: Store name
+          example: "DIAMOND"
+        storeLocation:
+          type: string
+          description: Store location
+          example: "Poins Square"
+        price:
+          type: number
+          format: double
+          description: Current price
+          example: 5600.00
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600.00
+        dateRecorded:
+          type: string
+          format: date
+          description: Date price was recorded
+          example: "2026-03-29"
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          example: false
+
+    CheapestPrice:
+      type: object
+      properties:
+        storeName:
+          type: string
+          description: Store with cheapest price
+          example: "Superindo"
+        price:
+          type: number
+          format: double
+          description: Cheapest price found
+          example: 5400.00
+        savings:
+          type: number
+          format: double
+          description: Savings compared to other stores
+          example: 200.00
+
+    StoreVisit:
+      type: object
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store identifier
+          example: 3
+        storeName:
+          type: string
+          description: Store name
+          example: "Superindo"
+        storeLocation:
+          type: string
+          description: Store location
+          example: "Poins Square"
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShoppingItem'
+        subtotal:
+          type: number
+          format: double
+          description: Subtotal for this store
+          example: 94900.00
+        estimatedTime:
+          type: string
+          description: Estimated time at this store
+          example: "15 mins"
+
+    ShoppingItem:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Product name
+          example: "Ultra Milk Plain Slim 200ml"
+        price:
+          type: number
+          format: double
+          description: Price at this store
+          example: 5400.00
+        quantity:
+          type: number
+          format: double
+          description: Quantity to purchase
+          example: 1.0
+
+    ShoppingSavings:
+      type: object
+      properties:
+        comparedToSingleStore:
+          type: number
+          format: double
+          description: Savings compared to buying all at one store
+          example: 45200.00
+        percentage:
+          type: number
+          format: double
+          description: Savings percentage
+          example: 10.7
+
+    TrendDataPoint:
+      type: object
+      properties:
+        period:
+          type: string
+          description: Time period
+          example: "2026-01-01"
+        avgPrice:
+          type: number
+          format: double
+          description: Average price in period
+          example: 5800.00
+        minPrice:
+          type: number
+          format: double
+          description: Minimum price in period
+          example: 5600.00
+        maxPrice:
+          type: number
+          format: double
+          description: Maximum price in period
+          example: 6000.00
+        dataPoints:
+          type: integer
+          description: Number of price records in period
+          example: 5

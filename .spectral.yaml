@@ -1,0 +1,43 @@
+extends: ["spectral:oas"]
+
+rules:
+  # Disable unused component check - we use $refs across files
+  oas3-unused-component: off
+  
+  # Core OpenAPI rules
+  operation-operationId: error
+  operation-description: error
+  operation-tags: error
+  operation-tag-defined: error
+  
+  # Documentation
+  info-contact: warn
+  info-license: warn
+  
+  # Custom rules for our API conventions
+  operation-summary-max-length:
+    description: Operation summary should be concise (max 120 characters)
+    given: "$.paths.*[get,post,put,delete,patch,options,head]"
+    then:
+      field: summary
+      function: length
+      functionOptions:
+        max: 120
+    severity: warn
+
+  path-param-description:
+    description: Path parameters must have descriptions
+    given: "$.paths.*.*.parameters[?(@.in == 'path')]"
+    then:
+      field: description
+      function: truthy
+    severity: error
+
+  no-empty-descriptions:
+    description: Descriptions should not be empty or whitespace only
+    given: "$..description"
+    then:
+      function: pattern
+      functionOptions:
+        match: "\\S"
+    severity: error

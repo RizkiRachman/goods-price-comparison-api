@@ -1,0 +1,40 @@
+openapi: 3.0.3
+info:
+  title: Shopping Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/shopping/optimize:
+    post:
+      summary: Optimize shopping route for a list of items
+      description: |
+        Get optimized shopping route for a list of items.
+        Strategy: Find store with most items, then cheapest for remainder.
+      operationId: optimizeShoppingRoute
+      tags:
+        - Shopping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/ShoppingOptimizeRequest'
+      responses:
+        '200':
+          description: Optimization completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ShoppingOptimizeResponse'
+        '400':
+          description: Invalid items list
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: One or more items not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

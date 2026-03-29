@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude generated code from OpenAPI Generator -->
+    <Match>
+        <Class name="~com\.example\.goodsprice\.api\.model\..*" />
+    </Match>
+    
+    <!-- Exclude invoker classes -->
+    <Match>
+        <Class name="~com\.example\.goodsprice\.invoker\..*" />
+    </Match>
+    
+    <!-- Exclude API interfaces -->
+    <Match>
+        <Class name="~com\.example\.goodsprice\.api\..*" />
+    </Match>
+</FindBugsFilter>

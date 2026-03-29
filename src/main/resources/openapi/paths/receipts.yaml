@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: Receipt Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/receipts/upload:
+    post:
+      summary: Upload receipt image for OCR processing
+      description: |
+        Upload a receipt image (JPG, PNG, or PDF) for OCR processing.
+        Returns a job ID to track the processing status.
+      operationId: uploadReceipt
+      tags:
+        - Receipts
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Receipt image file (max 10MB)
+              required:
+                - image
+      responses:
+        '202':
+          description: Upload successful, processing started
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptUploadResponse'
+        '400':
+          description: Invalid image format or size
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '413':
+          description: Image exceeds 10MB limit
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/receipts/{id}/status:
+    get:
+      summary: Check OCR processing status
+      description: |
+        Check the processing status of an uploaded receipt.
+        Status values: PROCESSING, COMPLETED, FAILED
+      operationId: getReceiptStatus
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      responses:
+        '200':
+          description: Status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptStatusResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/receipts/{id}/results:
+    get:
+      summary: Get OCR results
+      description: |
+        Retrieve extracted data from a processed receipt.
+        Only available when status is COMPLETED.
+      operationId: getReceiptResults
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      responses:
+        '200':
+          description: Results retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptResultResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Processing not yet completed
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

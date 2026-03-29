@@ -1,0 +1,85 @@
+openapi: 3.0.3
+info:
+  title: Request Schemas
+  version: 1.0.0
+
+components:
+  schemas:
+    PriceSearchRequest:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Product name to search for
+          example: "Ultra Milk Plain Slim"
+        dateRange:
+          $ref: './common.yaml#/components/schemas/DateRange'
+        location:
+          type: string
+          description: Filter by store location
+          example: "Jakarta Selatan"
+        sortBy:
+          type: string
+          enum: [price, date, store]
+          default: price
+          description: Sort field
+        sortOrder:
+          type: string
+          enum: [asc, desc]
+          default: asc
+          description: Sort order
+      required:
+        - productName
+
+    ShoppingOptimizeRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: string
+          description: List of product names to purchase
+          example: ["Ultra Milk Plain Slim 200ml", "Bawang Merah", "Telur Ayam"]
+        preferences:
+          $ref: '#/components/schemas/ShoppingPreferences'
+      required:
+        - items
+
+    ShoppingPreferences:
+      type: object
+      properties:
+        maxStores:
+          type: integer
+          minimum: 1
+          maximum: 5
+          default: 3
+          description: Maximum number of stores to visit
+        prioritizePrice:
+          type: boolean
+          default: true
+          description: Whether to prioritize lowest price over convenience
+
+    AlertSubscriptionRequest:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product ID to watch
+        targetPrice:
+          type: number
+          format: double
+          description: Target price threshold
+          example: 5000.00
+        notificationMethod:
+          type: string
+          enum: [email, push, sms]
+          description: Notification delivery method
+        email:
+          type: string
+          format: email
+          description: Email address for notifications
+      required:
+        - productId
+        - targetPrice
+        - notificationMethod

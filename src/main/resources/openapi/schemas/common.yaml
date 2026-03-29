@@ -1,0 +1,119 @@
+openapi: 3.0.3
+info:
+  title: Common Schemas
+  version: 1.0.0
+
+components:
+  schemas:
+    DateRange:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date
+          description: Start date
+          example: "2026-03-01"
+        to:
+          type: string
+          format: date
+          description: End date
+          example: "2026-03-29"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetails'
+
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: "VALIDATION_ERROR"
+        message:
+          type: string
+          description: Error message
+          example: "Invalid request data"
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: "2026-03-29T10:30:00Z"
+        path:
+          type: string
+          description: API path that caused the error
+          example: "/api/prices/search"
+
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field with error
+          example: "productName"
+        message:
+          type: string
+          description: Validation error message
+          example: "Product name is required"
+
+    ApiVersionResponse:
+      type: object
+      description: API version information
+      properties:
+        version:
+          type: string
+          description: Current API version
+          example: "v1"
+        fullVersion:
+          type: string
+          description: Full semantic version
+          example: "1.0.0"
+        status:
+          type: string
+          description: API status
+          enum: [stable, beta, deprecated, sunset]
+          example: "stable"
+        supportedVersions:
+          type: array
+          description: List of supported API versions
+          items:
+            type: object
+            properties:
+              version:
+                type: string
+                description: Version identifier
+                example: "v1"
+              status:
+                type: string
+                description: Version status
+                enum: [stable, beta, deprecated, sunset]
+                example: "stable"
+              baseUrl:
+                type: string
+                description: Base URL for this version
+                example: "/api/v1"
+        deprecationInfo:
+          type: object
+          description: Deprecation information (only present if deprecated)
+          nullable: true
+          properties:
+            deprecatedSince:
+              type: string
+              format: date
+              description: Deprecation date
+              example: "2026-06-01"
+            sunsetDate:
+              type: string
+              format: date
+              description: Date when version will be removed
+              example: "2026-09-01"
+            migrationGuide:
+              type: string
+              description: URL to migration guide
+              example: "https://docs.goodsprice.com/migration/v1-to-v2"
