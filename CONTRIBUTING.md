@@ -290,4 +290,14 @@ By contributing, you agree that your contributions will be licensed under the MI
 
 ---
 
+## Project Team
+
+### Core Contributors
+
+| Name | Email | Role | GitHub |
+|------|-------|------|--------|
+| **Rizki Rachman** | rizkifaizalr@gmail.com | Project Owner & Lead Developer | [@RizkiRachman](https://github.com/RizkiRachman) |
+
+---
+
 **Thank you for contributing!** 🚀

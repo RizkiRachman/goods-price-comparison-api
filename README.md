@@ -321,6 +321,16 @@ docker-compose up api-builder    # Podman supports docker-compose too!
 
 ---
 
+## Contributors
+
+| Name | Email | Role |
+|------|-------|------|
+| **Rizki Rachman** | rizkifaizalr@gmail.com | Project Owner & Lead Developer |
+
+Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+---
+
 **Tech Stack:** OpenAPI 3.0 | Java 17 | Maven | Spring Boot | Spectral
 
 **Version:** 1.0.0-SNAPSHOT (API v1)

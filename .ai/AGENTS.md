@@ -541,6 +541,21 @@ void shouldCalculateTotalPrice_WhenQuantityIsPositive() {
 
 ---
 
+## 👤 Project Maintainer
+
+**Rizki Rachman**
+- **Email:** rizkifaizalr@gmail.com
+- **GitHub:** [@RizkiRachman](https://github.com/RizkiRachman)
+- **Role:** Project Owner & Lead Developer
+
+**Contact for:**
+- Architectural decisions
+- Breaking changes approval
+- Security concerns
+- Performance optimization discussions
+
+---
+
 *Remember: Quality over speed. A perfect PR is better than a fast PR.*
 
 *Last updated: [AUTO-UPDATED BY CI]*
