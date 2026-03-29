@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dockerfile with multi-stage optimized build
 - docker-compose.yml for local development
 - Makefile with 15+ convenient commands
-- Qodana code quality integration
+- GitHub CodeQL for security analysis (replaces Qodana)
 
 #### Documentation
 - Comprehensive README with badges and table of contents
