@@ -50,6 +50,13 @@ jobs:
           name: api-jar
           path: target/
       
+      - name: Verify JAR exists
+        run: |
+          echo "Contents of target/:"
+          ls -la target/
+          echo "Checking JAR files:"
+          find target/ -name "*.jar" -type f
+      
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
@@ -78,3 +85,4 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          no-cache: false
