@@ -45,6 +45,9 @@ The main continuous integration and deployment workflow.
 #### 5. Build Container
 **Job:** `container`
 - Builds OCI image
+- **Multi-platform support:** linux/amd64 and linux/arm64
+  - `linux/amd64` - For Linux servers and Intel Macs
+  - `linux/arm64` - For Apple Silicon Macs (M1/M2/M3)
 - Pushes to GitHub Container Registry (ghcr.io)
 - Tags: branch name, commit SHA, latest
 

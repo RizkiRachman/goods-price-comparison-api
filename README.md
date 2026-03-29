@@ -343,6 +343,8 @@ On every **Pull Request** and **Push to main/develop**:
 
 - **Maven Package:** `https://github.com/RizkiRachman/goods-price-comparison-api/packages`
 - **Container Image:** `ghcr.io/rizkirachman/goods-price-comparison-api:latest`
+  - **Multi-platform:** Supports both AMD64 (Intel) and ARM64 (Apple Silicon)
+  - Works on Linux servers, Intel Macs, and Apple Silicon Macs (M1/M2/M3)
 
 ### Modifying Workflows
 
