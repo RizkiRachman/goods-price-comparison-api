@@ -8,12 +8,14 @@
 # ==========================================
 FROM eclipse-temurin:17-jdk-alpine AS builder
 
-# Install required tools
+# Install required tools including Maven
 RUN apk add --no-cache \
     curl \
     bash \
     nodejs \
     npm \
+    maven \
+    git \
     && rm -rf /var/cache/apk/*
 
 # Install Spectral CLI globally
