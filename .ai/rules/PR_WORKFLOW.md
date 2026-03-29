@@ -198,16 +198,42 @@ git push
 
 ### Step 7: Merge
 
-**Requirements for merge:**
+**⚠️ CRITICAL: AI Agents CANNOT Auto-Merge**
+
+**AI agents are FORBIDDEN from merging PRs automatically.**
+
+**Only the user can give merge permission.**
+
+### Getting Merge Permission
+
+**User must explicitly say:**
+- ✅ "Merge this PR"
+- ✅ "Approved, please merge"
+- ✅ "Go ahead and merge"
+- ✅ Similar explicit permission
+
+**Vague statements are NOT permission:**
+- ❌ "Looks good" 
+- ❌ "OK"
+- ❌ "👍"
+- ❌ Silence / no response
+
+### Requirements for merge:
 - ✅ All CI checks passing
-- ✅ Code review approved
+- ✅ Code review approved (by user or system)
 - ✅ No conflicts with main
 - ✅ Branch up to date
+- ✅ **User has explicitly given permission**
 
-**Merge methods:**
+### Merge methods:
 - **Squash & Merge** - Preferred (clean history)
 - **Rebase & Merge** - Linear history
 - **Merge Commit** - Preserves all commits
+
+**After merge command from user:**
+```bash
+gh pr merge <number> --squash --delete-branch
+```
 
 ```bash
 # After merge, clean up

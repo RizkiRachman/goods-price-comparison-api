@@ -63,8 +63,11 @@ Project-specific information:
 
 ### Critical Rules
 - **NEVER push to main** - Always use PR workflow
+- **NEVER auto-merge** - Wait for explicit user permission
 - **All checks must pass** before PR
 - **100% coverage** on new code
+
+**User must explicitly say "merge this PR" - vague approval is not enough.**
 
 ### Pre-PR Checklist
 ```bash

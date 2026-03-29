@@ -2,6 +2,30 @@
 
 Code quality standards and style guidelines for the project.
 
+## 🚨 Absolute Rules (MUST Follow)
+
+### 1. Never Push to Main
+**FORBIDDEN:**
+- Direct commits to `main`
+- Direct pushes to `main`
+- Using `--force` on main
+
+**ALWAYS use PR workflow.**
+
+### 2. Never Auto-Merge
+**AI agents CANNOT merge PRs automatically.**
+
+**FORBIDDEN:**
+- Auto-merging when CI passes
+- Merging without explicit user permission
+- Assuming approval from vague responses
+
+**REQUIRED:**
+- Wait for user to say: "merge this PR" or "approved, please merge"
+- Only explicit permission allows merge
+
+---
+
 ## Code Style
 
 ### Java Style Guide

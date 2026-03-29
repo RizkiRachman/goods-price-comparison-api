@@ -15,7 +15,24 @@ Quick reference for AI agents working on this project.
 - ✅ Push to feature branch: `git push origin feature/description`
 - ✅ Create Pull Request
 - ✅ Wait for CI + Review
-- ✅ Merge via PR
+
+### 2. NEVER Auto-Merge
+**AI CANNOT MERGE WITHOUT EXPLICIT PERMISSION**
+
+**❌ FORBIDDEN:**
+- Auto-merging when CI passes
+- Merging without user saying "merge this"
+- Assuming approval from "looks good" or 👍
+
+**✅ REQUIRED:**
+- Wait for explicit user instruction
+- User must say: "merge this PR" or "approved, please merge"
+- Only then execute merge command
+
+**If user says "stop" or "wait":**
+- STOP immediately
+- Do NOT merge
+- Wait for further instructions
 
 ### 2. Pre-PR Checklist (MUST PASS)
 
