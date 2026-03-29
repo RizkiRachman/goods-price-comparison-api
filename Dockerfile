@@ -1,22 +1,22 @@
 # syntax=docker/dockerfile:1
 
 # Multi-stage build for minimal image size
-# Optimized for Podman compatibility
+# Supports both linux/amd64 and linux/arm64 platforms
 
 # ==========================================
 # Stage 1: Build Environment
 # ==========================================
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM eclipse-temurin:17-jdk AS builder
 
 # Install required tools including Maven
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     curl \
     bash \
     nodejs \
     npm \
     maven \
     git \
-    && rm -rf /var/cache/apk/*
+    && rm -rf /var/lib/apt/lists/*
 
 # Install Spectral CLI globally
 RUN npm install -g @stoplight/spectral-cli@6.11.0 \
@@ -38,7 +38,8 @@ RUN spectral lint src/main/resources/openapi/main.yaml --ruleset .spectral.yaml
 # Remove Spectral and Node.js (not needed for Maven build)
 RUN npm uninstall -g @stoplight/spectral-cli \
     && npm cache clean --force \
-    && apk del nodejs npm
+    && apt-get purge -y nodejs npm \
+    && apt-get autoremove -y
 
 # Copy source code
 COPY src/ src/
@@ -57,7 +58,7 @@ RUN mvn clean package -DskipTests -q \
 # ==========================================
 # Stage 2: Runtime / Artifact Export
 # ==========================================
-FROM alpine:3.19 AS exporter
+FROM eclipse-temurin:17-jre AS exporter
 
 WORKDIR /output
 
@@ -70,7 +71,7 @@ RUN ls -lh *.jar > artifacts.txt
 # ==========================================
 # Stage 3: CI/CD Validation (Optional)
 # ==========================================
-FROM eclipse-temurin:17-jre-alpine AS validator
+FROM eclipse-temurin:17-jre AS validator
 
 WORKDIR /app
 
