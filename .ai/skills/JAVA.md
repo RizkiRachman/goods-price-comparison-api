@@ -279,6 +279,92 @@ list.sort(String::compareTo);
 Supplier<List<String>> listFactory = ArrayList::new;
 ```
 
+## Import Statements
+
+### Use Specific Imports (NO Wildcards)
+
+**❌ FORBIDDEN - Never use wildcard imports:**
+```java
+import java.util.*;
+import java.time.*;
+import com.example.goodsprice.model.*;
+```
+
+**✅ REQUIRED - Always import specific classes:**
+```java
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import com.example.goodsprice.model.Price;
+import com.example.goodsprice.model.Receipt;
+import com.example.goodsprice.model.Store;
+```
+
+**Why specific imports?**
+- Clear dependencies - see exactly what's used
+- No naming conflicts between packages
+- Better IDE navigation and refactoring
+- Easier code reviews
+- Self-documenting code
+
+### IntelliJ IDEA Settings
+
+To prevent IntelliJ from auto-converting to wildcard imports:
+
+1. **Settings** → **Editor** → **Code Style** → **Java** → **Imports**
+2. Set these values:
+   - **Class count to use import with '\*'**: `99`
+   - **Names count to use static import with '\*'**: `99`
+
+Or in `.idea/codeStyles/Project.xml`:
+```xml
+<code_scheme name="Project" version="173">
+  <JavaCodeStyleSettings>
+    <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+    <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99" />
+  </JavaCodeStyleSettings>
+</code_scheme>
+```
+
+### Import Organization
+
+**Group imports in this order:**
+1. `java.*` - Java standard library
+2. `javax.*` - Java extensions
+3. `org.*` - Third-party libraries (Spring, etc.)
+4. `com.*` - Other third-party
+5. Project imports - Your own packages
+
+**Example:**
+```java
+import java.util.List;
+import java.time.LocalDateTime;
+
+import javax.validation.constraints.NotNull;
+
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.goodsprice.model.Price;
+import com.example.goodsprice.service.PriceService;
+```
+
+### Static Imports
+
+**Use for:**
+- Test assertions: `import static org.junit.jupiter.api.Assertions.*;`
+- Constants: `import static com.example.Constants.MAX_RETRIES;`
+
+**Don't use for:**
+- General utility classes
+- When it reduces readability
+
 ## Best Practices
 
 ### DO
