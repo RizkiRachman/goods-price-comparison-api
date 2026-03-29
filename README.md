@@ -212,17 +212,59 @@ podman run --rm -v $(pwd)/output:/output goods-price-comparison-api:latest cp /o
 
 ## Using as Dependency
 
-Add to your `pom.xml`:
+### Published Artifacts
+
+Every merge to `main` automatically publishes:
+
+| Artifact | Location | URL |
+|----------|----------|-----|
+| **Maven Package** | GitHub Packages | `https://github.com/RizkiRachman/goods-price-comparison-api/packages` |
+| **Container Image** | GitHub Container Registry | `ghcr.io/rizkirachman/goods-price-comparison-api:latest` |
+
+### Using Maven Package
+
+Add GitHub Packages repository to your `pom.xml`:
 
 ```xml
-<dependency>
-    <groupId>com.example</groupId>
-    <artifactId>goods-price-comparison-api</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-</dependency>
+<repositories>
+    <repository>
+        <id>github</id>
+        <name>GitHub Packages</name>
+        <url>https://maven.pkg.github.com/RizkiRachman/goods-price-comparison-api</url>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>com.example</groupId>
+        <artifactId>goods-price-comparison-api</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </dependency>
+</dependencies>
 ```
 
-Then use generated DTOs:
+**Authentication required** - Add to `~/.m2/settings.xml`:
+```xml
+<servers>
+    <server>
+        <id>github</id>
+        <username>YOUR_GITHUB_USERNAME</username>
+        <password>YOUR_GITHUB_TOKEN</password>
+    </server>
+</servers>
+```
+
+### Using Container Image
+
+```bash
+# Pull from GitHub Container Registry
+docker pull ghcr.io/rizkirachman/goods-price-comparison-api:latest
+
+# Or with Podman
+podman pull ghcr.io/rizkirachman/goods-price-comparison-api:latest
+```
+
+### Using Generated DTOs
 
 ```java
 import com.example.goodsprice.api.model.PriceSearchRequest;
