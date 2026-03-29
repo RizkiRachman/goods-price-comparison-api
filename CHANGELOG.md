@@ -1,0 +1,93 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- New endpoints for advanced price analytics
+- Support for bulk receipt uploads
+- Enhanced filtering options for price search
+
+## [1.0.0-SNAPSHOT] - 2026-03-29
+
+### Added
+
+#### OpenAPI Specification
+- Split-by-resource structure for maintainability (`paths/` and `schemas/` directories)
+- 9 API endpoints:
+  - `/v1/version` - API version information
+  - `/v1/receipts/upload` - Receipt OCR upload
+  - `/v1/receipts/{id}/status` - OCR processing status
+  - `/v1/receipts/{id}/results` - OCR results retrieval
+  - `/v1/prices/search` - Basic price search (v1)
+  - `/v2/prices/search` - Enhanced price search with pagination, predictions, history (v2)
+  - `/v1/shopping/optimize` - Shopping route optimization
+  - `/v1/products/trend/{productId}` - Price trend analysis
+  - `/v1/alerts/subscribe` - Price drop alerts
+- Path-level versioning (`/v1/`, `/v2/`)
+- 35+ generated DTOs with Jakarta Bean Validation
+- Comprehensive request/response schemas
+- Error handling with standardized error responses
+
+#### Quality Assurance
+- Spectral linting for OpenAPI standards enforcement
+- Maven build with OpenAPI Generator plugin
+- Checkstyle integration (Google Java Style)
+- SpotBugs static analysis with exclusions for generated code
+- 90%+ test coverage requirement (100% for new code)
+
+#### CI/CD Pipeline
+- GitHub Actions workflow with 5 stages:
+  1. OpenAPI linting
+  2. Build & test
+  3. Code quality checks
+  4. Publish to GitHub Packages
+  5. Build OCI container image
+- Dockerfile with multi-stage optimized build
+- docker-compose.yml for local development
+- Makefile with 15+ convenient commands
+- Qodana code quality integration
+
+#### Documentation
+- Comprehensive README with badges and table of contents
+- CONTRIBUTING.md with detailed guidelines
+- AI agent guidelines (`.ai/` directory)
+- This CHANGELOG.md
+- Architecture diagrams and workflow documentation
+
+#### Container Support
+- Podman Desktop compatibility
+- Docker/Podman CLI support
+- Multi-stage Dockerfile for optimized builds
+- docker-compose services for development
+
+### Technical Details
+
+**Tech Stack:**
+- OpenAPI 3.0.3
+- Java 17+
+- Maven 3.9+
+- Spring Boot 3.2.0
+- Spectral CLI 6.11.0
+
+**Generated Artifacts:**
+- Java DTOs in `com.example.goodsprice.api.model` package
+- API interfaces in `com.example.goodsprice.api` package
+- Invoker classes in `com.example.goodsprice.invoker` package
+
+### Contributors
+- **Rizki Rachman** - Project Owner & Lead Developer ([@RizkiRachman](https://github.com/RizkiRachman))
+
+---
+
+## Version History
+
+- **1.0.0-SNAPSHOT** - Initial project setup (Current)
+
+## Notes
+
+This is an API-first/Contract-first project where the OpenAPI specification serves as the single source of truth for API contracts. The generated DTOs are used as a Maven dependency by the `goods-price-comparison-service` project.

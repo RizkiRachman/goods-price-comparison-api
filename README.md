@@ -22,6 +22,7 @@ OpenAPI specification and generated DTOs for the Goods Price Comparison Service.
 - [Using as Dependency](#using-as-dependency)
 - [Contributing](#contributing)
 - [Makefile Commands](#makefile-commands)
+- [Changelog](#changelog)
 
 ---
 
@@ -318,6 +319,20 @@ docker-compose up api-test       # Run tests
 # Or with Podman
 docker-compose up api-builder    # Podman supports docker-compose too!
 ```
+
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and version updates.
+
+### Recent Changes (v1.0.0-SNAPSHOT)
+
+- ✅ OpenAPI specification with 9 endpoints
+- ✅ Split-by-resource structure for maintainability
+- ✅ CI/CD pipeline with GitHub Actions
+- ✅ Container support (Docker/Podman)
+- ✅ Comprehensive documentation
 
 ---
 
