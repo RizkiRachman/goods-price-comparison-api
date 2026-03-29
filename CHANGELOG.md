@@ -12,6 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for bulk receipt uploads
 - Enhanced filtering options for price search
 
+### CI/CD Improvements
+- **Split workflows:** Separated CI into `ci-build.yml`, `ci-publish.yml`, `ci-release.yml`
+- **Automated releases:** GitHub releases created automatically on merge to main
+- **Container optimization:** Reduced image size from ~180MB to ~10MB
+  - Ultra-minimal Alpine-based Dockerfile (just copies JAR)
+  - Removed Java runtime (not needed for library project)
+  - Parallel matrix builds for AMD64/ARM64 platforms
+- **Build performance:** Optimized container build with caching (9min → ~3min)
+
 ## [1.0.0-SNAPSHOT] - 2026-03-29
 
 ### Added

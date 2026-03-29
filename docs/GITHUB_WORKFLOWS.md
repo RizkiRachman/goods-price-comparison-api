@@ -6,7 +6,9 @@ This document describes all GitHub Actions workflows used in this project.
 
 | Workflow | File | Purpose | Trigger |
 |----------|------|---------|---------|
-| **CI/CD Pipeline** | `ci.yml` | Main build, test, and publish | Push/PR to main/develop |
+| **CI Build** | `ci-build.yml` | Lint, build, test, quality checks | Push/PR to main/develop |
+| **CI Publish** | `ci-publish.yml` | Publish Maven package & container | Push to main |
+| **CI Release** | `ci-release.yml` | Auto-create GitHub releases | Push to main |
 | **CodeQL** | `codeql.yml` | Security vulnerability scanning | Push/PR + Weekly |
 
 ---
@@ -42,18 +44,17 @@ The main continuous integration and deployment workflow.
 - Only runs on push to main
 - Uses `GITHUB_TOKEN` (automatic)
 
-#### 5. Build Container
+#### 5. Build & Publish Container
 **Job:** `container`
-- Builds OCI image
+- Builds OCI image using pre-built JAR artifact
 - **Multi-platform support:** linux/amd64 and linux/arm64
   - `linux/amd64` - For Linux servers and Intel Macs
   - `linux/arm64` - For Apple Silicon Macs (M1/M2/M3)
-- **Image Size Note:** Uses Ubuntu-based images (~180MB) instead of Alpine (~50MB)
-  - Trade-off: Larger size for multi-platform compatibility
-  - Benefit: Works on both Intel and Apple Silicon Macs
-  - Alternative: Alpine doesn't support ARM64 well
+- **Ultra-minimal image:** Uses Alpine base (~10MB)
+  - Just holds the JAR artifact (library project, no runtime needed)
+  - Multi-stage build with artifact download from Maven job
 - Pushes to GitHub Container Registry (ghcr.io)
-- Tags: branch name, commit SHA, latest
+- Tags: `latest`, commit SHA
 
 ### Environment Variables
 
