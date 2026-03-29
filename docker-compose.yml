@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # API Builder Service
+  # ==========================================
+  api-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: goods-price-comparison-api:latest
+    container_name: api-builder
+    volumes:
+      - ./output:/output
+    command: ["sh", "-c", "cp /build/target/*.jar /output/"]
+
+  # ==========================================
+  # Spectral Linter Service
+  # ==========================================
+  spectral-lint:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: goods-price-comparison-api:latest
+    container_name: spectral-linter
+    command: ["spectral", "lint", "src/main/resources/openapi/main.yaml", "--ruleset", ".spectral.yaml"]
+
+  # ==========================================
+  # Test Runner Service
+  # ==========================================
+  api-test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: goods-price-comparison-api:latest
+    container_name: api-test-runner
+    command: ["mvn", "test"]
+
+  # ==========================================
+  # Development Environment
+  # ==========================================
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: goods-price-comparison-api:latest
+    container_name: api-dev
+    volumes:
+      - .:/workspace
+      - maven-cache:/root/.m2
+    working_dir: /workspace
+    command: ["sleep", "infinity"]
+    stdin_open: true
+    tty: true
+
+volumes:
+  maven-cache:
+    driver: local

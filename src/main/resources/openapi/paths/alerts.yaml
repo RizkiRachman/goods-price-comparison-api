@@ -1,0 +1,40 @@
+openapi: 3.0.3
+info:
+  title: Alert Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/alerts/subscribe:
+    post:
+      summary: Subscribe to price drop alerts
+      description: |
+        Subscribe to price drop alerts for a specific product.
+        Notification will be sent when price drops to target or below.
+      operationId: subscribeToAlert
+      tags:
+        - Alerts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/AlertSubscriptionRequest'
+      responses:
+        '201':
+          description: Subscription created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/AlertSubscriptionResponse'
+        '400':
+          description: Invalid subscription data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

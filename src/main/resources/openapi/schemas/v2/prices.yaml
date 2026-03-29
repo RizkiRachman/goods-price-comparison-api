@@ -1,0 +1,272 @@
+openapi: 3.0.3
+info:
+  title: V2 Price Schemas
+  version: 1.0.0
+
+components:
+  schemas:
+    PriceSearchRequestV2:
+      type: object
+      description: |
+        **VERSION 2** - Enhanced price search request with additional features:
+        - Pagination support
+        - Advanced filtering options
+        - Price prediction flag
+      properties:
+        productName:
+          type: string
+          description: Product name to search for (supports partial matching)
+          example: "Ultra Milk"
+        dateRange:
+          $ref: '../common.yaml#/components/schemas/DateRange'
+        location:
+          type: string
+          description: Filter by store location
+          example: "Jakarta Selatan"
+        brand:
+          type: string
+          description: Filter by product brand
+          example: "Ultra Milk"
+        category:
+          type: string
+          description: Filter by product category
+          example: "Dairy"
+        storeChain:
+          type: string
+          description: Filter by store chain name
+          example: "Superindo"
+        sortBy:
+          type: string
+          enum: [price, date, store, relevance]
+          default: relevance
+          description: Sort field (v2 adds relevance scoring)
+        sortOrder:
+          type: string
+          enum: [asc, desc]
+          default: asc
+          description: Sort order
+        includePrediction:
+          type: boolean
+          default: false
+          description: Include price prediction for next 7 days
+        includeHistory:
+          type: boolean
+          default: false
+          description: Include 30-day price history
+        page:
+          type: integer
+          default: 1
+          minimum: 1
+          description: Page number for pagination
+        pageSize:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+          description: Number of results per page
+      required:
+        - productName
+
+    PriceSearchResponseV2:
+      type: object
+      description: |
+        **VERSION 2** - Enhanced price search response with additional features:
+        - Pagination metadata
+        - Price predictions
+        - Historical price data
+        - Price trend indicators
+      properties:
+        productName:
+          type: string
+          description: Full product name
+          example: "Ultra Milk Plain Slim 200ml"
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceResultV2'
+        cheapest:
+          $ref: '../models.yaml#/components/schemas/CheapestPrice'
+        pagination:
+          type: object
+          description: Pagination metadata
+          properties:
+            page:
+              type: integer
+              description: Current page number
+              example: 1
+            pageSize:
+              type: integer
+              description: Number of items per page
+              example: 20
+            totalItems:
+              type: integer
+              description: Total number of matching items
+              example: 150
+            totalPages:
+              type: integer
+              description: Total number of pages
+              example: 8
+            hasNext:
+              type: boolean
+              description: Whether there are more pages
+              example: true
+            hasPrevious:
+              type: boolean
+              description: Whether there are previous pages
+              example: false
+        predictions:
+          type: object
+          description: Price predictions (only if includePrediction=true)
+          nullable: true
+          properties:
+            nextWeekPrice:
+              type: number
+              format: double
+              description: Predicted price for next week
+              example: 5300.00
+            confidence:
+              type: number
+              format: double
+              minimum: 0
+              maximum: 1
+              description: Prediction confidence (0-1)
+              example: 0.85
+            trend:
+              type: string
+              enum: [rising, falling, stable]
+              description: Predicted price trend
+              example: "falling"
+        metadata:
+          type: object
+          description: Additional search metadata
+          properties:
+            searchTime:
+              type: string
+              format: date-time
+              description: When the search was performed
+              example: "2026-03-29T10:30:00Z"
+            resultCount:
+              type: integer
+              description: Number of results in this response
+              example: 20
+            filtersApplied:
+              type: array
+              items:
+                type: string
+              description: List of filters that were applied
+              example: ["location:Jakarta Selatan", "brand:Ultra Milk"]
+
+    PriceResultV2:
+      type: object
+      description: |
+        **VERSION 2** - Enhanced price result with historical data and trends
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store identifier
+          example: 1
+        storeName:
+          type: string
+          description: Store name
+          example: "DIAMOND"
+        storeLocation:
+          type: string
+          description: Store location
+          example: "Poins Square"
+        storeChain:
+          type: string
+          description: Store chain/brand name
+          example: "Diamond Supermarket"
+        price:
+          type: number
+          format: double
+          description: Current price
+          example: 5600.00
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600.00
+        dateRecorded:
+          type: string
+          format: date-time
+          description: Date and time price was recorded
+          example: "2026-03-29T14:30:00Z"
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          example: false
+        promoDetails:
+          type: object
+          description: Promotion details (only if isPromo=true)
+          nullable: true
+          properties:
+            promoType:
+              type: string
+              enum: [discount, bundle, buy_one_get_one, clearance]
+              description: Type of promotion
+              example: "discount"
+            discountPercentage:
+              type: number
+              format: double
+              description: Discount percentage
+              example: 10.0
+            validUntil:
+              type: string
+              format: date-time
+              description: Promotion end date
+              example: "2026-04-05T23:59:59Z"
+        priceHistory:
+          type: array
+          description: 30-day price history (only if includeHistory=true)
+          nullable: true
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                description: Date of price record
+                example: "2026-03-01"
+              price:
+                type: number
+                format: double
+                description: Price on that date
+                example: 5800.00
+        priceChange:
+          type: object
+          description: Price change statistics
+          properties:
+            changeAmount:
+              type: number
+              format: double
+              description: Price change from last week
+              example: -200.00
+            changePercentage:
+              type: number
+              format: double
+              description: Percentage change
+              example: -3.45
+            trend:
+              type: string
+              enum: [rising, falling, stable]
+              description: Price trend direction
+              example: "falling"
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, unknown]
+          description: Product availability status
+          example: "in_stock"
+        distance:
+          type: number
+          format: double
+          description: Distance to store in kilometers
+          example: 2.5
+        relevanceScore:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Search relevance score (0-1)
+          example: 0.95

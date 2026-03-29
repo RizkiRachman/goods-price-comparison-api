@@ -1,0 +1,171 @@
+openapi: 3.0.3
+info:
+  title: Response Schemas
+  version: 1.0.0
+
+components:
+  schemas:
+    ReceiptUploadResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier for tracking
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        status:
+          type: string
+          enum: [PROCESSING, COMPLETED, FAILED]
+          description: Current processing status
+          example: "PROCESSING"
+        message:
+          type: string
+          description: Human-readable status message
+          example: "Receipt uploaded successfully. Processing started."
+
+    ReceiptStatusResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier
+        status:
+          type: string
+          enum: [PROCESSING, COMPLETED, FAILED]
+          description: Current processing status
+        progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Processing progress percentage
+          example: 75
+        message:
+          type: string
+          description: Status message
+          example: "OCR processing completed successfully"
+
+    ReceiptResultResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier
+        storeName:
+          type: string
+          description: Store name from receipt
+          example: "DIAMOND"
+        storeLocation:
+          type: string
+          description: Store location from receipt
+          example: "Poins Square"
+        date:
+          type: string
+          format: date
+          description: Receipt date
+          example: "2026-03-29"
+        items:
+          type: array
+          items:
+            $ref: './models.yaml#/components/schemas/ReceiptItem'
+        totalAmount:
+          type: number
+          format: double
+          description: Total receipt amount
+          example: 1207206.00
+
+    PriceSearchResponse:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Full product name
+          example: "Ultra Milk Plain Slim 200ml"
+        results:
+          type: array
+          items:
+            $ref: './models.yaml#/components/schemas/PriceResult'
+        cheapest:
+          $ref: './models.yaml#/components/schemas/CheapestPrice'
+
+    ShoppingOptimizeResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items in shopping list
+          example: 5
+        totalCost:
+          type: number
+          format: double
+          description: Total estimated cost
+          example: 375200.00
+        storesToVisit:
+          type: integer
+          description: Number of stores to visit
+          example: 2
+        route:
+          type: array
+          items:
+            $ref: './models.yaml#/components/schemas/StoreVisit'
+        savings:
+          $ref: './models.yaml#/components/schemas/ShoppingSavings'
+
+    ProductTrendResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product identifier
+          example: 1
+        productName:
+          type: string
+          description: Product name
+          example: "Ultra Milk Plain Slim 200ml"
+        trend:
+          type: array
+          items:
+            $ref: './models.yaml#/components/schemas/TrendDataPoint'
+        trendDirection:
+          type: string
+          enum: [increasing, decreasing, stable]
+          description: Overall trend direction
+          example: "decreasing"
+        priceChange:
+          type: number
+          format: double
+          description: Price change percentage
+          example: -3.4
+
+    AlertSubscriptionResponse:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+          description: Unique subscription identifier
+          example: "sub-12345"
+        status:
+          type: string
+          enum: [ACTIVE, PAUSED, EXPIRED]
+          description: Subscription status
+          example: "ACTIVE"
+        productName:
+          type: string
+          description: Product name
+          example: "Ultra Milk Plain Slim 200ml"
+        currentPrice:
+          type: number
+          format: double
+          description: Current product price
+          example: 5600.00
+        targetPrice:
+          type: number
+          format: double
+          description: Target price threshold
+          example: 5000.00
+        message:
+          type: string
+          description: Confirmation message
+          example: "You will be notified when price drops to Rp 5,000 or below"

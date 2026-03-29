@@ -1,0 +1,87 @@
+openapi: 3.0.3
+info:
+  title: Price Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/prices/search:
+    post:
+      summary: Search for product prices across stores
+      description: |
+        Search for product prices across all stores with filtering
+        and sorting options.
+      operationId: searchPrices
+      tags:
+        - Prices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/PriceSearchRequest'
+      responses:
+        '200':
+          description: Search completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/PriceSearchResponse'
+        '400':
+          description: Invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v2/prices/search:
+    post:
+      summary: Search for product prices (v2)
+      description: |
+        **VERSION 2** - Enhanced price search with additional features:
+        - Pagination support
+        - Advanced filtering (brand, category, store chain)
+        - Price prediction
+        - Historical price comparison
+        
+        This is an example of API versioning where v2 provides
+        enhanced functionality over v1.
+      operationId: searchPricesV2
+      tags:
+        - Prices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/v2/prices.yaml#/components/schemas/PriceSearchRequestV2'
+      responses:
+        '200':
+          description: Search completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/v2/prices.yaml#/components/schemas/PriceSearchResponseV2'
+          headers:
+            X-API-Version:
+              description: API version
+              schema:
+                type: string
+                example: "v2"
+        '400':
+          description: Invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
