@@ -22,6 +22,7 @@ OpenAPI specification and generated DTOs for the Goods Price Comparison Service.
 - [Local Development with Podman Desktop](#local-development-with-podman-desktop)
 - [Using as Dependency](#using-as-dependency)
 - [Contributing](#contributing)
+- [CI/CD Pipeline](#cicd-pipeline)
 - [Makefile Commands](#makefile-commands)
 - [Changelog](#changelog)
 
@@ -299,9 +300,46 @@ request.setProductName("Ultra Milk");
 
 ---
 
+## CI/CD Pipeline
+
+This project uses **GitHub Actions** for automated testing and deployment.
+
+### Active Workflows
+
+| Workflow | Purpose | Status |
+|----------|---------|--------|
+| **CI/CD** | Build, test, and publish artifacts | ✅ Active |
+| **CodeQL** | Security vulnerability scanning | ✅ Active |
+
+### What Runs Automatically
+
+On every **Pull Request** and **Push to main/develop**:
+1. ✅ OpenAPI specification linting (Spectral)
+2. ✅ Maven build and tests
+3. ✅ Code quality checks (Checkstyle, SpotBugs)
+4. ✅ Security analysis (CodeQL)
+5. ✅ Artifact publishing (GitHub Packages)
+6. ✅ Container image build (GHCR)
+
+### Access Published Artifacts
+
+- **Maven Package:** `https://github.com/RizkiRachman/goods-price-comparison-api/packages`
+- **Container Image:** `ghcr.io/rizkirachman/goods-price-comparison-api:latest`
+
+### Modifying Workflows
+
+See [docs/GITHUB_WORKFLOWS.md](docs/GITHUB_WORKFLOWS.md) for detailed documentation on:
+- Workflow structure and jobs
+- How to update and improve workflows
+- Best practices and troubleshooting
+- Adding new workflows
+
+---
+
 ## Documentation
 
 - **OpenAPI Spec**: View in `src/main/resources/openapi/main.yaml`
+- **GitHub Workflows**: See [docs/GITHUB_WORKFLOWS.md](docs/GITHUB_WORKFLOWS.md) for CI/CD documentation
 - **AI Guidelines**: See [.ai/AGENTS.md](.ai/AGENTS.md)
 - **Full API Docs**: See [goods-price-comparison-service/docs/API.md](../goods-price-comparison-service/docs/API.md)
 
