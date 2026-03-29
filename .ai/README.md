@@ -1,181 +1,111 @@
-# AI Documentation Index
+# AI Documentation
 
-Welcome, AI Agent! This folder contains all guidelines for working on the goods-price-comparison-api project.
+Welcome! This folder contains documentation for AI agents working on this project.
 
----
+## 📂 Folder Structure
 
-## 📚 Quick Reference
+```
+.ai/
+├── AGENTS.md              ← Quick reference (START HERE)
+├── README.md              ← This file - navigation guide
+├── rules/                 ← Standards and guidelines (MUST follow)
+│   ├── CODING_STANDARDS.md
+│   ├── PR_WORKFLOW.md
+│   ├── GIT_WORKFLOW.md
+│   └── OPENAPI_STANDARDS.md
+├── skills/                ← Technical how-to guides
+│   ├── JAVA.md
+│   ├── TESTING.md
+│   └── CONTAINERS.md
+└── context/               ← Project-specific information
+    ├── PROJECT_OVERVIEW.md
+    └── DECISION_LOG.md
+```
 
-| Document | Purpose | When to Read |
-|----------|---------|--------------|
-| [AGENTS.md](AGENTS.md) | Main guidelines, PR blocking rules, quality standards | **Before starting any work** |
-| [RULES.md](RULES.md) | Coding standards, naming conventions, forbidden patterns | **Before writing code** |
-| [SKILLS.md](SKILLS.md) | Required technical skills and capabilities | **Review for context** |
-| [PR_WORKFLOW.md](PR_WORKFLOW.md) | Step-by-step PR creation with blocking checks | **Before creating PR** |
-| [COVERAGE.md](COVERAGE.md) | Detailed coverage requirements and how to achieve | **When tests fail coverage** |
+## 🚀 Getting Started
 
----
+**New to this project?**
+1. Read [AGENTS.md](./AGENTS.md) - Quick reference with critical rules
+2. Read [context/PROJECT_OVERVIEW.md](./context/PROJECT_OVERVIEW.md) - Understand the project
+3. Check [rules/PR_WORKFLOW.md](./rules/PR_WORKFLOW.md) - Learn the PR process
 
-## 🚀 Quick Start for AI Agents
+## 📋 Rules (MUST Follow)
 
-### 1. First Time Here?
+These are **mandatory** standards:
 
-1. Read [AGENTS.md](AGENTS.md) - This is your bible
-2. Read [RULES.md](RULES.md) - Learn the coding standards
-3. Review project [README.md](../README.md) - Understand the project
+| Rule | File | Purpose |
+|------|------|---------|
+| **PR Workflow** | [rules/PR_WORKFLOW.md](./rules/PR_WORKFLOW.md) | How to submit changes |
+| **Coding Standards** | [rules/CODING_STANDARDS.md](./rules/CODING_STANDARDS.md) | Code style and quality |
+| **Git Workflow** | [rules/GIT_WORKFLOW.md](./rules/GIT_WORKFLOW.md) | Branch strategy |
+| **OpenAPI Standards** | [rules/OPENAPI_STANDARDS.md](./rules/OPENAPI_STANDARDS.md) | API specification rules |
 
-### 2. Before Writing Code
+## 🛠️ Skills (Reference)
 
-Check [RULES.md](RULES.md) for:
-- Naming conventions
-- Code structure
-- Testing requirements
-- Documentation standards
+Technical guides for common tasks:
 
-### 3. Before Creating PR
+| Skill | File | Topics |
+|-------|------|--------|
+| **Java** | [skills/JAVA.md](./skills/JAVA.md) | Java 17+, Streams, Optional, Records |
+| **Testing** | [skills/TESTING.md](./skills/TESTING.md) | JUnit 5, Mockito, Integration tests |
+| **Containers** | [skills/CONTAINERS.md](./skills/CONTAINERS.md) | Docker, Podman, Multi-platform builds |
 
-Follow [PR_WORKFLOW.md](PR_WORKFLOW.md):
+## 📖 Context (Understand)
+
+Project-specific information:
+
+| Document | File | Content |
+|----------|------|---------|
+| **Project Overview** | [context/PROJECT_OVERVIEW.md](./context/PROJECT_OVERVIEW.md) | What this project does, goals |
+| **Decision Log** | [context/DECISION_LOG.md](./context/DECISION_LOG.md) | Why certain decisions were made |
+
+## ⚡ Quick Reference
+
+### Critical Rules
+- **NEVER push to main** - Always use PR workflow
+- **NEVER auto-merge** - Wait for explicit user permission
+- **All checks must pass** before PR
+- **100% coverage** on new code
+
+**User must explicitly say "merge this PR" - vague approval is not enough.**
+
+### Pre-PR Checklist
 ```bash
-# Run these in order:
-1. mvn clean compile -q          # Must pass
-2. mvn test                      # Must pass (100%)
-3. mvn jacoco:report             # Check coverage >= 90%
-4. mvn checkstyle:check          # Must pass (0 violations)
-5. mvn spotbugs:check            # Must pass (0 high priority)
-6. ./scripts/update-readme.sh    # Update documentation
-7. git commit && git push
-8. Create PR only after ALL pass
+make build      # Must pass
+make test       # Must pass  
+make ci-check   # Must pass
+make lint       # Must pass
 ```
 
----
-
-## 🎯 Key Reminders
-
-### PR Blocking (NON-NEGOTIABLE)
-
-```
-❌ Cannot create PR if:
-   - Build fails
-   - Tests fail
-   - Coverage < 90% (existing) or < 100% (new)
-   - Checkstyle violations
-   - SpotBugs high priority bugs
-   - README not updated
+### Common Commands
+```bash
+# Git workflow
+git checkout -b feature/name
+git add .
+git commit -m "feat: description"
+git push -u origin feature/name
+gh pr create
 ```
 
-### Code Coverage Requirements
+## 🎯 Project Type
 
-```
-Existing Code: >= 90%
-New Code:      100% (mandatory)
-Target:        95%+
-```
-
-### Documentation Structure
-
-```
-Root: Only README.md
-Docs: Link to docs/ folder
-AI:   This .ai/ folder (AI only, humans don't edit)
-```
-
----
+This is an **API Specification Project**:
+- Defines OpenAPI contracts (not the actual service)
+- Generates Java DTOs automatically
+- Used as Maven dependency by service project
 
 ## 🆘 Need Help?
 
-### Common Issues
+1. **Check the docs first** - Look in appropriate folder
+2. **Check AGENTS.md** - Quick reference
+3. **Ask human** for: architectural decisions, breaking changes, security
 
-**Build fails?**
-→ Check [AGENTS.md](AGENTS.md) - Build Verification section
+## 👤 Maintainer
 
-**Tests fail?**
-→ Check [RULES.md](RULES.md) - Testing Rules section
-
-**Coverage low?**
-→ Check [COVERAGE.md](COVERAGE.md) - Coverage Improvement section
-
-**Don't know how to structure code?**
-→ Check [RULES.md](RULES.md) - Class Design Rules
-
-**Unsure about a feature?**
-→ Check project [README.md](../README.md) - Roadmap section
+**Rizki Rachman**
+- Email: rizkifaizalr@gmail.com
+- GitHub: [@RizkiRachman](https://github.com/RizkiRachman)
 
 ---
 
-## 📋 Pre-Work Checklist
-
-Before starting any task:
-
-- [ ] Read AGENTS.md completely
-- [ ] Understand the feature/requirement
-- [ ] Check existing code patterns
-- [ ] Review RULES.md for relevant section
-- [ ] Plan test strategy (aim for 100% coverage)
-
----
-
-## ✅ Pre-PR Checklist
-
-Before creating PR:
-
-- [ ] `mvn clean compile -q` passes
-- [ ] `mvn test` passes (100%)
-- [ ] Coverage >= 90% (100% for new code)
-- [ ] Checkstyle passes (0 violations)
-- [ ] SpotBugs passes (0 high priority)
-- [ ] Spectral linting passes (`spectral lint src/main/resources/openapi/main.yaml`)
-- [ ] Integration tests pass
-- [ ] README.md updated with changes
-- [ ] JavaDoc added for public methods
-- [ ] No TODO/FIXME without issue number
-- [ ] Meaningful commit messages
-
-**Only then create PR!**
-
----
-
-## 🔗 External Resources
-
-### Project Documentation
-- [Main README](../README.md) - Project overview
-- [Architecture](../docs/ARCHITECTURE.md) - System design
-- [API Docs](../docs/API.md) - API endpoints
-- [Database](../docs/DATABASE.md) - Schema details
-
-### Related Projects
-- [common-utils-java](https://github.com/RizkiRachman/common-utils-java)
-- [common-exception-java](https://github.com/RizkiRachman/common-exception-java)
-
----
-
-## 🎓 Learning Path
-
-### For New AI Agents
-
-1. **Day 1**: Read AGENTS.md + RULES.md
-2. **Day 2**: Review existing code structure
-3. **Day 3**: Attempt small fix/feature with PR
-4. **Ongoing**: Reference docs as needed
-
-### For Experienced Agents
-
-1. Quick scan of AGENTS.md (check for updates)
-2. Review PR_WORKFLOW.md for any changes
-3. Start development
-
----
-
-## 📝 Document Updates
-
-These documents are living documents:
-- Updated when new patterns emerge
-- Modified when standards change
-- Improved based on PR feedback
-
-**Last Updated**: [AUTO-UPDATED BY CI]
-
----
-
-**Remember: Quality over speed. Read before coding, test before PR.**
-
-*Happy coding, AI Agent! 🤖*
+**For Humans:** This folder is for AI agent documentation. Humans should check the main [README.md](../README.md) and [docs/](../docs/) folder.

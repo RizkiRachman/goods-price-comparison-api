@@ -48,6 +48,10 @@ The main continuous integration and deployment workflow.
 - **Multi-platform support:** linux/amd64 and linux/arm64
   - `linux/amd64` - For Linux servers and Intel Macs
   - `linux/arm64` - For Apple Silicon Macs (M1/M2/M3)
+- **Image Size Note:** Uses Ubuntu-based images (~180MB) instead of Alpine (~50MB)
+  - Trade-off: Larger size for multi-platform compatibility
+  - Benefit: Works on both Intel and Apple Silicon Macs
+  - Alternative: Alpine doesn't support ARM64 well
 - Pushes to GitHub Container Registry (ghcr.io)
 - Tags: branch name, commit SHA, latest
 
