@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### CI/CD Improvements
 - **Split workflows:** Separated CI into `ci-build.yml`, `ci-publish.yml`, `ci-release.yml`
 - **Automated releases:** GitHub releases created automatically on merge to main
-- **Container optimization:** Reduced image size from ~180MB to ~10MB
+- **Container optimization:** Reduced image size from ~293MB to ~17MB
   - Ultra-minimal Alpine-based Dockerfile (just copies JAR)
   - Removed Java runtime (not needed for library project)
   - Parallel matrix builds for AMD64/ARM64 platforms
