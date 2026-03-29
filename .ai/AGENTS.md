@@ -6,6 +6,41 @@ Build a production-ready price comparison service with the highest code quality 
 
 ---
 
+## 🚨 ABSOLUTE RULE: NEVER PUSH TO MAIN
+
+**⚠️ THIS IS THE MOST IMPORTANT RULE ⚠️**
+
+**AI AGENTS ARE STRICTLY FORBIDDEN FROM:**
+- ❌ Pushing directly to `main` branch
+- ❌ Committing to `main` branch
+- ❌ Merging without a Pull Request
+- ❌ Bypassing branch protection rules
+- ❌ Using `--force` or `--admin` flags to push to main
+
+**✅ CORRECT WORKFLOW:**
+1. Create feature branch: `git checkout -b feature/description`
+2. Make changes on feature branch
+3. Commit to feature branch
+4. Push feature branch: `git push origin feature/description`
+5. Create Pull Request via GitHub CLI or web
+6. Wait for CI checks to pass
+7. Get approval (if required)
+8. Merge via PR (not direct push)
+
+**CONSEQUENCES OF VIOLATION:**
+- Breaks audit trail
+- Bypasses code review
+- Violates team workflow
+- Can introduce untested code to production
+
+**IF YOU PUSHED TO MAIN BY MISTAKE:**
+1. Immediately inform the team
+2. Do NOT try to fix it with more direct pushes
+3. Create a revert PR if needed
+4. Document what happened
+
+---
+
 ## 🚫 CRITICAL: PR Blocking Rules
 
 **AI CANNOT create a PR if ANY of these conditions are not met:**
