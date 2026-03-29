@@ -5,6 +5,8 @@ OpenAPI specification and generated DTOs for the Goods Price Comparison Service.
 **API-First Design** | **Path Versioning** | **Automated Code Generation**
 
 [![CI/CD](https://github.com/RizkiRachman/goods-price-comparison-api/actions/workflows/ci.yml/badge.svg)](https://github.com/RizkiRachman/goods-price-comparison-api/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=RizkiRachman_goods-price-comparison-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=RizkiRachman_goods-price-comparison-api)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=RizkiRachman_goods-price-comparison-api&metric=coverage)](https://sonarcloud.io/summary/new_code?id=RizkiRachman_goods-price-comparison-api)
 [![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0.3-green)](https://spec.openapis.org/oas/v3.0.3)
 [![Java](https://img.shields.io/badge/Java-17-blue)](https://adoptium.net/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
