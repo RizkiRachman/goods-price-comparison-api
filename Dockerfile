@@ -6,6 +6,8 @@
 # ==========================================
 # Stage 1: Build Environment
 # ==========================================
+# Using non-Alpine for multi-platform support (AMD64 + ARM64)
+# Size trade-off: Larger than Alpine but supports Apple Silicon
 FROM eclipse-temurin:17-jdk AS builder
 
 # Install required tools including Maven
