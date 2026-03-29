@@ -204,6 +204,21 @@ git push
 
 **Only the user can give merge permission.**
 
+**⚠️ NO CARRY-OVER PERMISSION:**
+- ❌ NEVER assume permission from previous conversations
+- ❌ NEVER assume permission from previous sessions
+- ❌ NEVER use "last time you said" or "you previously approved"
+- ✅ **ALWAYS ask for fresh permission in the current conversation**
+- ✅ Permission must be explicitly given in THIS session
+
+**Example:**
+```
+User (yesterday): "Merge PR #5"
+[Next day, new session]
+AI: "I see PR #6 is ready. Do you want me to merge it?"  ✓ CORRECT
+AI: "Merging PR #6 now since you said to merge yesterday"  ✗ WRONG
+```
+
 ### Getting Merge Permission
 
 **User must explicitly say:**
