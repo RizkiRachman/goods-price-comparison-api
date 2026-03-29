@@ -7,6 +7,7 @@ on:
       - 'src/**'
       - 'pom.xml'
       - 'Dockerfile'
+      - '.github/workflows/ci-publish.yml'
 
 jobs:
   publish-maven:
