@@ -10,9 +10,10 @@ Makefile
 qodana.yaml
 spotbugs-exclude.xml
 
-# Build artifacts
-target/
-!.mvn/wrapper/maven-wrapper.jar
+# Build artifacts - exclude everything except JAR files for Docker build
+# target/ is NOT excluded here because the Dockerfile needs the JAR
+# This is an API spec project - the container just holds the artifact
+# target/
 
 # IDE
 .idea/
