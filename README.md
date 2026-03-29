@@ -15,6 +15,7 @@ OpenAPI specification and generated DTOs for the Goods Price Comparison Service.
 ## Table of Contents
 
 - [Quick Start](#quick-start)
+- [Project Tour (For Everyone!)](#project-tour-for-everyone)
 - [Project Structure](#project-structure)
 - [API Versioning](#api-versioning)
 - [Development Workflow](#development-workflow)
@@ -56,6 +57,23 @@ mvn clean install
 ```
 
 Done! The API JAR is now in your local Maven repository.
+
+---
+
+## Project Tour (For Everyone!)
+
+**New to this project?** Start here! 👋
+
+We have a beginner-friendly guide that explains:
+- 📖 [What this project does](docs/PROJECT_TOUR.md#what-is-this-project)
+- 📁 [What each file does](docs/PROJECT_TOUR.md#file-by-file-explanation)
+- 🤖 [What the automation tools do](docs/PROJECT_TOUR.md#what-do-these-tools-do)
+- 🎯 [How the team works together](docs/PROJECT_TOUR.md#how-does-the-team-work)
+- 📚 [Simple explanations of technical terms](docs/PROJECT_TOUR.md#glossary-simple-terms)
+
+**No coding experience required!** This guide explains everything in plain English.
+
+👉 **[Read the Project Tour](docs/PROJECT_TOUR.md)**
 
 ---
 
