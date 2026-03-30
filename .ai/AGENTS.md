@@ -23,21 +23,33 @@ Quick reference for AI agents working on this project.
 - Auto-merging when CI passes
 - Merging without user saying "merge this"
 - Assuming approval from "looks good" or 👍
+- Merging while CI checks are still running
 
 **✅ REQUIRED:**
 - Wait for explicit user instruction
 - User must say: "merge this PR" or "approved, please merge"
+- **Check CI status: `gh pr checks <number>`**
+- **Wait for ALL checks to pass**
 - Only then execute merge command
+
+**⚠️ IMPORTANT:**
+Even if user says "merge this PR", you MUST:
+1. Check CI status with `gh pr checks <number>`
+2. If running, wait and check again
+3. If failed, report to user and DO NOT merge
+4. Only merge when ALL checks pass
 
 **If user says "stop" or "wait":**
 - STOP immediately
 - Do NOT merge
 - Wait for further instructions
 
-### 2. Pre-PR Checklist (MUST PASS)
+### 3. Pre-PR Checklist (MUST PASS)
+
+**BEFORE creating PR:**
 
 ```bash
-# Run these checks - ALL MUST PASS
+# Run ALL checks - MUST pass 100%
 make build      # mvn clean compile -q
 make test       # mvn test (100% pass)
 make ci-check   # Full quality check
@@ -50,6 +62,47 @@ make lint       # spectral lint
 - ✅ Coverage: ≥90% (100% new code)
 - ✅ Checkstyle: 0 violations
 - ✅ SpotBugs: 0 high priority
+
+**If ANY check fails:**
+- Fix issues first
+- Re-run ALL checks
+- Only create PR when ALL pass
+
+### 4. Post-Approval Checklist (After User Approves)
+
+**Once user approves PR, BEFORE merging:**
+
+1. **Update CHANGELOG.md:**
+   ```bash
+   # Add entry under [Unreleased] section
+   # Describe the change with PR number
+   ```
+
+2. **Update documentation if needed:**
+   - README.md (if behavior changes)
+   - API docs (if endpoints change)
+   - Architecture docs (if design changes)
+
+3. **Commit updates:**
+   ```bash
+   git add CHANGELOG.md [other docs]
+   git commit -m "docs: Update changelog for PR #<number>"
+   git push origin <branch>
+   ```
+
+4. **Wait for CI to pass on doc updates**
+
+5. **Check final CI status:**
+   ```bash
+   gh pr checks <number>
+   ```
+
+6. **Ask about release tag:**
+   - "Do you want to create a release tag for this PR?"
+   - If YES: Create annotated tag after merge
+   - If NO: Still create automatic version tag (e.g., `v1.0.1`)
+
+7. **Only then merge**
 
 ## 📁 Documentation Structure (NEW)
 
