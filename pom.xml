@@ -14,7 +14,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>goods-price-comparison-api</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
 
     <name>Goods Price Comparison API</name>
@@ -156,7 +156,33 @@
                     </execution>
                 </executions>
             </plugin>
-            
+
+            <!-- Bundle OpenAPI files into single consolidated YAML during build -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <id>bundle-openapi</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npx</executable>
+                            <arguments>
+                                <argument>@redocly/cli</argument>
+                                <argument>bundle</argument>
+                                <argument>${project.basedir}/src/main/resources/openapi/main.yaml</argument>
+                                <argument>--output</argument>
+                                <argument>${project.basedir}/src/main/resources/openapi/openapi-bundled.yaml</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Add generated sources to classpath -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

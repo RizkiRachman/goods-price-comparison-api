@@ -8,14 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- New endpoints for advanced price analytics
-- Support for bulk receipt uploads
-- Enhanced filtering options for price search
+
+### Changed
+
+### Fixed
+
+## [1.1.0] - 2026-03-30
+
+### Added
+- **Controller Interfaces:** Generate API controller interfaces from OpenAPI spec
+  - Interfaces in `com.example.goodsprice.api.controller` package
+  - Implement in service project for type-safe contracts
+  - Spring annotations included (@RestController, @GetMapping, etc.)
 - **AI Agent Rules:** Updated PR workflow documentation with strict quality gates
   - Pre-PR verification checklist (all checks must pass)
   - Wait for CI completion before merging
   - Post-approval documentation updates (CHANGELOG, README)
   - Clear merge permission requirements
+- **Automatic OpenAPI bundling:** Maven build now creates consolidated spec
+  - Generates `openapi-bundled.yaml` during every build
+  - Single file with all references resolved for Swagger Online compatibility
+  - No manual bundling required - fully automated
 
 ### CI/CD Improvements
 - **Split workflows:** Separated CI into `ci-build.yml`, `ci-publish.yml`, `ci-release.yml`

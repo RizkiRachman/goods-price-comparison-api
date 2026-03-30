@@ -1,0 +1,1238 @@
+openapi: 3.0.3
+info:
+  title: Goods Price Comparison API
+  description: |
+    REST API for the Goods Price Comparison Service.
+    This API provides endpoints for:
+    - Receipt upload and OCR processing
+    - Price comparison across stores
+    - Shopping route optimization
+    - Price trend analysis
+    - Price alerts
+
+    ## API Versioning
+
+    This API uses URL path versioning. The current version is **v1**.
+
+    ### Versioning Strategy
+    - **URL Path**: Version is included in the URL path (e.g., `/v1/receipts/upload`)
+    - **Breaking Changes**: Only introduced in new major versions (v2, v3, etc.)
+    - **Deprecation**: Previous versions supported for 30 days after new version release
+    - **Version Header**: `X-API-Version` header included in all responses
+
+    ### Supported Versions
+    - **v1** (current) - `/v1/*` - Initial release
+    - **v2** (beta) - `/v2/*` - Enhanced features
+
+    ### Version Lifecycle
+    - **Beta**: Early access, may have breaking changes without notice
+    - **Stable**: Production ready, fully supported
+    - **Deprecated**: Still functional but will be removed
+    - **Sunset**: No longer available
+  version: 1.0.0
+  x-api-id: goods-price-comparison-api
+  x-api-version: v1
+  contact:
+    name: API Support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+  - url: https://api.goodsprice.com
+    description: Production server
+tags:
+  - name: System
+    description: System and API information endpoints
+  - name: Receipts
+    description: Receipt upload and OCR processing
+  - name: Prices
+    description: Price search and comparison
+  - name: Shopping
+    description: Shopping route optimization
+  - name: Products
+    description: Product information and trends
+  - name: Alerts
+    description: Price alert subscriptions
+paths:
+  /v1/version:
+    get:
+      summary: Get API version information
+      description: |
+        Returns current API version, supported versions, and deprecation notices.
+        Use this endpoint to check API compatibility.
+      operationId: getApiVersion
+      tags:
+        - System
+      responses:
+        '200':
+          description: Version information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiVersionResponse'
+          headers:
+            X-API-Version:
+              description: Current API version
+              schema:
+                type: string
+                example: v1
+  /v1/receipts/upload:
+    post:
+      summary: Upload receipt image for OCR processing
+      description: |
+        Upload a receipt image (JPG, PNG, or PDF) for OCR processing.
+        Returns a job ID to track the processing status.
+      operationId: uploadReceipt
+      tags:
+        - Receipts
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Receipt image file (max 10MB)
+              required:
+                - image
+      responses:
+        '202':
+          description: Upload successful, processing started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptUploadResponse'
+        '400':
+          description: Invalid image format or size
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: Image exceeds 10MB limit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/receipts/{id}/status:
+    get:
+      summary: Check OCR processing status
+      description: |
+        Check the processing status of an uploaded receipt.
+        Status values: PROCESSING, COMPLETED, FAILED
+      operationId: getReceiptStatus
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      responses:
+        '200':
+          description: Status retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptStatusResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/receipts/{id}/results:
+    get:
+      summary: Get OCR results
+      description: |
+        Retrieve extracted data from a processed receipt.
+        Only available when status is COMPLETED.
+      operationId: getReceiptResults
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      responses:
+        '200':
+          description: Results retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptResultResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Processing not yet completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/prices/search:
+    post:
+      summary: Search for product prices across stores
+      description: |
+        Search for product prices across all stores with filtering
+        and sorting options.
+      operationId: searchPrices
+      tags:
+        - Prices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceSearchRequest'
+      responses:
+        '200':
+          description: Search completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceSearchResponse'
+        '400':
+          description: Invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/prices/search:
+    post:
+      summary: Search for product prices (v2)
+      description: |
+        **VERSION 2** - Enhanced price search with additional features:
+        - Pagination support
+        - Advanced filtering (brand, category, store chain)
+        - Price prediction
+        - Historical price comparison
+
+        This is an example of API versioning where v2 provides
+        enhanced functionality over v1.
+      operationId: searchPricesV2
+      tags:
+        - Prices
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PriceSearchRequestV2'
+      responses:
+        '200':
+          description: Search completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceSearchResponseV2'
+          headers:
+            X-API-Version:
+              description: API version
+              schema:
+                type: string
+                example: v2
+        '400':
+          description: Invalid search parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/shopping/optimize:
+    post:
+      summary: Optimize shopping route for a list of items
+      description: |
+        Get optimized shopping route for a list of items.
+        Strategy: Find store with most items, then cheapest for remainder.
+      operationId: optimizeShoppingRoute
+      tags:
+        - Shopping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingOptimizeRequest'
+      responses:
+        '200':
+          description: Optimization completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShoppingOptimizeResponse'
+        '400':
+          description: Invalid items list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: One or more items not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/products/trend/{productId}:
+    get:
+      summary: Get price trend for a product
+      description: |
+        Get price history and trend analysis for a specific product
+        with configurable granularity.
+      operationId: getProductTrend
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Product ID
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: Start date (YYYY-MM-DD)
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: End date (YYYY-MM-DD)
+        - name: granularity
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - daily
+              - weekly
+              - monthly
+            default: daily
+          description: Data granularity
+      responses:
+        '200':
+          description: Trend data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductTrendResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/alerts/subscribe:
+    post:
+      summary: Subscribe to price drop alerts
+      description: |
+        Subscribe to price drop alerts for a specific product.
+        Notification will be sent when price drops to target or below.
+      operationId: subscribeToAlert
+      tags:
+        - Alerts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertSubscriptionRequest'
+      responses:
+        '201':
+          description: Subscription created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertSubscriptionResponse'
+        '400':
+          description: Invalid subscription data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    DateRange:
+      type: object
+      properties:
+        from:
+          type: string
+          format: date
+          description: Start date
+          example: '2026-03-01'
+        to:
+          type: string
+          format: date
+          description: End date
+          example: '2026-03-29'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetails'
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: VALIDATION_ERROR
+        message:
+          type: string
+          description: Error message
+          example: Invalid request data
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+          example: '2026-03-29T10:30:00Z'
+        path:
+          type: string
+          description: API path that caused the error
+          example: /api/prices/search
+    ValidationError:
+      type: object
+      properties:
+        field:
+          type: string
+          description: Field with error
+          example: productName
+        message:
+          type: string
+          description: Validation error message
+          example: Product name is required
+    ApiVersionResponse:
+      type: object
+      description: API version information
+      properties:
+        version:
+          type: string
+          description: Current API version
+          example: v1
+        fullVersion:
+          type: string
+          description: Full semantic version
+          example: 1.0.0
+        status:
+          type: string
+          description: API status
+          enum:
+            - stable
+            - beta
+            - deprecated
+            - sunset
+          example: stable
+        supportedVersions:
+          type: array
+          description: List of supported API versions
+          items:
+            type: object
+            properties:
+              version:
+                type: string
+                description: Version identifier
+                example: v1
+              status:
+                type: string
+                description: Version status
+                enum:
+                  - stable
+                  - beta
+                  - deprecated
+                  - sunset
+                example: stable
+              baseUrl:
+                type: string
+                description: Base URL for this version
+                example: /api/v1
+        deprecationInfo:
+          type: object
+          description: Deprecation information (only present if deprecated)
+          nullable: true
+          properties:
+            deprecatedSince:
+              type: string
+              format: date
+              description: Deprecation date
+              example: '2026-06-01'
+            sunsetDate:
+              type: string
+              format: date
+              description: Date when version will be removed
+              example: '2026-09-01'
+            migrationGuide:
+              type: string
+              description: URL to migration guide
+              example: https://docs.goodsprice.com/migration/v1-to-v2
+    PriceSearchRequest:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Product name to search for
+          example: Ultra Milk Plain Slim
+        dateRange:
+          $ref: '#/components/schemas/DateRange'
+        location:
+          type: string
+          description: Filter by store location
+          example: Jakarta Selatan
+        sortBy:
+          type: string
+          enum:
+            - price
+            - date
+            - store
+          default: price
+          description: Sort field
+        sortOrder:
+          type: string
+          enum:
+            - asc
+            - desc
+          default: asc
+          description: Sort order
+      required:
+        - productName
+    PriceSearchRequestV2:
+      type: object
+      description: |
+        **VERSION 2** - Enhanced price search request with additional features:
+        - Pagination support
+        - Advanced filtering options
+        - Price prediction flag
+      properties:
+        productName:
+          type: string
+          description: Product name to search for (supports partial matching)
+          example: Ultra Milk
+        dateRange:
+          $ref: '#/components/schemas/DateRange'
+        location:
+          type: string
+          description: Filter by store location
+          example: Jakarta Selatan
+        brand:
+          type: string
+          description: Filter by product brand
+          example: Ultra Milk
+        category:
+          type: string
+          description: Filter by product category
+          example: Dairy
+        storeChain:
+          type: string
+          description: Filter by store chain name
+          example: Superindo
+        sortBy:
+          type: string
+          enum:
+            - price
+            - date
+            - store
+            - relevance
+          default: relevance
+          description: Sort field (v2 adds relevance scoring)
+        sortOrder:
+          type: string
+          enum:
+            - asc
+            - desc
+          default: asc
+          description: Sort order
+        includePrediction:
+          type: boolean
+          default: false
+          description: Include price prediction for next 7 days
+        includeHistory:
+          type: boolean
+          default: false
+          description: Include 30-day price history
+        page:
+          type: integer
+          default: 1
+          minimum: 1
+          description: Page number for pagination
+        pageSize:
+          type: integer
+          default: 20
+          minimum: 1
+          maximum: 100
+          description: Number of results per page
+      required:
+        - productName
+    ShoppingOptimizeRequest:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: string
+          description: List of product names to purchase
+          example:
+            - Ultra Milk Plain Slim 200ml
+            - Bawang Merah
+            - Telur Ayam
+        preferences:
+          $ref: '#/components/schemas/ShoppingPreferences'
+      required:
+        - items
+    ShoppingPreferences:
+      type: object
+      properties:
+        maxStores:
+          type: integer
+          minimum: 1
+          maximum: 5
+          default: 3
+          description: Maximum number of stores to visit
+        prioritizePrice:
+          type: boolean
+          default: true
+          description: Whether to prioritize lowest price over convenience
+    AlertSubscriptionRequest:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product ID to watch
+        targetPrice:
+          type: number
+          format: double
+          description: Target price threshold
+          example: 5000
+        notificationMethod:
+          type: string
+          enum:
+            - email
+            - push
+            - sms
+          description: Notification delivery method
+        email:
+          type: string
+          format: email
+          description: Email address for notifications
+      required:
+        - productId
+        - targetPrice
+        - notificationMethod
+    ReceiptUploadResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier for tracking
+          example: 550e8400-e29b-41d4-a716-446655440000
+        status:
+          type: string
+          enum:
+            - PROCESSING
+            - COMPLETED
+            - FAILED
+          description: Current processing status
+          example: PROCESSING
+        message:
+          type: string
+          description: Human-readable status message
+          example: Receipt uploaded successfully. Processing started.
+    ReceiptStatusResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier
+        status:
+          type: string
+          enum:
+            - PROCESSING
+            - COMPLETED
+            - FAILED
+          description: Current processing status
+        progress:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Processing progress percentage
+          example: 75
+        message:
+          type: string
+          description: Status message
+          example: OCR processing completed successfully
+    ReceiptResultResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          format: uuid
+          description: Unique job identifier
+        storeName:
+          type: string
+          description: Store name from receipt
+          example: DIAMOND
+        storeLocation:
+          type: string
+          description: Store location from receipt
+          example: Poins Square
+        date:
+          type: string
+          format: date
+          description: Receipt date
+          example: '2026-03-29'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceiptItem'
+        totalAmount:
+          type: number
+          format: double
+          description: Total receipt amount
+          example: 1207206
+    PriceSearchResponse:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Full product name
+          example: Ultra Milk Plain Slim 200ml
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceResult'
+        cheapest:
+          $ref: '#/components/schemas/CheapestPrice'
+    PriceSearchResponseV2:
+      type: object
+      description: |
+        **VERSION 2** - Enhanced price search response with additional features:
+        - Pagination metadata
+        - Price predictions
+        - Historical price data
+        - Price trend indicators
+      properties:
+        productName:
+          type: string
+          description: Full product name
+          example: Ultra Milk Plain Slim 200ml
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceResultV2'
+        cheapest:
+          $ref: '#/components/schemas/CheapestPrice'
+        pagination:
+          type: object
+          description: Pagination metadata
+          properties:
+            page:
+              type: integer
+              description: Current page number
+              example: 1
+            pageSize:
+              type: integer
+              description: Number of items per page
+              example: 20
+            totalItems:
+              type: integer
+              description: Total number of matching items
+              example: 150
+            totalPages:
+              type: integer
+              description: Total number of pages
+              example: 8
+            hasNext:
+              type: boolean
+              description: Whether there are more pages
+              example: true
+            hasPrevious:
+              type: boolean
+              description: Whether there are previous pages
+              example: false
+        predictions:
+          type: object
+          description: Price predictions (only if includePrediction=true)
+          nullable: true
+          properties:
+            nextWeekPrice:
+              type: number
+              format: double
+              description: Predicted price for next week
+              example: 5300
+            confidence:
+              type: number
+              format: double
+              minimum: 0
+              maximum: 1
+              description: Prediction confidence (0-1)
+              example: 0.85
+            trend:
+              type: string
+              enum:
+                - rising
+                - falling
+                - stable
+              description: Predicted price trend
+              example: falling
+        metadata:
+          type: object
+          description: Additional search metadata
+          properties:
+            searchTime:
+              type: string
+              format: date-time
+              description: When the search was performed
+              example: '2026-03-29T10:30:00Z'
+            resultCount:
+              type: integer
+              description: Number of results in this response
+              example: 20
+            filtersApplied:
+              type: array
+              items:
+                type: string
+              description: List of filters that were applied
+              example:
+                - location:Jakarta Selatan
+                - brand:Ultra Milk
+    ShoppingOptimizeResponse:
+      type: object
+      properties:
+        totalItems:
+          type: integer
+          description: Total number of items in shopping list
+          example: 5
+        totalCost:
+          type: number
+          format: double
+          description: Total estimated cost
+          example: 375200
+        storesToVisit:
+          type: integer
+          description: Number of stores to visit
+          example: 2
+        route:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoreVisit'
+        savings:
+          $ref: '#/components/schemas/ShoppingSavings'
+    ProductTrendResponse:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product identifier
+          example: 1
+        productName:
+          type: string
+          description: Product name
+          example: Ultra Milk Plain Slim 200ml
+        trend:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendDataPoint'
+        trendDirection:
+          type: string
+          enum:
+            - increasing
+            - decreasing
+            - stable
+          description: Overall trend direction
+          example: decreasing
+        priceChange:
+          type: number
+          format: double
+          description: Price change percentage
+          example: -3.4
+    AlertSubscriptionResponse:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+          description: Unique subscription identifier
+          example: sub-12345
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - PAUSED
+            - EXPIRED
+          description: Subscription status
+          example: ACTIVE
+        productName:
+          type: string
+          description: Product name
+          example: Ultra Milk Plain Slim 200ml
+        currentPrice:
+          type: number
+          format: double
+          description: Current product price
+          example: 5600
+        targetPrice:
+          type: number
+          format: double
+          description: Target price threshold
+          example: 5000
+        message:
+          type: string
+          description: Confirmation message
+          example: You will be notified when price drops to Rp 5,000 or below
+    ReceiptItem:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Product name
+          example: Ultra Milk Plain Slim 200ml
+        category:
+          type: string
+          description: Product category
+          example: Dairy
+        quantity:
+          type: number
+          format: double
+          description: Quantity purchased
+          example: 48
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600
+        totalPrice:
+          type: number
+          format: double
+          description: Total price for this item
+          example: 268800
+        unit:
+          type: string
+          description: Unit of measurement
+          example: bottle
+    PriceResult:
+      type: object
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store identifier
+          example: 1
+        storeName:
+          type: string
+          description: Store name
+          example: DIAMOND
+        storeLocation:
+          type: string
+          description: Store location
+          example: Poins Square
+        price:
+          type: number
+          format: double
+          description: Current price
+          example: 5600
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600
+        dateRecorded:
+          type: string
+          format: date
+          description: Date price was recorded
+          example: '2026-03-29'
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          example: false
+    PriceResultV2:
+      type: object
+      description: |
+        **VERSION 2** - Enhanced price result with historical data and trends
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store identifier
+          example: 1
+        storeName:
+          type: string
+          description: Store name
+          example: DIAMOND
+        storeLocation:
+          type: string
+          description: Store location
+          example: Poins Square
+        storeChain:
+          type: string
+          description: Store chain/brand name
+          example: Diamond Supermarket
+        price:
+          type: number
+          format: double
+          description: Current price
+          example: 5600
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600
+        dateRecorded:
+          type: string
+          format: date-time
+          description: Date and time price was recorded
+          example: '2026-03-29T14:30:00Z'
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          example: false
+        promoDetails:
+          type: object
+          description: Promotion details (only if isPromo=true)
+          nullable: true
+          properties:
+            promoType:
+              type: string
+              enum:
+                - discount
+                - bundle
+                - buy_one_get_one
+                - clearance
+              description: Type of promotion
+              example: discount
+            discountPercentage:
+              type: number
+              format: double
+              description: Discount percentage
+              example: 10
+            validUntil:
+              type: string
+              format: date-time
+              description: Promotion end date
+              example: '2026-04-05T23:59:59Z'
+        priceHistory:
+          type: array
+          description: 30-day price history (only if includeHistory=true)
+          nullable: true
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                format: date
+                description: Date of price record
+                example: '2026-03-01'
+              price:
+                type: number
+                format: double
+                description: Price on that date
+                example: 5800
+        priceChange:
+          type: object
+          description: Price change statistics
+          properties:
+            changeAmount:
+              type: number
+              format: double
+              description: Price change from last week
+              example: -200
+            changePercentage:
+              type: number
+              format: double
+              description: Percentage change
+              example: -3.45
+            trend:
+              type: string
+              enum:
+                - rising
+                - falling
+                - stable
+              description: Price trend direction
+              example: falling
+        availability:
+          type: string
+          enum:
+            - in_stock
+            - low_stock
+            - out_of_stock
+            - unknown
+          description: Product availability status
+          example: in_stock
+        distance:
+          type: number
+          format: double
+          description: Distance to store in kilometers
+          example: 2.5
+        relevanceScore:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Search relevance score (0-1)
+          example: 0.95
+    CheapestPrice:
+      type: object
+      properties:
+        storeName:
+          type: string
+          description: Store with cheapest price
+          example: Superindo
+        price:
+          type: number
+          format: double
+          description: Cheapest price found
+          example: 5400
+        savings:
+          type: number
+          format: double
+          description: Savings compared to other stores
+          example: 200
+    StoreVisit:
+      type: object
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store identifier
+          example: 3
+        storeName:
+          type: string
+          description: Store name
+          example: Superindo
+        storeLocation:
+          type: string
+          description: Store location
+          example: Poins Square
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShoppingItem'
+        subtotal:
+          type: number
+          format: double
+          description: Subtotal for this store
+          example: 94900
+        estimatedTime:
+          type: string
+          description: Estimated time at this store
+          example: 15 mins
+    ShoppingItem:
+      type: object
+      properties:
+        productName:
+          type: string
+          description: Product name
+          example: Ultra Milk Plain Slim 200ml
+        price:
+          type: number
+          format: double
+          description: Price at this store
+          example: 5400
+        quantity:
+          type: number
+          format: double
+          description: Quantity to purchase
+          example: 1
+    ShoppingSavings:
+      type: object
+      properties:
+        comparedToSingleStore:
+          type: number
+          format: double
+          description: Savings compared to buying all at one store
+          example: 45200
+        percentage:
+          type: number
+          format: double
+          description: Savings percentage
+          example: 10.7
+    TrendDataPoint:
+      type: object
+      properties:
+        period:
+          type: string
+          description: Time period
+          example: '2026-01-01'
+        avgPrice:
+          type: number
+          format: double
+          description: Average price in period
+          example: 5800
+        minPrice:
+          type: number
+          format: double
+          description: Minimum price in period
+          example: 5600
+        maxPrice:
+          type: number
+          format: double
+          description: Maximum price in period
+          example: 6000
+        dataPoints:
+          type: integer
+          description: Number of price records in period
+          example: 5
+  headers:
+    X-RateLimit-Limit:
+      description: Rate limit per minute
+      schema:
+        type: integer
+        example: 100
+    X-RateLimit-Remaining:
+      description: Remaining requests in current window
+      schema:
+        type: integer
+        example: 95
+    X-RateLimit-Reset:
+      description: Unix timestamp when limit resets
+      schema:
+        type: integer
+        example: 1648556400
