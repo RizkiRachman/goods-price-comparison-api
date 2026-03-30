@@ -115,13 +115,36 @@ mvn jacoco:report
 2. Re-run checks
 3. Only proceed when all pass
 
+### Pre-PR Verification Checklist (CRITICAL)
+
+**AI Agent MUST complete BEFORE creating PR:**
+
+```bash
+# Run ALL checks - must pass 100%
+make build      # Build and generate
+make test       # Run tests
+make ci-check   # Full verification
+make lint       # Lint OpenAPI
+```
+
+**If ANY check fails:**
+1. Fix issues
+2. Re-run ALL checks
+3. Repeat until ALL pass
+4. Only THEN create PR
+
+**Why:** Don't waste CI resources on known-broken code.
+
 ### Step 4: Push & Create PR
 
 ```bash
+# Verify branch is up to date
+git pull origin main
+
 # Push branch
 git push -u origin feature/description
 
-# Create PR via GitHub CLI
+# Create PR
 gh pr create --title "type: Description" --body "Detailed description"
 ```
 
@@ -234,11 +257,78 @@ AI: "Merging PR #6 now since you said to merge yesterday"  ✗ WRONG
 - ❌ Silence / no response
 
 ### Requirements for merge:
-- ✅ All CI checks passing
+- ✅ **All CI checks passing** - Check with: `gh pr checks <number>`
 - ✅ Code review approved (by user or system)
 - ✅ No conflicts with main
 - ✅ Branch up to date
 - ✅ **User has explicitly given permission**
+
+### ⚠️ CRITICAL: Wait for CI Before Merging
+
+**Even if user says "merge this PR", AI agent MUST:**
+
+1. **Check CI status FIRST:**
+   ```bash
+   gh pr checks <number>
+   ```
+
+2. **If checks are RUNNING:**
+   - Wait for completion
+   - Check status again
+   - Only proceed if ALL pass
+
+3. **If checks FAIL:**
+   - Report failure to user
+   - DO NOT merge
+   - Wait for user to fix and re-approve
+
+4. **Only merge when:**
+   - User explicitly approved
+   - **AND** all CI checks pass
+   - **AND** no breaking changes detected
+
+**Example:**
+```
+User: "Merge this PR"
+AI: "Checking CI status..."
+[Checks running]
+AI: [Waits 2-3 minutes]
+AI: "All checks passed! Merging now..."
+[Merge executed]
+```
+
+### Post-Approval Steps (Before Merge)
+
+**Once user approves PR, AI agent MUST:**
+
+1. **Update CHANGELOG.md:**
+   - Add entry under `[Unreleased]` section
+   - Describe the change briefly
+   - Include PR number
+
+2. **Update Documentation if needed:**
+   - README.md (if behavior changes)
+   - API docs (if endpoints change)
+   - Architecture docs (if design changes)
+
+3. **Commit documentation updates:**
+   ```bash
+   git add CHANGELOG.md [other docs]
+   git commit -m "docs: Update changelog for PR #<number>"
+   git push origin <branch>
+   ```
+
+4. **Wait for CI to pass on doc updates**
+
+5. **Ask about release tag:**
+   ```
+   "Do you want to create a release tag for this PR?"
+   ```
+   - If YES: Create annotated tag with release notes after merge
+   - If NO: Still create automatic version tag (e.g., `v1.0.1`, `v1.0.2`)
+   - Tag format: `v{major}.{minor}.{patch}` incremented automatically
+
+6. **Only then merge**
 
 ### Merge methods:
 - **Squash & Merge** - Preferred (clean history)
