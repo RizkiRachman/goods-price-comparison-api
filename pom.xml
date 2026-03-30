@@ -47,6 +47,12 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         
+        <!-- Spring Web - Required for generated controller interfaces -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
         <!-- OpenAPI/Swagger -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
@@ -128,8 +134,8 @@
                             <output>${project.build.directory}/generated-sources/openapi</output>
                             <modelPackage>com.example.goodsprice.api.model</modelPackage>
                             <apiPackage>com.example.goodsprice.api.controller</apiPackage>
-                            <generateApis>false</generateApis>
-                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <generateApis>true</generateApis>
+                            <generateSupportingFiles>true</generateSupportingFiles>
                             <configOptions>
                                 <dateLibrary>java8</dateLibrary>
                                 <java17>true</java17>
@@ -142,6 +148,9 @@
                                 <serializationLibrary>jackson</serializationLibrary>
                                 <useOptional>false</useOptional>
                                 <useSpringBoot3>true</useSpringBoot3>
+                                <interfaceOnly>true</interfaceOnly>
+                                <skipDefaultInterface>false</skipDefaultInterface>
+                                <useTags>true</useTags>
                             </configOptions>
                         </configuration>
                     </execution>
