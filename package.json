@@ -1,0 +1,11 @@
+{
+  "name": "goods-price-comparison-api",
+  "version": "1.0.0",
+  "description": "OpenAPI specification project",
+  "devDependencies": {
+    "@redocly/cli": "^1.28.0"
+  },
+  "scripts": {
+    "bundle": "redocly bundle src/main/resources/openapi/main.yaml --output src/main/resources/openapi/openapi-bundled.yaml"
+  }
+}

@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Wait for CI completion before merging
   - Post-approval documentation updates (CHANGELOG, README)
   - Clear merge permission requirements
+- **Automatic OpenAPI bundling:** Maven build now creates consolidated spec
+  - Generates `openapi-bundled.yaml` during every build
+  - Single file with all references resolved for Swagger Online compatibility
+  - No manual bundling required - fully automated
 
 ### CI/CD Improvements
 - **Split workflows:** Separated CI into `ci-build.yml`, `ci-publish.yml`, `ci-release.yml`
