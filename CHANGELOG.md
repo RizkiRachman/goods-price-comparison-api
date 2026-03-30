@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.0] - 2026-03-30
+
+### Changed
+- **Version bump:** Updated version from 1.1.0 to 1.2.0
+  - Enables automatic release workflow to create v1.2.0 tag
+  - Previous v1.1.0 tag already existed, blocking automatic releases
+  - No functional changes - version bump only
+
 ## [1.1.0] - 2026-03-30
 
 ### Added
