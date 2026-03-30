@@ -17,7 +17,7 @@ jobs:
       - name: Get version
         id: version
         run: |
-          VERSION=$(grep -oP '(?<=<version>)[^<]+' pom.xml | head -1)
+          VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
       - name: Check tag exists
         id: check
