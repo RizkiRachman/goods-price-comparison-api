@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 ### Fixed
+- **Release workflow:** Fixed version extraction to use Maven instead of grep
+  - Was reading Spring Boot parent version (3.2.0) instead of project version
+  - Now uses `mvn help:evaluate` to get correct project version
+  - Ensures automatic releases use correct version tag
 
 ## [1.2.0] - 2026-03-30
 
