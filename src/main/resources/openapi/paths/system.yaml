@@ -26,3 +26,63 @@ paths:
               schema:
                 type: string
                 example: "v1"
+
+  /v1/health:
+    get:
+      summary: Health check endpoint
+      description: |
+        Returns the health status of the API. This endpoint is used by load balancers
+        and monitoring systems to determine if the service is operational.
+        
+        ## Response Codes
+        - `UP` - Service is healthy and operational
+        - `DOWN` - Service is unhealthy and should not receive traffic
+      operationId: getHealth
+      tags:
+        - System
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/HealthResponse'
+        '503':
+          description: Service is unhealthy or degraded
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/HealthResponse'
+
+  /v1/metrics:
+    get:
+      summary: API metrics endpoint
+      description: |
+        Returns operational metrics for monitoring and observability.
+        Metrics include request counts, response times, and error rates.
+        
+        ## Prometheus Format
+        When requested with `Accept: text/plain`, returns Prometheus format metrics.
+        Otherwise returns JSON format.
+      operationId: getMetrics
+      tags:
+        - System
+      responses:
+        '200':
+          description: Metrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/MetricsResponse'
+            text/plain:
+              schema:
+                type: string
+                description: Prometheus format metrics
+                example: |
+                  # HELP api_requests_total Total API requests
+                  api_requests_total{status="200"} 1024
+          headers:
+            X-RateLimit-Limit:
+              $ref: '../main.yaml#/components/headers/X-RateLimit-Limit'
+            X-RateLimit-Remaining:
+              $ref: '../main.yaml#/components/headers/X-RateLimit-Remaining'

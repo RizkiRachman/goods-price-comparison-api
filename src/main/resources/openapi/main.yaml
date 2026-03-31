@@ -29,7 +29,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.0.0
+  version: 1.2.1
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -61,6 +61,10 @@ tags:
 paths:
   /v1/version:
     $ref: './paths/system.yaml#/paths/~1v1~1version'
+  /v1/health:
+    $ref: './paths/system.yaml#/paths/~1v1~1health'
+  /v1/metrics:
+    $ref: './paths/system.yaml#/paths/~1v1~1metrics'
   /v1/receipts/upload:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1upload'
   /v1/receipts/{id}/status:
@@ -91,6 +95,10 @@ components:
       $ref: './schemas/common.yaml#/components/schemas/ValidationError'
     ApiVersionResponse:
       $ref: './schemas/common.yaml#/components/schemas/ApiVersionResponse'
+    HealthResponse:
+      $ref: './schemas/common.yaml#/components/schemas/HealthResponse'
+    MetricsResponse:
+      $ref: './schemas/common.yaml#/components/schemas/MetricsResponse'
     
     # Request schemas
     PriceSearchRequest:
