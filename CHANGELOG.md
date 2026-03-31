@@ -8,8 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Health and Metrics Endpoints:** New system monitoring endpoints
+  - `GET /v1/health` - Health check for load balancers and monitoring
+    - Returns: status (UP/DOWN), component health, timestamp, version
+    - HTTP 200 for healthy, 503 for unhealthy
+  - `GET /v1/metrics` - Operational metrics for observability
+    - Returns: uptime, request counts, response times (p50/p95/p99), error rates
+    - Supports JSON and Prometheus text format
+- **Breaking Change Detection:** Automated detection in CI pipeline
+  - Uses Optic to compare OpenAPI specs in PRs
+  - Fails build if breaking changes detected
+  - Posts warning comment on PR with breaking changes
+- **API Documentation Deployment:** Auto-deploy to GitHub Pages
+  - New workflow: `.github/workflows/docs.yml`
+  - Generates HTML docs using Redoc
+  - Deploys to GitHub Pages on every OpenAPI change
+  - URL: `https://rizkirachman.github.io/goods-price-comparison-api/`
 
 ### Changed
+- Updated OpenAPI version from 1.0.0 to 1.2.1 in spec
+- Updated README with new features and correct version
 
 ### Fixed
 

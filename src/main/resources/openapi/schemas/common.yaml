@@ -117,3 +117,116 @@ components:
               type: string
               description: URL to migration guide
               example: "https://docs.goodsprice.com/migration/v1-to-v2"
+
+    HealthResponse:
+      type: object
+      description: Health check response
+      properties:
+        status:
+          type: string
+          description: Overall health status
+          enum: [UP, DOWN]
+          example: "UP"
+        components:
+          type: object
+          description: Health status of individual components
+          properties:
+            api:
+              type: string
+              description: API service status
+              enum: [UP, DOWN]
+              example: "UP"
+            database:
+              type: string
+              description: Database connectivity status
+              enum: [UP, DOWN]
+              example: "UP"
+            ocr:
+              type: string
+              description: OCR service status (if applicable)
+              enum: [UP, DOWN]
+              example: "UP"
+        timestamp:
+          type: string
+          format: date-time
+          description: Health check timestamp
+          example: "2026-03-31T10:30:00Z"
+        version:
+          type: string
+          description: Service version
+          example: "1.2.1"
+
+    MetricsResponse:
+      type: object
+      description: API metrics response
+      properties:
+        uptime:
+          type: integer
+          description: Service uptime in seconds
+          example: 86400
+        requests:
+          type: object
+          description: Request metrics
+          properties:
+            total:
+              type: integer
+              description: Total requests since startup
+              example: 1024567
+            successful:
+              type: integer
+              description: Successful requests (2xx responses)
+              example: 1023000
+            failed:
+              type: integer
+              description: Failed requests (4xx and 5xx responses)
+              example: 1567
+            ratePerMinute:
+              type: number
+              format: double
+              description: Average requests per minute
+              example: 712.5
+        responseTime:
+          type: object
+          description: Response time statistics in milliseconds
+          properties:
+            average:
+              type: number
+              format: double
+              description: Average response time
+              example: 45.2
+            p50:
+              type: number
+              format: double
+              description: 50th percentile (median)
+              example: 38.0
+            p95:
+              type: number
+              format: double
+              description: 95th percentile
+              example: 120.5
+            p99:
+              type: number
+              format: double
+              description: 99th percentile
+              example: 250.0
+        errors:
+          type: object
+          description: Error metrics by type
+          properties:
+            validationErrors:
+              type: integer
+              description: Number of validation errors (400)
+              example: 1234
+            notFoundErrors:
+              type: integer
+              description: Number of not found errors (404)
+              example: 56
+            serverErrors:
+              type: integer
+              description: Number of server errors (500)
+              example: 3
+        timestamp:
+          type: string
+          format: date-time
+          description: Metrics snapshot timestamp
+          example: "2026-03-31T10:30:00Z"
