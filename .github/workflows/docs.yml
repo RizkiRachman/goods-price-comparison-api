@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - 'src/main/resources/openapi/openapi-bundled.yaml'
+      - 'src/main/resources/openapi/main.yaml'
+      - 'src/main/resources/openapi/paths/**'
+      - 'src/main/resources/openapi/schemas/**'
       - '.github/workflows/docs.yml'
   workflow_dispatch:
 
@@ -32,6 +34,13 @@ jobs:
       - name: Install Redocly CLI
         run: npm install -g @redocly/cli@1.10.0
 
+      - name: Get API Version
+        id: get-version
+        run: |
+          VERSION=$(grep "version:" src/main/resources/openapi/main.yaml | head -1 | sed 's/.*version: //')
+          echo "api_version=$VERSION" >> $GITHUB_OUTPUT
+          echo "API Version: $VERSION"
+
       - name: Bundle OpenAPI spec
         run: |
           npx @redocly/cli bundle src/main/resources/openapi/main.yaml \
@@ -46,7 +55,7 @@ jobs:
 
       - name: Create custom landing page
         run: |
-          cat > site/index.html << 'EOF'
+          cat > site/index.html << EOF
           <!DOCTYPE html>
           <html>
           <head>
@@ -67,7 +76,7 @@ jobs:
           <body>
               <div class="api-info">
                   <h1>Goods Price Comparison API</h1>
-                  <p>Version: 1.0.0 | <a href="https://github.com/RizkiRachman/goods-price-comparison-api">View on GitHub</a></p>
+                  <p>Version: ${{ steps.get-version.outputs.api_version }} | <a href="https://github.com/RizkiRachman/goods-price-comparison-api">View on GitHub</a></p>
                   <p>REST API for receipt OCR, price comparison, shopping optimization, and price alerts.</p>
               </div>
               <redoc spec-url="openapi.yaml"></redoc>
