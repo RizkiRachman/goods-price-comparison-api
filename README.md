@@ -428,7 +428,7 @@ docker-compose up api-builder    # Podman supports docker-compose too!
 
 See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and version updates.
 
-### Recent Changes (v1.2.1)
+### Recent Changes (v1.2.2)
 
 - ✅ OpenAPI specification with 9 endpoints
 - ✅ Split-by-resource structure for maintainability
@@ -452,7 +452,7 @@ Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Tech Stack:** OpenAPI 3.0 | Java 17 | Maven | Spring Boot | Spectral
 
-**Version:** 1.2.1 (API v1)
+**Version:** 1.2.2 (API v1)
 
 **License:** MIT
 

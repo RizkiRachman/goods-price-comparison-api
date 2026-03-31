@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.2.2] - 2026-03-31
+
+### Added
 - **Health and Metrics Endpoints:** New system monitoring endpoints
   - `GET /v1/health` - Health check for load balancers and monitoring
     - Returns: status (UP/DOWN), component health, timestamp, version
@@ -26,10 +34,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - URL: `https://rizkirachman.github.io/goods-price-comparison-api/`
 
 ### Changed
-- Updated OpenAPI version from 1.0.0 to 1.2.1 in spec
+- Updated OpenAPI version from 1.0.0 to 1.2.2 in spec
 - Updated README with new features and correct version
 
 ### Fixed
+- **Documentation Workflow:** Fixed trigger paths and dynamic version
+  - Updated trigger to monitor main.yaml and all OpenAPI path/schema files
+  - Made version dynamic by extracting from OpenAPI spec (was hardcoded 1.0.0)
 
 ## [1.2.1] - 2026-03-31
 
