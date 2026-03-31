@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+## [1.2.1] - 2026-03-31
+
+### Added
 - **Postman Collection Generation:** Automatic generation during Maven build
   - Generates `postman-collection.json` in `target/` directory
   - Runs automatically with `mvn clean compile`
@@ -20,8 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Receipt status (GET): Uses `receipt_id` environment variable
     - Receipt results (GET): Uses `receipt_id` environment variable
     - No manual ID copying needed - seamless API workflow
-
-### Changed
 
 ### Fixed
 - **Release workflow:** Fixed version extraction to use Maven instead of grep
