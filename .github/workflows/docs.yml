@@ -51,7 +51,7 @@ jobs:
           npx @redocly/cli build-docs site/openapi.yaml \
             --output site/index.html \
             --title "Goods Price Comparison API" \
-            --disable-google-fonts
+            --disableGoogleFont
 
       - name: Create custom landing page
         run: |
