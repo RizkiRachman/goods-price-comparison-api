@@ -180,6 +180,37 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>generate-postman</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>npx</executable>
+                            <arguments>
+                                <argument>openapi-to-postmanv2</argument>
+                                <argument>-s</argument>
+                                <argument>${project.basedir}/src/main/resources/openapi/openapi-bundled.yaml</argument>
+                                <argument>-o</argument>
+                                <argument>${project.build.directory}/postman-collection.json</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>inject-postman-tests</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>node</executable>
+                            <arguments>
+                                <argument>${project.basedir}/scripts/inject-postman-tests.js</argument>
+                                <argument>${project.build.directory}/postman-collection.json</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 

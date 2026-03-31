@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Postman Collection Generation:** Automatic generation during Maven build
+  - Generates `postman-collection.json` in `target/` directory
+  - Runs automatically with `mvn clean compile`
+  - Based on bundled OpenAPI spec (with all $refs resolved)
+  - Can be imported directly into Postman for API testing
+  - Located at: `target/postman-collection.json`
+  - **Auto-injected post-response scripts:**
+    - `scripts/inject-postman-tests.js` adds test scripts automatically
+    - Receipt upload (POST): Auto-extracts `receipt_id` from response to environment variable
+    - Receipt status (GET): Uses `receipt_id` environment variable
+    - Receipt results (GET): Uses `receipt_id` environment variable
+    - No manual ID copying needed - seamless API workflow
 
 ### Changed
 

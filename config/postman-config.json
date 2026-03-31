@@ -1,0 +1,84 @@
+{
+  "folderStrategy": "Tags",
+  "requestNameSource": "Fallback",
+  "indentCharacter": "Space",
+  "collapseFolders": true,
+  "includeAuthInfoInExample": true,
+  "keepImplicitHeaders": false,
+  "includeDeprecated": true,
+  "alwaysInheritAuthentication": false,
+  "enableOptionalParameters": true,
+  "keepRequestParameters": false,
+  "includeCookies": false,
+  "followRedirect": true,
+  "includeResponses": true,
+  "includePostmanTests": true,
+  "testConfig": {
+    "enabled": true,
+    "scripts": [
+      {
+        "path": "/v1/receipts/upload",
+        "method": "POST",
+        "script": [
+          "// Extract receipt ID from response and set as environment variable",
+          "const jsonData = pm.response.json();",
+          "if (jsonData && jsonData.id) {",
+          "    pm.environment.set(\"receipt_id\", jsonData.id);",
+          "    console.log(\"Receipt ID set:\", jsonData.id);",
+          "}",
+          "",
+          "// Validate response",
+          "pm.test(\"Status code is 200 or 201\", function () {",
+          "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+          "});",
+          "",
+          "pm.test(\"Response has receipt ID\", function () {",
+          "    pm.expect(jsonData).to.have.property(\"id\");",
+          "    pm.expect(jsonData.id).to.be.a(\"string\");",
+          "});"
+        ]
+      },
+      {
+        "path": "/v1/receipts/{id}/status",
+        "method": "GET",
+        "script": [
+          "// Use receipt_id from environment variable",
+          "const receiptId = pm.environment.get(\"receipt_id\");",
+          "if (receiptId) {",
+          "    console.log(\"Checking status for receipt:\", receiptId);",
+          "}",
+          "",
+          "pm.test(\"Status code is 200\", function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test(\"Response has status field\", function () {",
+          "    const jsonData = pm.response.json();",
+          "    pm.expect(jsonData).to.have.property(\"status\");",
+          "});"
+        ]
+      },
+      {
+        "path": "/v1/receipts/{id}/results",
+        "method": "GET",
+        "script": [
+          "// Use receipt_id from environment variable",
+          "const receiptId = pm.environment.get(\"receipt_id\");",
+          "if (receiptId) {",
+          "    console.log(\"Getting results for receipt:\", receiptId);",
+          "}",
+          "",
+          "pm.test(\"Status code is 200\", function () {",
+          "    pm.response.to.have.status(200);",
+          "});",
+          "",
+          "pm.test(\"Response has items array\", function () {",
+          "    const jsonData = pm.response.json();",
+          "    pm.expect(jsonData).to.have.property(\"items\");",
+          "    pm.expect(jsonData.items).to.be.an(\"array\");",
+          "});"
+        ]
+      }
+    ]
+  }
+}
