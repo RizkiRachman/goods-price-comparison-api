@@ -7,6 +7,10 @@ components:
   schemas:
     ReceiptUploadResponse:
       type: object
+      example:
+        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "PROCESSING"
+        message: "Receipt uploaded successfully. Processing started."
       properties:
         jobId:
           type: string
@@ -25,6 +29,11 @@ components:
 
     ReceiptStatusResponse:
       type: object
+      example:
+        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "PROCESSING"
+        progress: 75
+        message: "OCR processing completed successfully"
       properties:
         jobId:
           type: string
@@ -47,6 +56,19 @@ components:
 
     ReceiptResultResponse:
       type: object
+      example:
+        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        storeName: "DIAMOND"
+        storeLocation: "Poins Square"
+        date: "2026-03-29"
+        items:
+          - productName: "Ultra Milk Plain Slim 200ml"
+            category: "Dairy"
+            quantity: 48.0
+            unitPrice: 5600.00
+            totalPrice: 268800.00
+            unit: "bottle"
+        totalAmount: 1207206.00
       properties:
         jobId:
           type: string
@@ -77,6 +99,20 @@ components:
 
     PriceSearchResponse:
       type: object
+      example:
+        productName: "Ultra Milk Plain Slim 200ml"
+        results:
+          - storeId: 1
+            storeName: "DIAMOND"
+            storeLocation: "Poins Square"
+            price: 5600.00
+            unitPrice: 5600.00
+            dateRecorded: "2026-03-29"
+            isPromo: false
+        cheapest:
+          storeName: "Superindo"
+          price: 5400.00
+          savings: 200.00
       properties:
         productName:
           type: string
@@ -91,6 +127,23 @@ components:
 
     ShoppingOptimizeResponse:
       type: object
+      example:
+        totalItems: 5
+        totalCost: 375200.00
+        storesToVisit: 2
+        route:
+          - storeId: 3
+            storeName: "Superindo"
+            storeLocation: "Poins Square"
+            items:
+              - productName: "Ultra Milk Plain Slim 200ml"
+                price: 5400.00
+                quantity: 1.0
+            subtotal: 94900.00
+            estimatedTime: "15 mins"
+        savings:
+          comparedToSingleStore: 45200.00
+          percentage: 10.7
       properties:
         totalItems:
           type: integer
@@ -114,6 +167,17 @@ components:
 
     ProductTrendResponse:
       type: object
+      example:
+        productId: 1
+        productName: "Ultra Milk Plain Slim 200ml"
+        trend:
+          - period: "2026-01-01"
+            avgPrice: 5800.00
+            minPrice: 5600.00
+            maxPrice: 6000.00
+            dataPoints: 5
+        trendDirection: "decreasing"
+        priceChange: -3.4
       properties:
         productId:
           type: integer
@@ -141,6 +205,13 @@ components:
 
     AlertSubscriptionResponse:
       type: object
+      example:
+        subscriptionId: "sub-12345"
+        status: "ACTIVE"
+        productName: "Ultra Milk Plain Slim 200ml"
+        currentPrice: 5600.00
+        targetPrice: 5000.00
+        message: "You will be notified when price drops to Rp 5,000 or below"
       properties:
         subscriptionId:
           type: string
