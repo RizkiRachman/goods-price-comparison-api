@@ -14,7 +14,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>goods-price-comparison-api</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <packaging>jar</packaging>
 
     <name>Goods Price Comparison API</name>
