@@ -144,12 +144,6 @@ release:
       - any-glob-to-any-file:
           - pom.xml
           - CHANGELOG.md
-      - head-branch: ['^release/', '^release']
-      - base-branch: ['main']
-  - changed-files:
-      - any-glob-to-any-file:
-          - pom.xml
-      - head-branch: ['^release/']
 
 # Security Related
 security:
@@ -158,7 +152,6 @@ security:
           - .github/workflows/codeql.yml
           - .github/dependabot.yml
           - pom.xml
-      - head-branch: ['^security/', '^dependabot/']
 
 # ============================================
 # Size Labels (based on changed files count)
