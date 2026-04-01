@@ -211,6 +211,19 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>generate-postman-env</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>node</executable>
+                            <arguments>
+                                <argument>${project.basedir}/scripts/generate-postman-env.js</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
