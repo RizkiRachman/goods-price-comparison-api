@@ -86,3 +86,15 @@ paths:
               $ref: '../main.yaml#/components/headers/X-RateLimit-Limit'
             X-RateLimit-Remaining:
               $ref: '../main.yaml#/components/headers/X-RateLimit-Remaining'
+
+# Test endpoint for workflow verification
+  /v1/test:
+    get:
+      summary: Test endpoint for CI workflow verification
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              example:
+                status: ok
