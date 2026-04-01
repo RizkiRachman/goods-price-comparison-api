@@ -11,44 +11,94 @@ const yaml = require('js-yaml');
 const OPENAPI_PATH = 'src/main/resources/openapi/openapi-bundled.yaml';
 const OUTPUT_PATH = 'vercel/index.js';
 
-// Default mock responses based on schema types
-const DEFAULT_RESPONSES = {
-  string: 'sample-string',
-  integer: 123,
-  number: 123.45,
-  boolean: true,
-  array: [],
-  object: {}
-};
+function resolveRef(spec, ref) {
+  if (!ref || !ref.startsWith('#/')) return null;
+  
+  const parts = ref.slice(2).split('/');
+  let current = spec;
+  
+  for (const part of parts) {
+    const key = part.replace(/~1/g, '/').replace(/~0/g, '~');
+    if (current && typeof current === 'object') {
+      current = current[key];
+    } else {
+      return null;
+    }
+  }
+  
+  return current;
+}
 
-function generateMockValue(schema) {
+function resolveSchema(spec, schema) {
   if (!schema) return null;
   
-  if (schema.example !== undefined) return schema.example;
-  if (schema.default !== undefined) return schema.default;
-  
-  if (schema.type === 'string') {
-    if (schema.format === 'date-time') return new Date().toISOString();
-    if (schema.format === 'date') return new Date().toISOString().split('T')[0];
-    return schema.enum ? schema.enum[0] : 'sample-value';
+  if (schema.$ref) {
+    return resolveSchema(spec, resolveRef(spec, schema.$ref));
   }
-  if (schema.type === 'integer') return 123;
-  if (schema.type === 'number') return 123.45;
-  if (schema.type === 'boolean') return true;
-  if (schema.type === 'array') {
-    if (schema.items) {
-      return [generateMockValue(schema.items)];
+  
+  return schema;
+}
+
+function generateMockValue(spec, schema) {
+  if (!schema) return null;
+  
+  const resolved = resolveSchema(spec, schema);
+  if (!resolved) return null;
+  
+  if (resolved.example !== undefined) return resolved.example;
+  if (resolved.default !== undefined) return resolved.default;
+  
+  if (resolved.allOf) {
+    const merged = {};
+    for (const subSchema of resolved.allOf) {
+      const subMock = generateMockValue(spec, subSchema);
+      if (subMock && typeof subMock === 'object') {
+        Object.assign(merged, subMock);
+      }
+    }
+    return Object.keys(merged).length > 0 ? merged : null;
+  }
+  
+  if (resolved.oneOf || resolved.anyOf) {
+    const schemas = resolved.oneOf || resolved.anyOf;
+    return generateMockValue(spec, schemas[0]);
+  }
+  
+  if (resolved.type === 'string') {
+    if (resolved.format === 'date-time') return new Date().toISOString();
+    if (resolved.format === 'date') return new Date().toISOString().split('T')[0];
+    if (resolved.format === 'uuid') return '550e8400-e29b-41d4-a716-446655440000';
+    if (resolved.format === 'email') return 'user@example.com';
+    if (resolved.format === 'uri') return 'https://example.com';
+    return resolved.enum ? resolved.enum[0] : 'sample-value';
+  }
+  if (resolved.type === 'integer' || resolved.type === 'number') {
+    if (resolved.minimum !== undefined && resolved.maximum !== undefined) {
+      return Math.floor((resolved.minimum + resolved.maximum) / 2);
+    }
+    return resolved.type === 'integer' ? 123 : 123.45;
+  }
+  if (resolved.type === 'boolean') return true;
+  if (resolved.type === 'array') {
+    if (resolved.items) {
+      const itemMock = generateMockValue(spec, resolved.items);
+      return itemMock !== null ? [itemMock] : [];
     }
     return [];
   }
-  if (schema.type === 'object') {
+  if (resolved.type === 'object' || resolved.properties) {
     const obj = {};
-    if (schema.properties) {
-      for (const [key, prop] of Object.entries(schema.properties)) {
-        obj[key] = generateMockValue(prop);
+    if (resolved.properties) {
+      for (const [key, prop] of Object.entries(resolved.properties)) {
+        if (key !== 'additionalProperties') {
+          const value = generateMockValue(spec, prop);
+          if (value !== null) {
+            obj[key] = value;
+          }
+        }
       }
     }
-    return obj;
+    return Object.keys(obj).length > 0 ? obj : null;
   }
   
   return null;
@@ -64,16 +114,16 @@ function generateExpressRoutes(spec) {
         const expressPath = path.replace(/{/g, ':').replace(/}/g, '');
         const operationId = operation.operationId || `${method}_${path.replace(/\//g, '_')}`;
         
-        // Get success response (200 or 201)
+        // Get success response (200, 201, or 202)
         const responses = operation.responses || {};
-        const successResponse = responses['200'] || responses['201'] || responses.default;
+        const successResponse = responses['200'] || responses['201'] || responses['202'] || responses.default;
         
         let mockResponse = { message: 'Mock response' };
         
         if (successResponse && successResponse.content) {
           const jsonContent = successResponse.content['application/json'];
           if (jsonContent && jsonContent.schema) {
-            mockResponse = generateMockValue(jsonContent.schema);
+            mockResponse = generateMockValue(spec, jsonContent.schema);
           }
         }
         
@@ -86,7 +136,7 @@ function generateExpressRoutes(spec) {
           method: method.toUpperCase(),
           path: expressPath,
           operationId,
-          mockResponse: JSON.stringify(mockResponse, null, 2)
+          mockResponse
         });
       }
     }
@@ -97,9 +147,11 @@ function generateExpressRoutes(spec) {
 
 function generateIndexJs(routes) {
   const routeHandlers = routes.map(route => {
+    const formattedJson = JSON.stringify(route.mockResponse, null, 2)
+      .replace(/\n/g, '\n  ');
     return `// ${route.operationId}
 app.${route.method.toLowerCase()}('${route.path}', (req, res) => {
-  res.json(${route.mockResponse});
+  res.json(${formattedJson});
 });`;
   }).join('\n\n');
 
