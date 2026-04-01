@@ -13,6 +13,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.3] - 2026-04-01
+
+### Added
+- **Vercel Mock Server Auto-Generator:** Automatic Express route generation from OpenAPI spec
+  - `scripts/generate-vercel-routes.js` parses OpenAPI spec during Maven build
+  - Generates `vercel/index.js` with mock responses for all 11 endpoints
+  - Zero manual work when adding new API endpoints
+  - Mock responses generated from schema examples
+
+### Changed
+- **Improved Mock Responses:** All schemas now include top-level examples
+  - Better mock data generation for Vercel deployment
+  - Consistent example values across all DTOs
+  - Support for 202 response codes
+
+### Fixed
+- **CI Workflows:** Multiple fixes for proper npm dependency installation
+  - Added `npm install` to `ci-build.yml`, `ci-publish.yml`, `codeql.yml`, `test-code-generation.yml`
+  - Added write permissions to `generate-mock-server.yml` for commit comments
+
 ## [1.2.2] - 2026-03-31
 
 ### Added
