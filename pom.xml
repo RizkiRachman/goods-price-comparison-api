@@ -224,6 +224,19 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>generate-vercel-routes</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>node</executable>
+                            <arguments>
+                                <argument>${project.basedir}/scripts/generate-vercel-routes.js</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 
