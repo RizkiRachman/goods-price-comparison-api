@@ -57,5 +57,11 @@ app.get('/v1/prices/search', (req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Mock server running on port ${PORT}`));
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Mock server running on port ${PORT}`));
+}
+
+// Export for Vercel serverless
+module.exports = app;
