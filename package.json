@@ -9,6 +9,7 @@
   "scripts": {
     "bundle": "redocly bundle src/main/resources/openapi/main.yaml --output src/main/resources/openapi/openapi-bundled.yaml",
     "generate-postman": "openapi2postmanv2 -s src/main/resources/openapi/openapi-bundled.yaml -o target/postman-collection.json",
-    "inject-postman-tests": "node scripts/inject-postman-tests.js target/postman-collection.json"
+    "inject-postman-tests": "node scripts/inject-postman-tests.js target/postman-collection.json",
+    "generate-postman-env": "node scripts/generate-postman-env.js"
   }
 }
