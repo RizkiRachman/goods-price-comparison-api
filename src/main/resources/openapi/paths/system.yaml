@@ -86,3 +86,12 @@ paths:
               $ref: '../main.yaml#/components/headers/X-RateLimit-Limit'
             X-RateLimit-Remaining:
               $ref: '../main.yaml#/components/headers/X-RateLimit-Remaining'
+
+# Demo endpoint for API diff testing
+  /v1/demo:
+    get:
+      summary: Demo endpoint
+      responses:
+        '200':
+          description: Success
+# Trigger workflow
