@@ -31,7 +31,7 @@ jobs:
         id: current
         run: |
           PATHS=$(grep -E "^  /[a-z]" src/main/resources/openapi/main.yaml | wc -l)
-          SCHEMAS=$(grep -c "type: object" src/main/resources/openapi/schemas/*.yaml || echo "0")
+          SCHEMAS=$(grep -h "type: object" src/main/resources/openapi/schemas/*.yaml 2>/dev/null | wc -l || echo "0")
           echo "paths=$PATHS" >> $GITHUB_OUTPUT
           echo "schemas=$SCHEMAS" >> $GITHUB_OUTPUT
 
