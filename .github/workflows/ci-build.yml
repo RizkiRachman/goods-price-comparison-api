@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
       - run: npm install -g @stoplight/spectral-cli@6.11.0
       - run: spectral lint src/main/resources/openapi/main.yaml --ruleset .spectral.yaml
 
@@ -35,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Install OpenAPI Diff
         run: npm install -g @useoptic/optic
