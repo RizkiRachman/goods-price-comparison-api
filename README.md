@@ -79,25 +79,25 @@ We have a beginner-friendly guide that explains:
 
 ## Project Structure
 
+```mermaid
+flowchart TD
+    root["📁 openapi/"] --> main["main.yaml - Entry point"]
+    root --> paths["paths/ - API endpoints"]
+    root --> schemas["schemas/ - Data models"]
+    
+    paths --> receipts["receipts.yaml"]
+    paths --> prices["prices.yaml"]
+    paths --> shopping["shopping.yaml"]
+    paths --> products["products.yaml"]
+    paths --> alerts["alerts.yaml"]
+    paths --> system["system.yaml"]
+    
+    schemas --> common["common.yaml - Errors, dates"]
+    schemas --> requests["requests.yaml"]
+    schemas --> responses["responses.yaml"]
+    schemas --> models["models.yaml"]
+    schemas --> v2["v2/prices.yaml"]
 ```
-openapi/                          # API Specification (Split by Resource)
-├── main.yaml                     # Entry point
-├── paths/                        # Endpoints by domain
-│   ├── receipts.yaml             # OCR upload & processing
-│   ├── prices.yaml               # Price search (v1/v2)
-│   ├── shopping.yaml             # Route optimization
-│   ├── products.yaml             # Price trends
-│   ├── alerts.yaml               # Price alerts
-│   └── system.yaml               # API version info
-└── schemas/                      # Data models
-    ├── common.yaml               # Errors, dates
-    ├── requests.yaml             # Request DTOs
-    ├── responses.yaml            # Response DTOs
-    ├── models.yaml               # Domain models
-    └── v2/prices.yaml            # V2 enhancements
-```
-
-**Why split by resource?** Maintainability. No more 1200+ line files.
 
 ---
 
@@ -168,12 +168,28 @@ spectral lint src/main/resources/openapi/main.yaml
 
 Every PR must pass:
 
-| Check | Command | Requirement |
+```mermaid
+flowchart LR
+    A[Push/PR] --> B[Lint]
+    B --> C[Build & Test]
+    C --> D[Quality Check]
+    D --> E[Publish]
+    D --> F[Container Build]
+    
+    style A fill:#fff
+    style B fill:#ffeb3b
+    style C fill:#4caf50
+    style D fill:#2196f3
+    style E fill:#9c27b0
+    style F fill:#ff9800
+```
+
+| Stage | Command | Requirement |
 |-------|---------|-------------|
-| **OpenAPI Linting** | `spectral lint ...` | 0 errors |
-| **Build** | `mvn clean compile -q` | 0 errors/warnings |
-| **Tests** | `mvn test` | 100% pass |
-| **Coverage** | `mvn jacoco:report` | ≥90% (100% new code) |
+| **Lint** | `spectral lint` | 0 errors |
+| **Build** | `mvn clean compile` | 0 errors |
+| **Test** | `mvn test` | 100% pass |
+| **Coverage** | `mvn jacoco:report` | ≥90% |
 | **Checkstyle** | `mvn checkstyle:check` | 0 violations |
 | **SpotBugs** | `mvn spotbugs:check` | 0 high priority |
 
@@ -368,20 +384,21 @@ See [docs/GITHUB_WORKFLOWS.md](docs/GITHUB_WORKFLOWS.md) for detailed documentat
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────────┐
-│  GOODS-PRICE-COMPARISON-API (This Project)  │
-│                                             │
-│  OpenAPI Spec ──► OpenAPI Generator ──►     │
-│  (Split Files)     (Maven Plugin)      DTOs │
-└─────────────────────┬───────────────────────┘
-                      │ Maven Dependency
-                      ▼
-┌─────────────────────────────────────────────┐
-│  GOODS-PRICE-COMPARISON-SERVICE             │
-│                                             │
-│  Uses DTOs for type-safe API contracts      │
-└─────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    subgraph API["📦 API Project (This Repo)"]
+        A["OpenAPI Spec"] --> B["OpenAPI Generator"]
+        B --> C["Java DTOs"]
+    end
+    
+    C -->|Maven Dependency| D
+    
+    subgraph Service["📦 Service Project"]
+        D["Implements API using DTOs"]
+    end
+    
+    style API fill:#e1f5fe,stroke:#333
+    style Service fill:#f3e5f5,stroke:#333
 ```
 
 ---
