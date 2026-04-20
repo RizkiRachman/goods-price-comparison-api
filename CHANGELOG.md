@@ -13,6 +13,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.4] - 2026-04-20
+
+### Added
+- **Receipt Verification & Approval Flow:** Extended `/receipts` API with user review lifecycle
+  - `POST /v1/receipts/{id}/approve` - Approve OCR result and trigger data ingestion
+    - Accepts optional corrections (storeName, storeLocation, date, totalAmount, items)
+    - Returns `202 INGESTING` when ingestion starts
+  - `POST /v1/receipts/{id}/reject` - Reject extraction result with optional reason
+  - New status states: `PENDING_REVIEW`, `APPROVED`, `INGESTING`, `REJECTED`, `INGESTION_FAILED`
+  - New request schemas: `ReceiptApproveRequest`, `ReceiptRejectRequest`
+  - New response schemas: `ReceiptApproveResponse`, `ReceiptRejectResponse`
+
+### Changed
+- **Receipt status enum expanded** from 3 to 8 states to cover full review lifecycle
+  - Previous: `PROCESSING`, `COMPLETED`, `FAILED`
+  - Current: `PROCESSING`, `PENDING_REVIEW`, `APPROVED`, `INGESTING`, `COMPLETED`, `REJECTED`, `FAILED`, `INGESTION_FAILED`
+- **`GET /v1/receipts/{id}/results`** now available from `PENDING_REVIEW` status onwards (was `COMPLETED` only)
+- **Mock server** updated with handlers for approve/reject endpoints and `PENDING_REVIEW` status response
+
 ## [1.2.3] - 2026-04-01
 
 ### Added
