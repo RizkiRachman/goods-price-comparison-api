@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.5] - 2026-04-20
+
+### Fixed
+- **OpenAPI bundled spec missing receipt approval paths:** `POST /v1/receipts/{id}/approve` and `POST /v1/receipts/{id}/reject` were defined in `paths/receipts.yaml` but not included in `openapi-bundled.yaml`
+  - Re-bundled spec now includes both endpoints with full request/response schemas
+
 ## [1.2.4] - 2026-04-20
 
 ### Added

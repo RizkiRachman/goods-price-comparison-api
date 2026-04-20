@@ -29,7 +29,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.2.4
+  version: 1.2.5
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -71,6 +71,10 @@ paths:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1status'
   /v1/receipts/{id}/results:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1results'
+  /v1/receipts/{id}/approve:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1approve'
+  /v1/receipts/{id}/reject:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1reject'
   /v1/prices/search:
     $ref: './paths/prices.yaml#/paths/~1v1~1prices~1search'
   /v2/prices/search:
