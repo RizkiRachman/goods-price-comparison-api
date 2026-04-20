@@ -5,7 +5,6 @@ app.use(express.json());
 
 // Auto-generated from OpenAPI spec
 // Generated at: 2026-04-20T07:56:21.220Z
-
 // getApiVersion
 app.get('/v1/version', (req, res) => {
   res.json({
