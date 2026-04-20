@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Auto-generated from OpenAPI spec
-// Generated at: 2026-04-01T13:05:35.330Z
+// Generated at: 2026-04-20T07:43:24.430Z
 
 // getApiVersion
 app.get('/v1/version', (req, res) => {
@@ -83,9 +83,9 @@ app.post('/v1/receipts/upload', (req, res) => {
 app.get('/v1/receipts/:id/status', (req, res) => {
   res.json({
     "jobId": "550e8400-e29b-41d4-a716-446655440000",
-    "status": "PROCESSING",
-    "progress": 75,
-    "message": "OCR processing completed successfully",
+    "status": "PENDING_REVIEW",
+    "progress": 100,
+    "message": "OCR complete. Awaiting user review.",
     "_operationId": "getReceiptStatus"
   });
 });

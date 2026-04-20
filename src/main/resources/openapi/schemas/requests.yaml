@@ -83,3 +83,34 @@ components:
         - productId
         - targetPrice
         - notificationMethod
+
+    ReceiptApproveRequest:
+      type: object
+      description: Optional corrections to apply before approving. Omit to approve OCR result as-is.
+      properties:
+        storeName:
+          type: string
+          example: "DIAMOND"
+        storeLocation:
+          type: string
+          example: "Poins Square"
+        date:
+          type: string
+          format: date
+          example: "2026-03-29"
+        totalAmount:
+          type: number
+          format: double
+          example: 1207206.00
+        items:
+          type: array
+          items:
+            $ref: './models.yaml#/components/schemas/ReceiptItem'
+
+    ReceiptRejectRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Reason for rejection
+          example: "Wrong store detected, items unclear"

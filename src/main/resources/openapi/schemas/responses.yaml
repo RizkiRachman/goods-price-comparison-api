@@ -19,7 +19,7 @@ components:
           example: "550e8400-e29b-41d4-a716-446655440000"
         status:
           type: string
-          enum: [PROCESSING, COMPLETED, FAILED]
+          enum: [PROCESSING, PENDING_REVIEW, APPROVED, INGESTING, COMPLETED, REJECTED, FAILED, INGESTION_FAILED]
           description: Current processing status
           example: "PROCESSING"
         message:
@@ -31,9 +31,9 @@ components:
       type: object
       example:
         jobId: "550e8400-e29b-41d4-a716-446655440000"
-        status: "PROCESSING"
-        progress: 75
-        message: "OCR processing completed successfully"
+        status: "PENDING_REVIEW"
+        progress: 100
+        message: "OCR complete. Awaiting user review."
       properties:
         jobId:
           type: string
@@ -41,18 +41,54 @@ components:
           description: Unique job identifier
         status:
           type: string
-          enum: [PROCESSING, COMPLETED, FAILED]
+          enum: [PROCESSING, PENDING_REVIEW, APPROVED, INGESTING, COMPLETED, REJECTED, FAILED, INGESTION_FAILED]
           description: Current processing status
         progress:
           type: integer
           minimum: 0
           maximum: 100
           description: Processing progress percentage
-          example: 75
+          example: 100
         message:
           type: string
           description: Status message
-          example: "OCR processing completed successfully"
+          example: "OCR complete. Awaiting user review."
+
+    ReceiptApproveResponse:
+      type: object
+      example:
+        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "INGESTING"
+        message: "Receipt approved. Data ingestion started."
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [INGESTING]
+          example: "INGESTING"
+        message:
+          type: string
+          example: "Receipt approved. Data ingestion started."
+
+    ReceiptRejectResponse:
+      type: object
+      example:
+        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "REJECTED"
+        message: "Receipt rejected."
+      properties:
+        jobId:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum: [REJECTED]
+          example: "REJECTED"
+        message:
+          type: string
+          example: "Receipt rejected."
 
     ReceiptResultResponse:
       type: object
