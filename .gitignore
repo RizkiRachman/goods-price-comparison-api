@@ -85,3 +85,7 @@ output/
 # Local development
 local/
 temp/
+
+# claude
+.claude/
+.ai/

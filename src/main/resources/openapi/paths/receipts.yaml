@@ -88,7 +88,7 @@ paths:
       summary: Get OCR results
       description: |
         Retrieve extracted data from a processed receipt.
-        Only available when status is COMPLETED.
+        Only available when status is PENDING_REVIEW or later.
       operationId: getReceiptResults
       tags:
         - Receipts
@@ -115,6 +115,92 @@ paths:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
         '409':
           description: Processing not yet completed
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/receipts/{id}/approve:
+    post:
+      summary: Approve receipt and trigger data ingestion
+      description: |
+        Approve the extracted receipt data and trigger ingestion into the system.
+        Optionally submit corrected data before approving.
+        Receipt must be in PENDING_REVIEW status.
+      operationId: approveReceipt
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/ReceiptApproveRequest'
+      responses:
+        '202':
+          description: Approved, ingestion triggered
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptApproveResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Receipt not in PENDING_REVIEW status
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/receipts/{id}/reject:
+    post:
+      summary: Reject receipt extraction result
+      description: |
+        Reject the OCR extraction result. Receipt must be in PENDING_REVIEW status.
+      operationId: rejectReceipt
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/ReceiptRejectRequest'
+      responses:
+        '200':
+          description: Receipt rejected successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptRejectResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Receipt not in PENDING_REVIEW status
           content:
             application/json:
               schema:
