@@ -4,7 +4,8 @@ const app = express();
 app.use(express.json());
 
 // Auto-generated from OpenAPI spec
-// Generated at: 2026-04-20T07:56:21.220Z
+// Generated at: 2026-04-20T08:38:37.980Z
+
 // getApiVersion
 app.get('/v1/version', (req, res) => {
   res.json({
@@ -108,6 +109,26 @@ app.get('/v1/receipts/:id/results', (req, res) => {
     ],
     "totalAmount": 1207206,
     "_operationId": "getReceiptResults"
+  });
+});
+
+// approveReceipt
+app.post('/v1/receipts/:id/approve', (req, res) => {
+  res.json({
+    "jobId": "550e8400-e29b-41d4-a716-446655440000",
+    "status": "INGESTING",
+    "message": "Receipt approved. Data ingestion started.",
+    "_operationId": "approveReceipt"
+  });
+});
+
+// rejectReceipt
+app.post('/v1/receipts/:id/reject', (req, res) => {
+  res.json({
+    "jobId": "550e8400-e29b-41d4-a716-446655440000",
+    "status": "REJECTED",
+    "message": "Receipt rejected.",
+    "_operationId": "rejectReceipt"
   });
 });
 
