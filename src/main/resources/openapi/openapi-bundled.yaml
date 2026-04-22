@@ -29,7 +29,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.2.6
+  version: 1.2.7
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -1565,6 +1565,9 @@ components:
       description: Processing status for async operations
       enum:
         - PENDING
+        - PENDING_REVIEW
+        - INGESTING
+        - INGESTION_FAILED
         - APPROVED
         - REJECTED
         - FAILED

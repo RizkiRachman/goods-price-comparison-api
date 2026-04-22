@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Auto-generated from OpenAPI spec
-// Generated at: 2026-04-22T04:08:15.596Z
+// Generated at: 2026-04-22T07:35:27.312Z
 
 // getApiVersion
 app.get('/v1/version', (req, res) => {
