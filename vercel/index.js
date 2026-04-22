@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Auto-generated from OpenAPI spec
-// Generated at: 2026-04-20T08:38:37.980Z
+// Generated at: 2026-04-22T04:08:15.596Z
 
 // getApiVersion
 app.get('/v1/version', (req, res) => {
@@ -72,9 +72,8 @@ app.get('/v1/metrics', (req, res) => {
 // uploadReceipt
 app.post('/v1/receipts/upload', (req, res) => {
   res.json({
-    "jobId": "550e8400-e29b-41d4-a716-446655440000",
-    "status": "PROCESSING",
-    "message": "Receipt uploaded successfully. Processing started.",
+    "receiptId": "550e8400-e29b-41d4-a716-446655440000",
+    "status": "PENDING",
     "_operationId": "uploadReceipt"
   });
 });
@@ -82,10 +81,8 @@ app.post('/v1/receipts/upload', (req, res) => {
 // getReceiptStatus
 app.get('/v1/receipts/:id/status', (req, res) => {
   res.json({
-    "jobId": "550e8400-e29b-41d4-a716-446655440000",
-    "status": "PENDING_REVIEW",
-    "progress": 100,
-    "message": "OCR complete. Awaiting user review.",
+    "receiptId": "550e8400-e29b-41d4-a716-446655440000",
+    "status": "PENDING",
     "_operationId": "getReceiptStatus"
   });
 });
@@ -93,7 +90,7 @@ app.get('/v1/receipts/:id/status', (req, res) => {
 // getReceiptResults
 app.get('/v1/receipts/:id/results', (req, res) => {
   res.json({
-    "jobId": "550e8400-e29b-41d4-a716-446655440000",
+    "receiptId": "550e8400-e29b-41d4-a716-446655440000",
     "storeName": "DIAMOND",
     "storeLocation": "Poins Square",
     "date": "2026-03-29",
@@ -115,9 +112,8 @@ app.get('/v1/receipts/:id/results', (req, res) => {
 // approveReceipt
 app.post('/v1/receipts/:id/approve', (req, res) => {
   res.json({
-    "jobId": "550e8400-e29b-41d4-a716-446655440000",
-    "status": "INGESTING",
-    "message": "Receipt approved. Data ingestion started.",
+    "receiptId": "550e8400-e29b-41d4-a716-446655440000",
+    "status": "APPROVED",
     "_operationId": "approveReceipt"
   });
 });
@@ -125,9 +121,8 @@ app.post('/v1/receipts/:id/approve', (req, res) => {
 // rejectReceipt
 app.post('/v1/receipts/:id/reject', (req, res) => {
   res.json({
-    "jobId": "550e8400-e29b-41d4-a716-446655440000",
+    "receiptId": "550e8400-e29b-41d4-a716-446655440000",
     "status": "REJECTED",
-    "message": "Receipt rejected.",
     "_operationId": "rejectReceipt"
   });
 });

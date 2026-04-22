@@ -88,7 +88,7 @@ paths:
       summary: Get OCR results
       description: |
         Retrieve extracted data from a processed receipt.
-        Only available when status is PENDING_REVIEW or later.
+        Only available when status is PENDING or later.
       operationId: getReceiptResults
       tags:
         - Receipts
@@ -122,11 +122,11 @@ paths:
 
   /v1/receipts/{id}/approve:
     post:
-      summary: Approve receipt and trigger data ingestion
+      summary: Approve receipt and get extracted data from receipt pending task and extract the data store into items
       description: |
         Approve the extracted receipt data and trigger ingestion into the system.
         Optionally submit corrected data before approving.
-        Receipt must be in PENDING_REVIEW status.
+        Receipt must be in PENDING status.
       operationId: approveReceipt
       tags:
         - Receipts
@@ -138,12 +138,6 @@ paths:
             type: string
             format: uuid
           description: Job ID returned from upload
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/requests.yaml#/components/schemas/ReceiptApproveRequest'
       responses:
         '202':
           description: Approved, ingestion triggered
@@ -158,7 +152,7 @@ paths:
               schema:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
         '409':
-          description: Receipt not in PENDING_REVIEW status
+          description: Receipt not in PENDING status
           content:
             application/json:
               schema:
@@ -168,7 +162,7 @@ paths:
     post:
       summary: Reject receipt extraction result
       description: |
-        Reject the OCR extraction result. Receipt must be in PENDING_REVIEW status.
+        Reject the OCR extraction result. Receipt must be in PENDING status.
       operationId: rejectReceipt
       tags:
         - Receipts
@@ -200,7 +194,7 @@ paths:
               schema:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
         '409':
-          description: Receipt not in PENDING_REVIEW status
+          description: Receipt not in PENDING status
           content:
             application/json:
               schema:

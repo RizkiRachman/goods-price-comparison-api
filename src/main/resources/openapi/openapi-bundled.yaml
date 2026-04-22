@@ -29,7 +29,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.2.5
+  version: 1.2.6
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -218,7 +218,7 @@ paths:
       summary: Get OCR results
       description: |
         Retrieve extracted data from a processed receipt.
-        Only available when status is PENDING_REVIEW or later.
+        Only available when status is PENDING or later.
       operationId: getReceiptResults
       tags:
         - Receipts
@@ -251,11 +251,11 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /v1/receipts/{id}/approve:
     post:
-      summary: Approve receipt and trigger data ingestion
+      summary: Approve receipt and get extracted data from receipt pending task and extract the data store into items
       description: |
         Approve the extracted receipt data and trigger ingestion into the system.
         Optionally submit corrected data before approving.
-        Receipt must be in PENDING_REVIEW status.
+        Receipt must be in PENDING status.
       operationId: approveReceipt
       tags:
         - Receipts
@@ -267,12 +267,6 @@ paths:
             type: string
             format: uuid
           description: Job ID returned from upload
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ReceiptApproveRequest'
       responses:
         '202':
           description: Approved, ingestion triggered
@@ -287,7 +281,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Receipt not in PENDING_REVIEW status
+          description: Receipt not in PENDING status
           content:
             application/json:
               schema:
@@ -296,7 +290,7 @@ paths:
     post:
       summary: Reject receipt extraction result
       description: |
-        Reject the OCR extraction result. Receipt must be in PENDING_REVIEW status.
+        Reject the OCR extraction result. Receipt must be in PENDING status.
       operationId: rejectReceipt
       tags:
         - Receipts
@@ -328,7 +322,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
-          description: Receipt not in PENDING_REVIEW status
+          description: Receipt not in PENDING status
           content:
             application/json:
               schema:
@@ -929,70 +923,32 @@ components:
     ReceiptUploadResponse:
       type: object
       example:
-        jobId: 550e8400-e29b-41d4-a716-446655440000
-        status: PROCESSING
-        message: Receipt uploaded successfully. Processing started.
+        receiptId: 550e8400-e29b-41d4-a716-446655440000
+        status: PENDING
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
-          description: Unique job identifier for tracking
+          description: Unique receipt identifier for tracking
           example: 550e8400-e29b-41d4-a716-446655440000
         status:
-          type: string
-          enum:
-            - PROCESSING
-            - PENDING_REVIEW
-            - APPROVED
-            - INGESTING
-            - COMPLETED
-            - REJECTED
-            - FAILED
-            - INGESTION_FAILED
-          description: Current processing status
-          example: PROCESSING
-        message:
-          type: string
-          description: Human-readable status message
-          example: Receipt uploaded successfully. Processing started.
+          $ref: '#/components/schemas/Status'
     ReceiptStatusResponse:
       type: object
       example:
-        jobId: 550e8400-e29b-41d4-a716-446655440000
-        status: PENDING_REVIEW
-        progress: 100
-        message: OCR complete. Awaiting user review.
+        receiptId: 550e8400-e29b-41d4-a716-446655440000
+        status: PENDING
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
-          description: Unique job identifier
+          description: Unique receipt identifier
         status:
-          type: string
-          enum:
-            - PROCESSING
-            - PENDING_REVIEW
-            - APPROVED
-            - INGESTING
-            - COMPLETED
-            - REJECTED
-            - FAILED
-            - INGESTION_FAILED
-          description: Current processing status
-        progress:
-          type: integer
-          minimum: 0
-          maximum: 100
-          description: Processing progress percentage
-          example: 100
-        message:
-          type: string
-          description: Status message
-          example: OCR complete. Awaiting user review.
+          $ref: '#/components/schemas/Status'
     ReceiptResultResponse:
       type: object
       example:
-        jobId: 550e8400-e29b-41d4-a716-446655440000
+        receiptId: 550e8400-e29b-41d4-a716-446655440000
         storeName: DIAMOND
         storeLocation: Poins Square
         date: '2026-03-29'
@@ -1005,10 +961,10 @@ components:
             unit: bottle
         totalAmount: 1207206
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
-          description: Unique job identifier
+          description: Unique receipt identifier
         storeName:
           type: string
           description: Store name from receipt
@@ -1604,46 +1560,27 @@ components:
           type: integer
           description: Number of price records in period
           example: 5
-    ReceiptApproveRequest:
-      type: object
-      description: Optional corrections to apply before approving. Omit to approve OCR result as-is.
-      properties:
-        storeName:
-          type: string
-          example: DIAMOND
-        storeLocation:
-          type: string
-          example: Poins Square
-        date:
-          type: string
-          format: date
-          example: '2026-03-29'
-        totalAmount:
-          type: number
-          format: double
-          example: 1207206
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReceiptItem'
+    Status:
+      type: string
+      description: Processing status for async operations
+      enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
+        - FAILED
+        - COMPLETED
+      example: PENDING
     ReceiptApproveResponse:
       type: object
       example:
-        jobId: 550e8400-e29b-41d4-a716-446655440000
-        status: INGESTING
-        message: Receipt approved. Data ingestion started.
+        receiptId: 550e8400-e29b-41d4-a716-446655440000
+        status: APPROVED
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
         status:
-          type: string
-          enum:
-            - INGESTING
-          example: INGESTING
-        message:
-          type: string
-          example: Receipt approved. Data ingestion started.
+          $ref: '#/components/schemas/Status'
     ReceiptRejectRequest:
       type: object
       properties:
@@ -1654,21 +1591,14 @@ components:
     ReceiptRejectResponse:
       type: object
       example:
-        jobId: 550e8400-e29b-41d4-a716-446655440000
+        receiptId: 550e8400-e29b-41d4-a716-446655440000
         status: REJECTED
-        message: Receipt rejected.
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
         status:
-          type: string
-          enum:
-            - REJECTED
-          example: REJECTED
-        message:
-          type: string
-          example: Receipt rejected.
+          $ref: '#/components/schemas/Status'
   headers:
     X-RateLimit-Limit:
       description: Rate limit per minute

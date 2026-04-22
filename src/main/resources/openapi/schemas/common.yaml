@@ -77,7 +77,7 @@ components:
         status:
           type: string
           description: API status
-          enum: [stable, beta, deprecated, sunset]
+          enum: [ stable, beta, deprecated, sunset ]
           example: "stable"
         supportedVersions:
           type: array
@@ -92,7 +92,7 @@ components:
               status:
                 type: string
                 description: Version status
-                enum: [stable, beta, deprecated, sunset]
+                enum: [ stable, beta, deprecated, sunset ]
                 example: "stable"
               baseUrl:
                 type: string
@@ -125,7 +125,7 @@ components:
         status:
           type: string
           description: Overall health status
-          enum: [UP, DOWN]
+          enum: [ UP, DOWN ]
           example: "UP"
         components:
           type: object
@@ -134,17 +134,17 @@ components:
             api:
               type: string
               description: API service status
-              enum: [UP, DOWN]
+              enum: [ UP, DOWN ]
               example: "UP"
             database:
               type: string
               description: Database connectivity status
-              enum: [UP, DOWN]
+              enum: [ UP, DOWN ]
               example: "UP"
             ocr:
               type: string
               description: OCR service status (if applicable)
-              enum: [UP, DOWN]
+              enum: [ UP, DOWN ]
               example: "UP"
         timestamp:
           type: string
@@ -230,3 +230,13 @@ components:
           format: date-time
           description: Metrics snapshot timestamp
           example: "2026-03-31T10:30:00Z"
+    Status:
+      type: string
+      description: Processing status for async operations
+      enum:
+        - PENDING
+        - APPROVED
+        - REJECTED
+        - FAILED
+        - COMPLETED
+      example: "PENDING"
