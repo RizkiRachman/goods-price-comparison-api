@@ -13,6 +13,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.6] - 2026-04-22
+
+### Added
+- **Common Status Schema:** New reusable `Status` enum for async operations
+  - Values: `PENDING`, `APPROVED`, `REJECTED`, `FAILED`, `COMPLETED`
+  - Located in `common.yaml#/components/schemas/Status`
+  - Used across receipt, alert, and other async workflows
+
+### Changed
+- **Receipt API - Simplified Status Model:**
+  - Consolidated 8 receipt-specific statuses into 5 common statuses
+  - Previous: `PROCESSING`, `PENDING_REVIEW`, `APPROVED`, `INGESTING`, `COMPLETED`, `REJECTED`, `FAILED`, `INGESTION_FAILED`
+  - Current: `PENDING`, `APPROVED`, `REJECTED`, `FAILED`, `COMPLETED`
+  - All receipt responses now use common `Status` schema
+- **Receipt API - Renamed `jobId` to `receiptId`:**
+  - `ReceiptUploadResponse`, `ReceiptStatusResponse`, `ReceiptApproveResponse`, `ReceiptRejectResponse`, `ReceiptResultResponse`
+  - More intuitive naming - identifies the receipt entity directly
+- **Receipt API - Removed message fields:**
+  - Simplified response structure (status-only responses)
+  - Clients can handle messaging based on status code
+- **Updated API version:** Bumped from 1.2.5 to 1.2.6 in OpenAPI spec
+
+### Fixed
+- **Receipt endpoints documentation:**
+  - `GET /v1/receipts/{id}/results` - Changed status requirement from `PENDING_REVIEW` to `PENDING`
+  - `POST /v1/receipts/{id}/approve` - Updated 409 error description to "Receipt not in PENDING status"
+  - `POST /v1/receipts/{id}/reject` - Updated 409 error description to "Receipt not in PENDING status"
+
 ## [1.2.4] - 2026-04-20
 
 ### Added
@@ -211,7 +239,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
-- **1.0.0-SNAPSHOT** - Initial project setup (Current)
+- **1.2.6** - Simplified status model and common Status schema
+- **1.2.4** - Receipt verification & approval flow
+- **1.2.3** - Vercel mock server auto-generator
+- **1.2.2** - Health and metrics endpoints
+- **1.2.1** - Postman collection generation
+- **1.2.0** - Version bump
+- **1.1.0** - Controller interfaces generation
+- **1.0.0-SNAPSHOT** - Initial project setup
 
 ## Notes
 

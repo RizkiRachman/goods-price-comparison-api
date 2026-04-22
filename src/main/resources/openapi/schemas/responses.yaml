@@ -8,92 +8,58 @@ components:
     ReceiptUploadResponse:
       type: object
       example:
-        jobId: "550e8400-e29b-41d4-a716-446655440000"
-        status: "PROCESSING"
-        message: "Receipt uploaded successfully. Processing started."
+        receiptId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "PENDING"
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
-          description: Unique job identifier for tracking
+          description: Unique receipt identifier for tracking
           example: "550e8400-e29b-41d4-a716-446655440000"
         status:
-          type: string
-          enum: [PROCESSING, PENDING_REVIEW, APPROVED, INGESTING, COMPLETED, REJECTED, FAILED, INGESTION_FAILED]
-          description: Current processing status
-          example: "PROCESSING"
-        message:
-          type: string
-          description: Human-readable status message
-          example: "Receipt uploaded successfully. Processing started."
+          $ref: './common.yaml#/components/schemas/Status'
 
     ReceiptStatusResponse:
       type: object
       example:
-        jobId: "550e8400-e29b-41d4-a716-446655440000"
-        status: "PENDING_REVIEW"
-        progress: 100
-        message: "OCR complete. Awaiting user review."
+        receiptId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "PENDING"
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
-          description: Unique job identifier
+          description: Unique receipt identifier
         status:
-          type: string
-          enum: [PROCESSING, PENDING_REVIEW, APPROVED, INGESTING, COMPLETED, REJECTED, FAILED, INGESTION_FAILED]
-          description: Current processing status
-        progress:
-          type: integer
-          minimum: 0
-          maximum: 100
-          description: Processing progress percentage
-          example: 100
-        message:
-          type: string
-          description: Status message
-          example: "OCR complete. Awaiting user review."
+          $ref: './common.yaml#/components/schemas/Status'
 
     ReceiptApproveResponse:
       type: object
       example:
-        jobId: "550e8400-e29b-41d4-a716-446655440000"
-        status: "INGESTING"
-        message: "Receipt approved. Data ingestion started."
+        receiptId: "550e8400-e29b-41d4-a716-446655440000"
+        status: "APPROVED"
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
         status:
-          type: string
-          enum: [INGESTING]
-          example: "INGESTING"
-        message:
-          type: string
-          example: "Receipt approved. Data ingestion started."
+          $ref: './common.yaml#/components/schemas/Status'
 
     ReceiptRejectResponse:
       type: object
       example:
-        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        receiptId: "550e8400-e29b-41d4-a716-446655440000"
         status: "REJECTED"
-        message: "Receipt rejected."
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
         status:
-          type: string
-          enum: [REJECTED]
-          example: "REJECTED"
-        message:
-          type: string
-          example: "Receipt rejected."
+          $ref: './common.yaml#/components/schemas/Status'
 
     ReceiptResultResponse:
       type: object
       example:
-        jobId: "550e8400-e29b-41d4-a716-446655440000"
+        receiptId: "550e8400-e29b-41d4-a716-446655440000"
         storeName: "DIAMOND"
         storeLocation: "Poins Square"
         date: "2026-03-29"
@@ -106,10 +72,10 @@ components:
             unit: "bottle"
         totalAmount: 1207206.00
       properties:
-        jobId:
+        receiptId:
           type: string
           format: uuid
-          description: Unique job identifier
+          description: Unique receipt identifier
         storeName:
           type: string
           description: Store name from receipt
@@ -230,7 +196,7 @@ components:
             $ref: './models.yaml#/components/schemas/TrendDataPoint'
         trendDirection:
           type: string
-          enum: [increasing, decreasing, stable]
+          enum: [ increasing, decreasing, stable ]
           description: Overall trend direction
           example: "decreasing"
         priceChange:
@@ -255,7 +221,7 @@ components:
           example: "sub-12345"
         status:
           type: string
-          enum: [ACTIVE, PAUSED, EXPIRED]
+          enum: [ ACTIVE, PAUSED, EXPIRED ]
           description: Subscription status
           example: "ACTIVE"
         productName:
