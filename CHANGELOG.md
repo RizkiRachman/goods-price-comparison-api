@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.2.7] - 2026-04-22
+
+### Added
+- **Common Status Schema:** Add another `Status` enum for async operations
+  - Values: `PENDING_REVIEW`, `INGESTING`, `INGESTION_FAILED`
+  - Located in `common.yaml#/components/schemas/Status`
+  - Used across receipt, alert, and other async workflows
+
 ## [1.2.6] - 2026-04-22
 
 ### Added

@@ -235,6 +235,9 @@ components:
       description: Processing status for async operations
       enum:
         - PENDING
+        - PENDING_REVIEW
+        - INGESTING
+        - INGESTION_FAILED
         - APPROVED
         - REJECTED
         - FAILED
