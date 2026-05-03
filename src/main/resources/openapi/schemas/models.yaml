@@ -221,6 +221,26 @@ components:
           description: Number of price records in period
           example: 5
 
+    ProductDetail:
+      type: object
+      description: Aggregated product detail (e.g. price summary)
+      properties:
+        price:
+          type: object
+          description: Aggregated price information
+          properties:
+            avg:
+              type: number
+              format: double
+              description: Average price across all stores
+              example: 5600.00
+            updatedAt:
+              type: string
+              format: date-time
+              description: Last price update timestamp
+              nullable: true
+              example: "2026-03-29T14:30:00Z"
+
     Product:
       type: object
       description: Product catalog entry
@@ -267,6 +287,8 @@ components:
           format: date-time
           description: Last update timestamp
           example: "2026-03-29T10:00:00Z"
+        detail:
+          $ref: '#/components/schemas/ProductDetail'
 
     Store:
       type: object

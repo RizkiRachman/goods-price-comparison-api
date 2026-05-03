@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Auto-generated from OpenAPI spec
-// Generated at: 2026-05-03T09:46:15.697Z
+// Generated at: 2026-05-03T13:20:11.434Z
 
 // getApiVersion
 app.get('/v1/version', (req, res) => {
@@ -323,7 +323,13 @@ app.get('/v1/products', (req, res) => {
         "brand": "Ultra Milk",
         "unit": "bottle",
         "createdAt": "2026-01-01T00:00:00Z",
-        "updatedAt": "2026-03-29T10:00:00Z"
+        "updatedAt": "2026-03-29T10:00:00Z",
+        "detail": {
+          "price": {
+            "avg": 5600,
+            "updatedAt": "2026-03-29T14:30:00Z"
+          }
+        }
       }
     ],
     "pagination": {

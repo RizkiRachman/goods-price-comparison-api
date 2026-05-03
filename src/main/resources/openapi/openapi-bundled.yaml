@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.3.0
+  version: 1.4.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -662,6 +662,13 @@ paths:
               - desc
             default: asc
           description: Sort direction
+        - name: includePrice
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+          description: Include aggregated price details per product
       responses:
         '200':
           description: Products retrieved successfully
@@ -2228,6 +2235,10 @@ components:
             unit: bottle
             createdAt: '2026-01-01T00:00:00Z'
             updatedAt: '2026-03-29T10:00:00Z'
+            detail:
+              price:
+                avg: 5600
+                updatedAt: '2026-03-29T14:30:00Z'
         pagination:
           page: 1
           pageSize: 20
@@ -2681,6 +2692,27 @@ components:
           format: date-time
           description: Last update timestamp
           example: '2026-03-29T10:00:00Z'
+        detail:
+          $ref: '#/components/schemas/ProductDetail'
+    ProductDetail:
+      type: object
+      description: Aggregated product detail (e.g. price summary)
+      properties:
+        price:
+          type: object
+          description: Aggregated price information
+          properties:
+            avg:
+              type: number
+              format: double
+              description: Average price across all stores
+              example: 5600
+            updatedAt:
+              type: string
+              format: date-time
+              description: Last price update timestamp
+              nullable: true
+              example: '2026-03-29T14:30:00Z'
     Store:
       type: object
       description: Retail store information

@@ -31,7 +31,7 @@ info:
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
 
-  version: 1.3.0
+  version: 1.4.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -191,6 +191,8 @@ components:
       $ref: './schemas/models.yaml#/components/schemas/TrendDataPoint'
     Product:
       $ref: './schemas/models.yaml#/components/schemas/Product'
+    ProductDetail:
+      $ref: './schemas/models.yaml#/components/schemas/ProductDetail'
     Store:
       $ref: './schemas/models.yaml#/components/schemas/Store'
     Promotion:
