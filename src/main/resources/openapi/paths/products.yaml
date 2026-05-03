@@ -56,3 +56,356 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/products:
+    get:
+      summary: List products
+      description: |
+        Retrieve a paginated list of products with optional
+        filtering by category, brand, and search query.
+      operationId: listProducts
+      tags:
+        - Products
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search products by name (partial match)
+        - name: category
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by product category
+        - name: brand
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by product brand
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+          description: Filter by entity status
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [name, category, brand, createdAt]
+            default: name
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+          description: Sort direction
+      responses:
+        '200':
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ProductListResponse'
+    post:
+      summary: Create a product
+      description: Create a new product in the catalog
+      operationId: createProduct
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/CreateProductRequest'
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/Product'
+          headers:
+            Location:
+              description: URL of the created product
+              schema:
+                type: string
+                format: uri
+                example: "http://localhost:8080/v1/products/1"
+        '400':
+          description: Invalid product data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Product with this name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/products/{productId}:
+    get:
+      summary: Get a product by ID
+      description: Retrieve detailed information about a specific product
+      operationId: getProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Product ID
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/Product'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a product
+      description: Update an existing product's information
+      operationId: updateProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Product ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/UpdateProductRequest'
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/Product'
+        '400':
+          description: Invalid product data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Product with this name already exists
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a product
+      description: Soft-delete a product from the catalog
+      operationId: deleteProduct
+      tags:
+        - Products
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Product ID
+      responses:
+        '204':
+          description: Product deleted successfully
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/products/{productId}/prices:
+    get:
+      summary: List prices for a product
+      description: |
+        Retrieve all price records for a specific product across stores,
+        with optional filtering by store and date range.
+      operationId: listProductPrices
+      tags:
+        - Prices
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Product ID
+        - name: storeId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Filter by store
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Start date for price records
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: End date for price records
+        - name: isPromo
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filter by promotional status
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+          description: Filter by entity status
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [price, dateRecorded, storeId]
+            default: dateRecorded
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+          description: Sort direction
+      responses:
+        '200':
+          description: Price records retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/PriceRecordListResponse'
+        '404':
+          description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    post:
+      summary: Record a price for a product
+      description: Create a new price record for a product at a specific store
+      operationId: createPriceRecord
+      tags:
+        - Prices
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Product ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/CreatePriceRecordRequest'
+      responses:
+        '201':
+          description: Price record created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/PriceRecord'
+          headers:
+            Location:
+              description: URL of the created price record
+              schema:
+                type: string
+                format: uri
+                example: "http://localhost:8080/v1/prices/1"
+        '400':
+          description: Invalid price data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Product or store not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

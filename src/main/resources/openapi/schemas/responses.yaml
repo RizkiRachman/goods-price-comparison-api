@@ -242,3 +242,91 @@ components:
           type: string
           description: Confirmation message
           example: "You will be notified when price drops to Rp 5,000 or below"
+
+    ProductListResponse:
+      type: object
+      description: Paginated list of products
+      example:
+        data:
+          - id: 1
+            name: "Ultra Milk Plain Slim 200ml"
+            category: "Dairy"
+            brand: "Ultra Milk"
+            unit: "bottle"
+            createdAt: "2026-01-01T00:00:00Z"
+            updatedAt: "2026-03-29T10:00:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 150
+          totalPages: 8
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of product records
+          items:
+            $ref: './models.yaml#/components/schemas/Product'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
+
+    StoreListResponse:
+      type: object
+      description: Paginated list of stores
+      example:
+        data:
+          - id: 1
+            name: "DIAMOND"
+            location: "Poins Square"
+            chain: "Diamond Supermarket"
+            address: "Jl. Poins Raya No. 1, Jakarta Selatan"
+            latitude: -6.2088
+            longitude: 106.8456
+            createdAt: "2026-01-01T00:00:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 50
+          totalPages: 3
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of store records
+          items:
+            $ref: './models.yaml#/components/schemas/Store'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
+
+    PriceRecordListResponse:
+      type: object
+      description: Paginated list of price records
+      example:
+        data:
+          - id: 1
+            productId: 1
+            storeId: 1
+            price: 5600.00
+            unitPrice: 5600.00
+            dateRecorded: "2026-03-29T14:30:00Z"
+            isPromo: false
+            availability: "in_stock"
+            createdAt: "2026-03-29T14:30:00Z"
+            updatedAt: "2026-03-29T14:30:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 500
+          totalPages: 25
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of price records
+          items:
+            $ref: './models.yaml#/components/schemas/PriceRecord'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'

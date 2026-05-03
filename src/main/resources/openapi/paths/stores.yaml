@@ -1,0 +1,215 @@
+openapi: 3.0.3
+info:
+  title: Store Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/stores:
+    get:
+      summary: List stores
+      description: |
+        Retrieve a paginated list of stores with optional
+        filtering by name, location, chain, and search query.
+      operationId: listStores
+      tags:
+        - Stores
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search stores by name or location (partial match)
+        - name: location
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by store location
+        - name: chain
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Filter by store chain
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+          description: Filter by entity status
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [name, location, chain, createdAt]
+            default: name
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+          description: Sort direction
+      responses:
+        '200':
+          description: Stores retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/StoreListResponse'
+    post:
+      summary: Create a store
+      description: Create a new store location
+      operationId: createStore
+      tags:
+        - Stores
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/CreateStoreRequest'
+      responses:
+        '201':
+          description: Store created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/Store'
+          headers:
+            Location:
+              description: URL of the created store
+              schema:
+                type: string
+                format: uri
+                example: "http://localhost:8080/v1/stores/1"
+        '400':
+          description: Invalid store data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Store with this name and location already exists
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/stores/{storeId}:
+    get:
+      summary: Get a store by ID
+      description: Retrieve detailed information about a specific store
+      operationId: getStore
+      tags:
+        - Stores
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Store ID
+      responses:
+        '200':
+          description: Store retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/Store'
+        '404':
+          description: Store not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a store
+      description: Update an existing store's information
+      operationId: updateStore
+      tags:
+        - Stores
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Store ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/UpdateStoreRequest'
+      responses:
+        '200':
+          description: Store updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/Store'
+        '400':
+          description: Invalid store data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Store not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Store with this name and location already exists
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a store
+      description: Soft-delete a store from the system
+      operationId: deleteStore
+      tags:
+        - Stores
+      parameters:
+        - name: storeId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Store ID
+      responses:
+        '204':
+          description: Store deleted successfully
+        '404':
+          description: Store not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

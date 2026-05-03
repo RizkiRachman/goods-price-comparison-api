@@ -220,3 +220,235 @@ components:
           type: integer
           description: Number of price records in period
           example: 5
+
+    Product:
+      type: object
+      description: Product catalog entry
+      example:
+        id: 1
+        name: "Ultra Milk Plain Slim 200ml"
+        category: "Dairy"
+        brand: "Ultra Milk"
+        unit: "bottle"
+        status: pending_review
+        createdAt: "2026-01-01T00:00:00Z"
+        updatedAt: "2026-03-29T10:00:00Z"
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique product identifier
+          example: 1
+        name:
+          type: string
+          description: Full product name
+          example: "Ultra Milk Plain Slim 200ml"
+        category:
+          type: string
+          description: Product category
+          example: "Dairy"
+        brand:
+          type: string
+          description: Product brand
+          example: "Ultra Milk"
+        unit:
+          type: string
+          description: Unit of measurement
+          example: "bottle"
+        status:
+          $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-01-01T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-03-29T10:00:00Z"
+
+    Store:
+      type: object
+      description: Retail store information
+      example:
+        id: 1
+        name: "DIAMOND"
+        location: "Poins Square"
+        chain: "Diamond Supermarket"
+        address: "Jl. Poins Raya No. 1, Jakarta Selatan"
+        latitude: -6.2088
+        longitude: 106.8456
+        status: pending
+        createdAt: "2026-01-01T00:00:00Z"
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique store identifier
+          example: 1
+        name:
+          type: string
+          description: Store display name
+          example: "DIAMOND"
+        location:
+          type: string
+          description: Location or branch name
+          example: "Poins Square"
+        chain:
+          type: string
+          description: Store chain or brand name
+          example: "Diamond Supermarket"
+        address:
+          type: string
+          description: Full street address
+          example: "Jl. Poins Raya No. 1, Jakarta Selatan"
+        latitude:
+          type: number
+          format: double
+          description: GPS latitude coordinate
+          example: -6.2088
+        longitude:
+          type: number
+          format: double
+          description: GPS longitude coordinate
+          example: 106.8456
+        status:
+          $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-01-01T00:00:00Z"
+
+    Promotion:
+      type: object
+      description: Promotion or discount offer
+      example:
+        id: 1
+        promoType: "discount"
+        discountPercentage: 10.0
+        validUntil: "2026-04-05T23:59:59Z"
+        description: "Diskon 10% untuk semua produk dairy"
+        createdAt: "2026-03-01T00:00:00Z"
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique promotion identifier
+          example: 1
+        promoType:
+          type: string
+          enum: [discount, bundle, buy_one_get_one, clearance]
+          description: Type of promotion
+          example: "discount"
+        discountPercentage:
+          type: number
+          format: double
+          description: Discount percentage (if applicable)
+          example: 10.0
+        validUntil:
+          type: string
+          format: date-time
+          description: Promotion end date
+          example: "2026-04-05T23:59:59Z"
+        description:
+          type: string
+          description: Human-readable promotion description
+          example: "Diskon 10% untuk semua produk dairy"
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-03-01T00:00:00Z"
+
+    PriceRecord:
+      type: object
+      description: Price snapshot for a product at a store
+      example:
+        id: 1
+        productId: 1
+        storeId: 1
+        price: 5600.00
+        unitPrice: 5600.00
+        dateRecorded: "2026-03-29T14:30:00Z"
+        isPromo: false
+        promoDetails: null
+        availability: "in_stock"
+        status: pending
+        createdAt: "2026-03-29T14:30:00Z"
+        updatedAt: "2026-03-29T14:30:00Z"
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique price record identifier
+          example: 1
+        productId:
+          type: integer
+          format: int64
+          description: Associated product identifier
+          example: 1
+        storeId:
+          type: integer
+          format: int64
+          description: Associated store identifier
+          example: 1
+        price:
+          type: number
+          format: double
+          description: Current price
+          minimum: 0
+          example: 5600.00
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          minimum: 0
+          example: 5600.00
+        dateRecorded:
+          type: string
+          format: date-time
+          description: When the price was recorded
+          example: "2026-03-29T14:30:00Z"
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          example: false
+        promoDetails:
+          type: object
+          description: Promotion details (only if isPromo=true)
+          nullable: true
+          properties:
+            promoType:
+              type: string
+              enum: [discount, bundle, buy_one_get_one, clearance]
+              description: Type of promotion
+              example: "discount"
+            discountPercentage:
+              type: number
+              format: double
+              description: Discount percentage
+              example: 10.0
+            validUntil:
+              type: string
+              format: date-time
+              description: Promotion end date
+              example: "2026-04-05T23:59:59Z"
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, unknown]
+          description: Product availability at store
+          example: "in_stock"
+        status:
+          $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-03-29T14:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-03-29T14:30:00Z"

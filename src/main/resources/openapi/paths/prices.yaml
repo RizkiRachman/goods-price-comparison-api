@@ -48,7 +48,7 @@ paths:
         - Advanced filtering (brand, category, store chain)
         - Price prediction
         - Historical price comparison
-        
+
         This is an example of API versioning where v2 provides
         enhanced functionality over v1.
       operationId: searchPricesV2
@@ -81,6 +81,97 @@ paths:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
         '404':
           description: Product not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/prices/{priceId}:
+    get:
+      summary: Get a price record by ID
+      description: Retrieve detailed information about a specific price record
+      operationId: getPriceRecord
+      tags:
+        - Prices
+      parameters:
+        - name: priceId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Price record ID
+      responses:
+        '200':
+          description: Price record retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/PriceRecord'
+        '404':
+          description: Price record not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a price record
+      description: Update an existing price record's information
+      operationId: updatePriceRecord
+      tags:
+        - Prices
+      parameters:
+        - name: priceId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Price record ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/UpdatePriceRecordRequest'
+      responses:
+        '200':
+          description: Price record updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/models.yaml#/components/schemas/PriceRecord'
+        '400':
+          description: Invalid price data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Price record not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a price record
+      description: Soft-delete a price record from the system
+      operationId: deletePriceRecord
+      tags:
+        - Prices
+      parameters:
+        - name: priceId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: Price record ID
+      responses:
+        '204':
+          description: Price record deleted successfully
+        '404':
+          description: Price record not found
           content:
             application/json:
               schema:

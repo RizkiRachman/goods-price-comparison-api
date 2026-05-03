@@ -243,3 +243,57 @@ components:
         - FAILED
         - COMPLETED
       example: "PENDING"
+
+    Pagination:
+      type: object
+      description: Pagination metadata for list endpoints
+      properties:
+        page:
+          type: integer
+          description: Current page number
+          example: 1
+        pageSize:
+          type: integer
+          description: Number of items per page
+          example: 20
+        totalItems:
+          type: integer
+          description: Total number of matching items
+          example: 150
+        totalPages:
+          type: integer
+          description: Total number of pages
+          example: 8
+        hasNext:
+          type: boolean
+          description: Whether there are more pages
+          example: true
+        hasPrevious:
+          type: boolean
+          description: Whether there are previous pages
+          example: false
+
+    SortDirection:
+      type: string
+      description: Sort direction
+      enum: [asc, desc]
+      default: asc
+      example: asc
+
+    EntityStatus:
+      type: string
+      description: |
+        Lifecycle status for entities.
+        Flow: pending → pending_review → pending_approval → approved → ingestion → completed
+                                                          → rejected
+                                                          → ingestion_failed
+      enum:
+        - pending
+        - pending_review
+        - pending_approval
+        - approved
+        - rejected
+        - ingestion
+        - ingestion_failed
+        - completed
+      example: pending

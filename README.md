@@ -90,9 +90,10 @@ flowchart TD
     paths --> shopping["shopping.yaml"]
     paths --> products["products.yaml"]
     paths --> alerts["alerts.yaml"]
+    paths --> stores["stores.yaml"]
     paths --> system["system.yaml"]
     
-    schemas --> common["common.yaml - Errors, dates"]
+    schemas --> common["common.yaml - Errors, dates, pagination, status"]
     schemas --> requests["requests.yaml"]
     schemas --> responses["responses.yaml"]
     schemas --> models["models.yaml"]
@@ -112,7 +113,7 @@ flowchart TD
 
 | Version | Status | Key Features |
 |---------|--------|--------------|
-| **v1** | Stable | Basic price search, receipt OCR, shopping optimization |
+| **v1** | Stable | Product, store & price CRUD, price search, receipt OCR, shopping optimization, price alerts |
 | **v2** | Beta | Enhanced price search with pagination, predictions, filters |
 
 **Breaking changes?** Only in new major versions. Deprecated versions supported for 30 days.
@@ -445,9 +446,14 @@ docker-compose up api-builder    # Podman supports docker-compose too!
 
 See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and version updates.
 
-### Recent Changes (v1.2.3)
+### Recent Changes (v1.3.0)
 
-- ✅ OpenAPI specification with 11 endpoints
+- ✅ OpenAPI specification with **28 endpoints**
+- ✅ Products CRUD — full catalog management
+- ✅ Stores CRUD — retail store management with geolocation
+- ✅ Price Records CRUD — nested under products with direct access
+- ✅ Unified `EntityStatus` lifecycle across all entities (8 states)
+- ✅ Pagination support on all list endpoints
 - ✅ Split-by-resource structure for maintainability
 - ✅ CI/CD pipeline with GitHub Actions
 - ✅ Container support (Docker/Podman)
@@ -469,7 +475,7 @@ Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Tech Stack:** OpenAPI 3.0 | Java 17 | Maven | Spring Boot | Spectral
 
-**Version:** 1.2.3 (API v1)
+**Version:** 1.3.0 (API v1)
 
 **License:** MIT
 
