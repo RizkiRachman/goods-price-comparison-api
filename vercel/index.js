@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 // Auto-generated from OpenAPI spec
-// Generated at: 2026-04-22T07:35:27.312Z
+// Generated at: 2026-05-03T09:46:15.697Z
 
 // getApiVersion
 app.get('/v1/version', (req, res) => {
@@ -216,6 +216,52 @@ app.post('/v2/prices/search', (req, res) => {
   });
 });
 
+// getPriceRecord
+app.get('/v1/prices/:priceId', (req, res) => {
+  res.json({
+    "id": 1,
+    "productId": 1,
+    "storeId": 1,
+    "price": 5600,
+    "unitPrice": 5600,
+    "dateRecorded": "2026-03-29T14:30:00Z",
+    "isPromo": false,
+    "promoDetails": null,
+    "availability": "in_stock",
+    "status": "pending",
+    "createdAt": "2026-03-29T14:30:00Z",
+    "updatedAt": "2026-03-29T14:30:00Z",
+    "_operationId": "createPriceRecord"
+  });
+});
+
+// updatePriceRecord
+app.put('/v1/prices/:priceId', (req, res) => {
+  res.json({
+    "id": 1,
+    "productId": 1,
+    "storeId": 1,
+    "price": 5600,
+    "unitPrice": 5600,
+    "dateRecorded": "2026-03-29T14:30:00Z",
+    "isPromo": false,
+    "promoDetails": null,
+    "availability": "in_stock",
+    "status": "pending",
+    "createdAt": "2026-03-29T14:30:00Z",
+    "updatedAt": "2026-03-29T14:30:00Z",
+    "_operationId": "createPriceRecord"
+  });
+});
+
+// deletePriceRecord
+app.delete('/v1/prices/:priceId', (req, res) => {
+  res.json({
+    "message": "Mock response",
+    "_operationId": "deletePriceRecord"
+  });
+});
+
 // optimizeShoppingRoute
 app.post('/v1/shopping/optimize', (req, res) => {
   res.json({
@@ -263,6 +309,216 @@ app.get('/v1/products/trend/:productId', (req, res) => {
     "trendDirection": "decreasing",
     "priceChange": -3.4,
     "_operationId": "getProductTrend"
+  });
+});
+
+// listProducts
+app.get('/v1/products', (req, res) => {
+  res.json({
+    "data": [
+      {
+        "id": 1,
+        "name": "Ultra Milk Plain Slim 200ml",
+        "category": "Dairy",
+        "brand": "Ultra Milk",
+        "unit": "bottle",
+        "createdAt": "2026-01-01T00:00:00Z",
+        "updatedAt": "2026-03-29T10:00:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 150,
+      "totalPages": 8,
+      "hasNext": true,
+      "hasPrevious": false
+    },
+    "_operationId": "listProducts"
+  });
+});
+
+// createProduct
+app.post('/v1/products', (req, res) => {
+  res.json({
+    "id": 1,
+    "name": "Ultra Milk Plain Slim 200ml",
+    "category": "Dairy",
+    "brand": "Ultra Milk",
+    "unit": "bottle",
+    "status": "pending_review",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-03-29T10:00:00Z",
+    "_operationId": "updateProduct"
+  });
+});
+
+// getProduct
+app.get('/v1/products/:productId', (req, res) => {
+  res.json({
+    "id": 1,
+    "name": "Ultra Milk Plain Slim 200ml",
+    "category": "Dairy",
+    "brand": "Ultra Milk",
+    "unit": "bottle",
+    "status": "pending_review",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-03-29T10:00:00Z",
+    "_operationId": "updateProduct"
+  });
+});
+
+// updateProduct
+app.put('/v1/products/:productId', (req, res) => {
+  res.json({
+    "id": 1,
+    "name": "Ultra Milk Plain Slim 200ml",
+    "category": "Dairy",
+    "brand": "Ultra Milk",
+    "unit": "bottle",
+    "status": "pending_review",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "updatedAt": "2026-03-29T10:00:00Z",
+    "_operationId": "updateProduct"
+  });
+});
+
+// deleteProduct
+app.delete('/v1/products/:productId', (req, res) => {
+  res.json({
+    "message": "Mock response",
+    "_operationId": "deleteProduct"
+  });
+});
+
+// listProductPrices
+app.get('/v1/products/:productId/prices', (req, res) => {
+  res.json({
+    "data": [
+      {
+        "id": 1,
+        "productId": 1,
+        "storeId": 1,
+        "price": 5600,
+        "unitPrice": 5600,
+        "dateRecorded": "2026-03-29T14:30:00Z",
+        "isPromo": false,
+        "availability": "in_stock",
+        "createdAt": "2026-03-29T14:30:00Z",
+        "updatedAt": "2026-03-29T14:30:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 500,
+      "totalPages": 25,
+      "hasNext": true,
+      "hasPrevious": false
+    },
+    "_operationId": "listProductPrices"
+  });
+});
+
+// createPriceRecord
+app.post('/v1/products/:productId/prices', (req, res) => {
+  res.json({
+    "id": 1,
+    "productId": 1,
+    "storeId": 1,
+    "price": 5600,
+    "unitPrice": 5600,
+    "dateRecorded": "2026-03-29T14:30:00Z",
+    "isPromo": false,
+    "promoDetails": null,
+    "availability": "in_stock",
+    "status": "pending",
+    "createdAt": "2026-03-29T14:30:00Z",
+    "updatedAt": "2026-03-29T14:30:00Z",
+    "_operationId": "createPriceRecord"
+  });
+});
+
+// listStores
+app.get('/v1/stores', (req, res) => {
+  res.json({
+    "data": [
+      {
+        "id": 1,
+        "name": "DIAMOND",
+        "location": "Poins Square",
+        "chain": "Diamond Supermarket",
+        "address": "Jl. Poins Raya No. 1, Jakarta Selatan",
+        "latitude": -6.2088,
+        "longitude": 106.8456,
+        "createdAt": "2026-01-01T00:00:00Z"
+      }
+    ],
+    "pagination": {
+      "page": 1,
+      "pageSize": 20,
+      "totalItems": 50,
+      "totalPages": 3,
+      "hasNext": true,
+      "hasPrevious": false
+    },
+    "_operationId": "listStores"
+  });
+});
+
+// createStore
+app.post('/v1/stores', (req, res) => {
+  res.json({
+    "id": 1,
+    "name": "DIAMOND",
+    "location": "Poins Square",
+    "chain": "Diamond Supermarket",
+    "address": "Jl. Poins Raya No. 1, Jakarta Selatan",
+    "latitude": -6.2088,
+    "longitude": 106.8456,
+    "status": "pending",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "_operationId": "updateStore"
+  });
+});
+
+// getStore
+app.get('/v1/stores/:storeId', (req, res) => {
+  res.json({
+    "id": 1,
+    "name": "DIAMOND",
+    "location": "Poins Square",
+    "chain": "Diamond Supermarket",
+    "address": "Jl. Poins Raya No. 1, Jakarta Selatan",
+    "latitude": -6.2088,
+    "longitude": 106.8456,
+    "status": "pending",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "_operationId": "updateStore"
+  });
+});
+
+// updateStore
+app.put('/v1/stores/:storeId', (req, res) => {
+  res.json({
+    "id": 1,
+    "name": "DIAMOND",
+    "location": "Poins Square",
+    "chain": "Diamond Supermarket",
+    "address": "Jl. Poins Raya No. 1, Jakarta Selatan",
+    "latitude": -6.2088,
+    "longitude": 106.8456,
+    "status": "pending",
+    "createdAt": "2026-01-01T00:00:00Z",
+    "_operationId": "updateStore"
+  });
+});
+
+// deleteStore
+app.delete('/v1/stores/:storeId', (req, res) => {
+  res.json({
+    "message": "Mock response",
+    "_operationId": "deleteStore"
   });
 });
 
