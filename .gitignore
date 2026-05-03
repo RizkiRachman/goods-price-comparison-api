@@ -86,6 +86,7 @@ output/
 local/
 temp/
 
-# claude
-.claude/
+# AI agent configs and skills
 .ai/
+.claude/
+.opencode/

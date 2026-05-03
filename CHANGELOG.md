@@ -13,6 +13,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.3.0] - 2026-05-03
+
+### Added
+- **Products CRUD:** Full management endpoints for product catalog
+  - `GET /v1/products` — Paginated list with search, category, brand, status filters
+  - `POST /v1/products` — Create product
+  - `GET /v1/products/{productId}` — Get product by ID
+  - `PUT /v1/products/{productId}` — Update product
+  - `DELETE /v1/products/{productId}` — Soft-delete product
+- **Stores CRUD:** Full management endpoints for retail stores
+  - `GET /v1/stores` — Paginated list with search, location, chain, status filters
+  - `POST /v1/stores` — Create store with geolocation
+  - `GET /v1/stores/{storeId}` — Get store by ID
+  - `PUT /v1/stores/{storeId}` — Update store
+  - `DELETE /v1/stores/{storeId}` — Soft-delete store
+- **Price Records CRUD:** Direct and sub-resource price management
+  - `GET /v1/products/{productId}/prices` — List prices with store, date, promo, status filters
+  - `POST /v1/products/{productId}/prices` — Record a price with inline promotion details
+  - `GET /v1/prices/{priceId}` — Get price record by ID
+  - `PUT /v1/prices/{priceId}` — Update price record
+  - `DELETE /v1/prices/{priceId}` — Soft-delete price record
+- **EntityStatus Schema:** Unified lifecycle status across all entities
+  - States: `pending`, `pending_review`, `pending_approval`, `approved`, `rejected`, `ingestion`, `ingestion_failed`, `completed`
+  - Applied to Product, Store, and PriceRecord models
+  - Filterable via `status` query param on all list endpoints
+- **New domain models:** `Product`, `Store`, `PriceRecord`, `Promotion`, `Pagination`, `SortDirection`
+- **GitHub Actions workflow** for validating OpenAPI examples (`validate-examples.yml`)
+
+### Changed
+- **OpenAPI spec** expanded from 11 to 28 endpoints (+17 new)
+  - All existing endpoints remain unchanged and backward compatible
+- **Project structure:** New `paths/stores.yaml` for store management endpoints
+- **API version** bumped from 1.2.6 to 1.3.0
+- **README updated** with new endpoint counts and project structure
+
 ## [1.2.7] - 2026-04-22
 
 ### Added
@@ -247,6 +282,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **1.3.0** - Products, stores & price records CRUD, unified EntityStatus
 - **1.2.6** - Simplified status model and common Status schema
 - **1.2.4** - Receipt verification & approval flow
 - **1.2.3** - Vercel mock server auto-generator

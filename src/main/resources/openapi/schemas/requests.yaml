@@ -114,3 +114,270 @@ components:
           type: string
           description: Reason for rejection
           example: "Wrong store detected, items unclear"
+
+    CreateProductRequest:
+      type: object
+      description: Request body for creating a new product
+      properties:
+        name:
+          type: string
+          description: Full product name
+          example: "Ultra Milk Plain Slim 200ml"
+          minLength: 1
+          maxLength: 255
+        category:
+          type: string
+          description: Product category
+          example: "Dairy"
+          maxLength: 100
+        brand:
+          type: string
+          description: Product brand
+          example: "Ultra Milk"
+          maxLength: 100
+        unit:
+          type: string
+          description: Unit of measurement
+          example: "bottle"
+          maxLength: 50
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+      required:
+        - name
+
+    UpdateProductRequest:
+      type: object
+      description: Request body for updating an existing product
+      properties:
+        name:
+          type: string
+          description: Full product name
+          example: "Ultra Milk Plain Slim 200ml"
+          minLength: 1
+          maxLength: 255
+        category:
+          type: string
+          description: Product category
+          example: "Dairy"
+          maxLength: 100
+          nullable: true
+        brand:
+          type: string
+          description: Product brand
+          example: "Ultra Milk"
+          maxLength: 100
+          nullable: true
+        unit:
+          type: string
+          description: Unit of measurement
+          example: "bottle"
+          maxLength: 50
+          nullable: true
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+
+    CreateStoreRequest:
+      type: object
+      description: Request body for creating a new store
+      properties:
+        name:
+          type: string
+          description: Store display name
+          example: "DIAMOND"
+          minLength: 1
+          maxLength: 100
+        location:
+          type: string
+          description: Location or branch name
+          example: "Poins Square"
+          maxLength: 200
+        chain:
+          type: string
+          description: Store chain or brand name
+          example: "Diamond Supermarket"
+          maxLength: 100
+        address:
+          type: string
+          description: Full street address
+          example: "Jl. Poins Raya No. 1, Jakarta Selatan"
+          maxLength: 500
+        latitude:
+          type: number
+          format: double
+          description: GPS latitude coordinate
+          example: -6.2088
+          minimum: -90
+          maximum: 90
+        longitude:
+          type: number
+          format: double
+          description: GPS longitude coordinate
+          example: 106.8456
+          minimum: -180
+          maximum: 180
+      required:
+        - name
+        - location
+
+    UpdateStoreRequest:
+      type: object
+      description: Request body for updating an existing store
+      properties:
+        name:
+          type: string
+          description: Store display name
+          example: "DIAMOND"
+          minLength: 1
+          maxLength: 100
+        location:
+          type: string
+          description: Location or branch name
+          example: "Poins Square"
+          maxLength: 200
+        chain:
+          type: string
+          description: Store chain or brand name
+          example: "Diamond Supermarket"
+          maxLength: 100
+          nullable: true
+        address:
+          type: string
+          description: Full street address
+          example: "Jl. Poins Raya No. 1, Jakarta Selatan"
+          maxLength: 500
+          nullable: true
+        latitude:
+          type: number
+          format: double
+          description: GPS latitude coordinate
+          example: -6.2088
+          minimum: -90
+          maximum: 90
+          nullable: true
+        longitude:
+          type: number
+          format: double
+          description: GPS longitude coordinate
+          example: 106.8456
+          minimum: -180
+          maximum: 180
+          nullable: true
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+
+    CreatePriceRecordRequest:
+      type: object
+      description: Request body for recording a new price
+      properties:
+        storeId:
+          type: integer
+          format: int64
+          description: Store where price was observed
+          example: 1
+        price:
+          type: number
+          format: double
+          description: Current price
+          minimum: 0
+          example: 5600.00
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          minimum: 0
+          example: 5600.00
+        dateRecorded:
+          type: string
+          format: date-time
+          description: When the price was observed
+          example: "2026-03-29T14:30:00Z"
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          default: false
+          example: false
+        promoDetails:
+          type: object
+          description: Promotion details (required if isPromo=true)
+          nullable: true
+          properties:
+            promoType:
+              type: string
+              enum: [discount, bundle, buy_one_get_one, clearance]
+              description: Type of promotion
+              example: "discount"
+            discountPercentage:
+              type: number
+              format: double
+              description: Discount percentage
+              example: 10.0
+            validUntil:
+              type: string
+              format: date-time
+              description: Promotion end date
+              example: "2026-04-05T23:59:59Z"
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, unknown]
+          description: Product availability at store
+          default: unknown
+          example: "in_stock"
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+      required:
+        - storeId
+        - price
+
+    UpdatePriceRecordRequest:
+      type: object
+      description: Request body for updating a price record
+      properties:
+        price:
+          type: number
+          format: double
+          description: Current price
+          minimum: 0
+          example: 5600.00
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          minimum: 0
+          example: 5600.00
+          nullable: true
+        dateRecorded:
+          type: string
+          format: date-time
+          description: When the price was observed
+          example: "2026-03-29T14:30:00Z"
+        isPromo:
+          type: boolean
+          description: Whether this is a promotional price
+          example: false
+        promoDetails:
+          type: object
+          description: Promotion details (required if isPromo=true)
+          nullable: true
+          properties:
+            promoType:
+              type: string
+              enum: [discount, bundle, buy_one_get_one, clearance]
+              description: Type of promotion
+              example: "discount"
+            discountPercentage:
+              type: number
+              format: double
+              description: Discount percentage
+              example: 10.0
+            validUntil:
+              type: string
+              format: date-time
+              description: Promotion end date
+              example: "2026-04-05T23:59:59Z"
+        availability:
+          type: string
+          enum: [in_stock, low_stock, out_of_stock, unknown]
+          description: Product availability at store
+          example: "in_stock"
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
