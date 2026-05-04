@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.4.0
+  version: 1.4.1
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:

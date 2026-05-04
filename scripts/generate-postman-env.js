@@ -20,16 +20,6 @@ const environments = {
       { key: "store_id", value: "", type: "default", enabled: true }
     ]
   },
-  vercel: {
-    name: "Goods Price API - Vercel",
-    values: [
-      { key: "baseUrl", value: "https://goods-price-comparison-api.vercel.app", type: "default", enabled: true },
-      { key: "apiVersion", value: "v1", type: "default", enabled: true },
-      { key: "receipt_id", value: "", type: "default", enabled: true },
-      { key: "product_id", value: "", type: "default", enabled: true },
-      { key: "store_id", value: "", type: "default", enabled: true }
-    ]
-  },
   docker: {
     name: "Goods Price API - Docker",
     values: [

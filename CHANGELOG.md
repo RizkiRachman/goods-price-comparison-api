@@ -13,7 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-## [1.4.0] - 2026-05-03
+## [1.4.1] - 2026-05-04
+
+### Security
+- **Removed Vercel deployment components** — eliminated all Vercel-related files and configurations due to security considerations
+  - Deleted `vercel/` directory with mock server files
+  - Removed `scripts/generate-vercel-routes.js` auto-generator
+  - Removed `.github/workflows/deploy-vercel.yml` deployment workflow
+  - Updated build pipeline to exclude Vercel artifacts
 
 ### Added
 - **`includePrice` query param** on `GET /v1/products` — include aggregated price details per product when set to `true`
