@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.2] - 2026-05-04
+
+### Added
+- **Extended ProductDetail price aggregation** — added min/max price fields alongside existing average
+  - `ProductDetail.price.min` — minimum price found across all stores
+  - `ProductDetail.price.max` — maximum price found across all stores
+  - Maintains backward compatibility with existing `avg` field
+  - Consistent naming convention: `avg`, `min`, `max`
+
 ## [1.4.1] - 2026-05-04
 
 ### Security
