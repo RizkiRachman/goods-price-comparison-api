@@ -50,3 +50,5 @@ Existing instruction sources with detail worth preserving:
 - `.ai/rules/CODING_STANDARDS.md` — Java style (Google Java, 4-space indent, 100-char line limit)
 - `.ai/rules/GIT_WORKFLOW.md` — branch strategy and PR lifecycle
 - `.opencode/skills/openapi-system-design/SKILL.md` — OpenCode skill for API design work
+- `.opencode/skills/release-plan/SKILL.md` — Release management: version bumps, CI gates, PR creation, changelog updates
+- `.opencode/skills/token-optimize/SKILL.md` — Token efficiency: optimize file reading, batch operations, context management

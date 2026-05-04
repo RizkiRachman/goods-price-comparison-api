@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.4.1
+  version: 1.4.2
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -2697,6 +2697,12 @@ components:
     ProductDetail:
       type: object
       description: Aggregated product detail (e.g. price summary)
+      example:
+        price:
+          avg: 5600
+          min: 5400
+          max: 6000
+          updatedAt: '2026-03-29T14:30:00Z'
       properties:
         price:
           type: object
@@ -2707,6 +2713,16 @@ components:
               format: double
               description: Average price across all stores
               example: 5600
+            min:
+              type: number
+              format: double
+              description: Minimum price found across all stores
+              example: 5400
+            max:
+              type: number
+              format: double
+              description: Maximum price found across all stores
+              example: 6000
             updatedAt:
               type: string
               format: date-time
