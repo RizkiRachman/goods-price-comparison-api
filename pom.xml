@@ -14,7 +14,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>goods-price-comparison-api</artifactId>
-    <version>1.4.0</version>
+    <version>1.4.1</version>
     <packaging>jar</packaging>
 
     <name>Goods Price Comparison API</name>
@@ -222,19 +222,6 @@
                             <executable>node</executable>
                             <arguments>
                                 <argument>${project.basedir}/scripts/generate-postman-env.js</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>generate-vercel-routes</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>node</executable>
-                            <arguments>
-                                <argument>${project.basedir}/scripts/generate-vercel-routes.js</argument>
                             </arguments>
                         </configuration>
                     </execution>

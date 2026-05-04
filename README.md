@@ -459,7 +459,6 @@ See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and version u
 - ✅ Container support (Docker/Podman)
 - ✅ Automatic Postman collection generation
 - ✅ Health and metrics endpoints
-- ✅ Vercel mock server auto-generator
 
 ---
 
@@ -475,7 +474,7 @@ Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 **Tech Stack:** OpenAPI 3.0 | Java 17 | Maven | Spring Boot | Spectral
 
-**Version:** 1.3.0 (API v1)
+**Version:** 1.4.1 (API v1)
 
 **License:** MIT
 
