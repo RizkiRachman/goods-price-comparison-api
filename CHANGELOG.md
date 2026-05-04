@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.0] - 2026-05-03
+
+### Added
+- **`includePrice` query param** on `GET /v1/products` — include aggregated price details per product when set to `true`
+- **`ProductDetail` schema** with `price.avg` (average price across all stores) and `price.updatedAt`
+- **`detail` field** on `Product` model — optional aggregated product detail containing price summary
+
 ## [1.3.0] - 2026-05-03
 
 ### Added
@@ -282,6 +289,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **1.4.0** - Product detail price aggregation and includePrice param
 - **1.3.0** - Products, stores & price records CRUD, unified EntityStatus
 - **1.2.6** - Simplified status model and common Status schema
 - **1.2.4** - Receipt verification & approval flow

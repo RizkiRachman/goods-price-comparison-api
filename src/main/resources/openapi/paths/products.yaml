@@ -124,13 +124,20 @@ paths:
             enum: [asc, desc]
             default: asc
           description: Sort direction
+        - name: includePrice
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+          description: Include aggregated price details per product
       responses:
-        '200':
-          description: Products retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '../schemas/responses.yaml#/components/schemas/ProductListResponse'
+         '200':
+           description: Products retrieved successfully
+           content:
+             application/json:
+               schema:
+                 $ref: '../schemas/responses.yaml#/components/schemas/ProductListResponse'
     post:
       summary: Create a product
       description: Create a new product in the catalog
