@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.3] - 2026-05-04
+
+### Added
+- **Store filter for product list** — Enhanced `GET /v1/products` with store-specific filtering
+  - New `storeId` query parameter — Filter products available at specific store
+  - New `minPrice`/`maxPrice` query parameters — Price range filtering (requires storeId)
+  - New `isPromo` query parameter — Filter promotional items only (requires storeId)
+  - New `availability` query parameter — Filter by stock status: `in_stock`, `low_stock`, `out_of_stock` (requires storeId)
+  - New response schema `ProductStorePriceListResponse` for store-filtered results
+  - New schema `ProductWithStorePrice` — Product details with embedded store pricing information
+  - Returns store-specific pricing: storeId, storeName, storeLocation, price, unitPrice, availability, isPromo, promoDetails
+  - Backward compatible — existing calls without storeId work unchanged
+
 ## [1.4.2] - 2026-05-04
 
 ### Added
@@ -305,6 +318,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **1.4.3** - Store filter for product list with store-specific pricing
 - **1.4.0** - Product detail price aggregation and includePrice param
 - **1.3.0** - Products, stores & price records CRUD, unified EntityStatus
 - **1.2.6** - Simplified status model and common Status schema
