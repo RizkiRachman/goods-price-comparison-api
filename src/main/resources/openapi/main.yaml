@@ -171,6 +171,8 @@ components:
       $ref: './schemas/responses.yaml#/components/schemas/StoreListResponse'
     PriceRecordListResponse:
       $ref: './schemas/responses.yaml#/components/schemas/PriceRecordListResponse'
+    ProductStorePriceListResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ProductStorePriceListResponse'
 
     # Model schemas
     ReceiptItem:

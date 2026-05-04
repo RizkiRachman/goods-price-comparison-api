@@ -130,14 +130,57 @@ paths:
           schema:
             type: boolean
             default: false
-          description: Include aggregated price details per product
+          description: Include aggregated price details per product (ignored when storeId is provided)
+        - name: storeId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Filter products by availability at a specific store. When provided, returns only products with prices at this store, including store-specific pricing details.
+        - name: minPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            minimum: 0
+          description: Filter by minimum price (only effective when storeId is provided)
+        - name: maxPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            minimum: 0
+          description: Filter by maximum price (only effective when storeId is provided)
+        - name: isPromo
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filter by promotional status (only effective when storeId is provided)
+        - name: availability
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [in_stock, low_stock, out_of_stock]
+          description: Filter by product availability at store (only effective when storeId is provided)
       responses:
-         '200':
-           description: Products retrieved successfully
-           content:
-             application/json:
-               schema:
-                 $ref: '../schemas/responses.yaml#/components/schemas/ProductListResponse'
+        '200':
+          description: |
+            Products retrieved successfully.
+
+            **Response schema depends on query parameters:**
+            - With `storeId`: Returns `ProductStorePriceListResponse` (products filtered by store with store-specific prices)
+            - Without `storeId`: Returns `ProductListResponse` (all products with optional aggregated price info)
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '../schemas/responses.yaml#/components/schemas/ProductListResponse'
+                  - $ref: '../schemas/responses.yaml#/components/schemas/ProductStorePriceListResponse'
     post:
       summary: Create a product
       description: Create a new product in the catalog
