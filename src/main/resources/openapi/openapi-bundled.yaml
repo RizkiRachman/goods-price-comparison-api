@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.4.2
+  version: 1.4.4
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -668,14 +668,60 @@ paths:
           schema:
             type: boolean
             default: false
-          description: Include aggregated price details per product
+          description: Include aggregated price details per product (ignored when storeId is provided)
+        - name: storeId
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int64
+          description: Filter products by availability at a specific store. When provided, returns only products with prices at this store, including store-specific pricing details.
+        - name: minPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            minimum: 0
+          description: Filter by minimum price (only effective when storeId is provided)
+        - name: maxPrice
+          in: query
+          required: false
+          schema:
+            type: number
+            format: double
+            minimum: 0
+          description: Filter by maximum price (only effective when storeId is provided)
+        - name: isPromo
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Filter by promotional status (only effective when storeId is provided)
+        - name: availability
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - in_stock
+              - low_stock
+              - out_of_stock
+          description: Filter by product availability at store (only effective when storeId is provided)
       responses:
         '200':
-          description: Products retrieved successfully
+          description: |
+            Products retrieved successfully.
+
+            **Response schema depends on query parameters:**
+            - With `storeId`: Returns `ProductStorePriceListResponse` (products filtered by store with store-specific prices)
+            - Without `storeId`: Returns `ProductListResponse` (all products with optional aggregated price info)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductListResponse'
+                oneOf:
+                  - $ref: '#/components/schemas/ProductListResponse'
+                  - $ref: '#/components/schemas/ProductStorePriceListResponse'
     post:
       summary: Create a product
       description: Create a new product in the catalog
@@ -2312,6 +2358,43 @@ components:
             $ref: '#/components/schemas/PriceRecord'
         pagination:
           $ref: '#/components/schemas/Pagination'
+    ProductStorePriceListResponse:
+      type: object
+      description: Paginated list of products with store-specific prices
+      example:
+        data:
+          - id: 1
+            name: Ultra Milk Plain Slim 200ml
+            category: Dairy
+            brand: Ultra Milk
+            unit: bottle
+            status: approved
+            storePrice:
+              storeId: 1
+              storeName: DIAMOND
+              storeLocation: Poins Square
+              price: 5600
+              unitPrice: 5600
+              isPromo: false
+              availability: in_stock
+              dateRecorded: '2026-03-29T14:30:00Z'
+            createdAt: '2026-01-01T00:00:00Z'
+            updatedAt: '2026-03-29T10:00:00Z'
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 150
+          totalPages: 8
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of products with store-specific pricing
+          items:
+            $ref: '#/components/schemas/ProductWithStorePrice'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     ReceiptItem:
       type: object
       example:
@@ -2832,6 +2915,7 @@ components:
         id: 1
         productId: 1
         storeId: 1
+        storeName: DIAMOND
         price: 5600
         unitPrice: 5600
         dateRecorded: '2026-03-29T14:30:00Z'
@@ -2857,6 +2941,10 @@ components:
           format: int64
           description: Associated store identifier
           example: 1
+        storeName:
+          type: string
+          description: Store display name
+          example: DIAMOND
         price:
           type: number
           format: double
@@ -2965,6 +3053,129 @@ components:
           format: uuid
         status:
           $ref: '#/components/schemas/Status'
+    ProductWithStorePrice:
+      type: object
+      description: Product with store-specific pricing information
+      example:
+        id: 1
+        name: Ultra Milk Plain Slim 200ml
+        category: Dairy
+        brand: Ultra Milk
+        unit: bottle
+        status: approved
+        storePrice:
+          storeId: 1
+          storeName: DIAMOND
+          storeLocation: Poins Square
+          price: 5600
+          unitPrice: 5600
+          isPromo: false
+          availability: in_stock
+          dateRecorded: '2026-03-29T14:30:00Z'
+        createdAt: '2026-01-01T00:00:00Z'
+        updatedAt: '2026-03-29T10:00:00Z'
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Unique product identifier
+          example: 1
+        name:
+          type: string
+          description: Full product name
+          example: Ultra Milk Plain Slim 200ml
+        category:
+          type: string
+          description: Product category
+          example: Dairy
+        brand:
+          type: string
+          description: Product brand
+          example: Ultra Milk
+        unit:
+          type: string
+          description: Unit of measurement
+          example: bottle
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        storePrice:
+          type: object
+          description: Store-specific price information (only present when storeId filter is used)
+          properties:
+            storeId:
+              type: integer
+              format: int64
+              description: Store identifier
+              example: 1
+            storeName:
+              type: string
+              description: Store name
+              example: DIAMOND
+            storeLocation:
+              type: string
+              description: Store location
+              example: Poins Square
+            price:
+              type: number
+              format: double
+              description: Current price at this store
+              example: 5600
+            unitPrice:
+              type: number
+              format: double
+              description: Price per unit at this store
+              example: 5600
+            isPromo:
+              type: boolean
+              description: Whether this is a promotional price
+              example: false
+            availability:
+              type: string
+              enum:
+                - in_stock
+                - low_stock
+                - out_of_stock
+              description: Product availability at this store
+              example: in_stock
+            dateRecorded:
+              type: string
+              format: date-time
+              description: When the price was last recorded
+              example: '2026-03-29T14:30:00Z'
+            promoDetails:
+              type: object
+              description: Promotion details (only if isPromo=true)
+              nullable: true
+              properties:
+                promoType:
+                  type: string
+                  enum:
+                    - discount
+                    - bundle
+                    - buy_one_get_one
+                    - clearance
+                  description: Type of promotion
+                  example: discount
+                discountPercentage:
+                  type: number
+                  format: double
+                  description: Discount percentage
+                  example: 10
+                validUntil:
+                  type: string
+                  format: date-time
+                  description: Promotion end date
+                  example: '2026-04-05T23:59:59Z'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: '2026-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2026-03-29T10:00:00Z'
   headers:
     X-RateLimit-Limit:
       description: Rate limit per minute

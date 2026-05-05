@@ -13,6 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.4.4] - 2026-05-05
+
+### Added
+- **Store name in price records** — `GET /v1/products/{productId}/prices` and `GET /v1/prices/{priceId}` now include `storeName` field in each `PriceRecord`
+  - Saves clients from making separate `GET /v1/stores/{storeId}` calls
+  - Backward compatible — existing `storeId` field preserved
+
 ## [1.4.3] - 2026-05-04
 
 ### Added
