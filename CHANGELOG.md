@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.5.0] - 2026-05-05
+
+### Added
+- **Receipt correction endpoint** — `POST /v1/receipts/{id}/correct` allows users to correct OCR extraction data when receipt is in `PENDING_APPROVAL` status
+  - Request body matches `ReceiptResultResponse` structure: `storeName`, `storeLocation`, `date`, `totalAmount`, `items[]`
+  - Response returns the corrected result (same schema as `GET /v1/receipts/{id}/results`)
+  - Returns `409 Conflict` if receipt is not in `PENDING_APPROVAL` status
+- **Admin job trigger endpoint** — `POST /v1/admin/jobs/{jobName}` for triggering internal scheduled jobs
+  - Fire-and-forget design — returns `202 Accepted` immediately after dispatch
+  - Supports: `price-sync`, `cleanup-expired`, `trend-calculation`
+  - Scoped under `/v1/admin/` for internal access control
+
 ## [1.4.4] - 2026-05-05
 
 ### Added

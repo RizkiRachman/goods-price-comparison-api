@@ -158,6 +158,50 @@ paths:
               schema:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
 
+  /v1/receipts/{id}/correct:
+    post:
+      summary: Correct OCR extraction data
+      description: |
+        Submit corrections to the OCR extraction result.
+        Receipt must be in PENDING_APPROVAL status.
+        Returns the corrected result.
+      operationId: correctReceipt
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/ReceiptCorrectRequest'
+      responses:
+        '200':
+          description: Corrections applied successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptResultResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '409':
+          description: Receipt not in PENDING_APPROVAL status
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
   /v1/receipts/{id}/reject:
     post:
       summary: Reject receipt extraction result

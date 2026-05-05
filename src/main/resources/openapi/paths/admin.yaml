@@ -1,0 +1,40 @@
+openapi: 3.0.3
+info:
+  title: Admin Endpoints
+  version: 1.0.0
+
+paths:
+  /v1/admin/jobs/{jobName}:
+    post:
+      summary: Trigger a scheduled job
+      description: |
+        Trigger a named admin job to run immediately.
+        Jobs are executed asynchronously — this returns immediately after dispatch.
+
+        Supported jobs:
+        - `price-sync`: Synchronize prices from external sources
+        - `cleanup-expired`: Remove expired alerts and stale data
+        - `trend-calculation`: Recalculate price trends
+      operationId: triggerJob
+      tags:
+        - Admin
+      parameters:
+        - name: jobName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the job to trigger — price-sync, cleanup-expired, or trend-calculation
+      responses:
+        '202':
+          description: Job triggered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/AdminJobTriggerResponse'
+        '400':
+          description: Invalid job name
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

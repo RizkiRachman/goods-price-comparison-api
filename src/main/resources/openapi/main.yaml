@@ -31,7 +31,7 @@ info:
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
 
-  version: 1.4.4
+  version: 1.5.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -61,6 +61,8 @@ tags:
     description: Store information and management
   - name: Alerts
     description: Price alert subscriptions
+  - name: Admin
+    description: Internal admin operations and job triggers
 
 paths:
   /v1/version:
@@ -77,6 +79,10 @@ paths:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1results'
   /v1/receipts/{id}/approve:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1approve'
+  /v1/receipts/{id}/correct:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1correct'
+  /v1/admin/jobs/{jobName}:
+    $ref: './paths/admin.yaml#/paths/~1v1~1admin~1jobs~1{jobName}'
   /v1/receipts/{id}/reject:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1reject'
   /v1/prices/search:
@@ -173,6 +179,8 @@ components:
       $ref: './schemas/responses.yaml#/components/schemas/PriceRecordListResponse'
     ProductStorePriceListResponse:
       $ref: './schemas/responses.yaml#/components/schemas/ProductStorePriceListResponse'
+    AdminJobTriggerResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/AdminJobTriggerResponse'
 
     # Model schemas
     ReceiptItem:
