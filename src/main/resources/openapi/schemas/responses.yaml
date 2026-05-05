@@ -99,6 +99,27 @@ components:
           description: Total receipt amount
           example: 1207206.00
 
+    AdminJobTriggerResponse:
+      type: object
+      example:
+        jobName: "price-sync"
+        message: "Job 'price-sync' triggered successfully"
+        triggeredAt: "2026-05-05T10:30:00Z"
+      properties:
+        jobName:
+          type: string
+          description: Name of the triggered job
+          example: "price-sync"
+        message:
+          type: string
+          description: Human-readable confirmation message
+          example: "Job 'price-sync' triggered successfully"
+        triggeredAt:
+          type: string
+          format: date-time
+          description: Timestamp when the job was triggered
+          example: "2026-05-05T10:30:00Z"
+
     PriceSearchResponse:
       type: object
       example:

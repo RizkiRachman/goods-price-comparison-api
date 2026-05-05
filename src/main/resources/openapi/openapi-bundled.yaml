@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.4.4
+  version: 1.5.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -58,6 +58,8 @@ tags:
     description: Store information and management
   - name: Alerts
     description: Price alert subscriptions
+  - name: Admin
+    description: Internal admin operations and job triggers
 paths:
   /v1/version:
     get:
@@ -285,6 +287,83 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '409':
           description: Receipt not in PENDING status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/receipts/{id}/correct:
+    post:
+      summary: Correct OCR extraction data
+      description: |
+        Submit corrections to the OCR extraction result.
+        Receipt must be in PENDING_APPROVAL status.
+        Returns the corrected result.
+      operationId: correctReceipt
+      tags:
+        - Receipts
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Job ID returned from upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptCorrectRequest'
+      responses:
+        '200':
+          description: Corrections applied successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReceiptResultResponse'
+        '404':
+          description: Job ID not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Receipt not in PENDING_APPROVAL status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/admin/jobs/{jobName}:
+    post:
+      summary: Trigger a scheduled job
+      description: |
+        Trigger a named admin job to run immediately.
+        Jobs are executed asynchronously — this returns immediately after dispatch.
+
+        Supported jobs:
+        - `price-sync`: Synchronize prices from external sources
+        - `cleanup-expired`: Remove expired alerts and stale data
+        - `trend-calculation`: Recalculate price trends
+      operationId: triggerJob
+      tags:
+        - Admin
+      parameters:
+        - name: jobName
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Name of the job to trigger — price-sync, cleanup-expired, or trend-calculation
+      responses:
+        '202':
+          description: Job triggered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminJobTriggerResponse'
+        '400':
+          description: Invalid job name
           content:
             application/json:
               schema:
@@ -2395,6 +2474,26 @@ components:
             $ref: '#/components/schemas/ProductWithStorePrice'
         pagination:
           $ref: '#/components/schemas/Pagination'
+    AdminJobTriggerResponse:
+      type: object
+      example:
+        jobName: price-sync
+        message: Job 'price-sync' triggered successfully
+        triggeredAt: '2026-05-05T10:30:00Z'
+      properties:
+        jobName:
+          type: string
+          description: Name of the triggered job
+          example: price-sync
+        message:
+          type: string
+          description: Human-readable confirmation message
+          example: Job 'price-sync' triggered successfully
+        triggeredAt:
+          type: string
+          format: date-time
+          description: Timestamp when the job was triggered
+          example: '2026-05-05T10:30:00Z'
     ReceiptItem:
       type: object
       example:
@@ -3035,6 +3134,28 @@ components:
           format: uuid
         status:
           $ref: '#/components/schemas/Status'
+    ReceiptCorrectRequest:
+      type: object
+      description: Corrections to apply to the receipt extraction result. Only available when status is pending_approval.
+      properties:
+        storeName:
+          type: string
+          example: DIAMOND
+        storeLocation:
+          type: string
+          example: Poins Square
+        date:
+          type: string
+          format: date
+          example: '2026-03-29'
+        totalAmount:
+          type: number
+          format: double
+          example: 1207206
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceiptItem'
     ReceiptRejectRequest:
       type: object
       properties:
