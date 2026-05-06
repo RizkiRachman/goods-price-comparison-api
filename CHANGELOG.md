@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.5.1] - 2026-05-06
+
+### Changed
+- **Receipt reject endpoint** — Changed HTTP method from `POST` to `DELETE` for `POST /v1/receipts/{id}/reject`
+- Removed `ReceiptRejectRequest` request body from receipt reject endpoint
+
 ## [1.5.0] - 2026-05-05
 
 ### Added
