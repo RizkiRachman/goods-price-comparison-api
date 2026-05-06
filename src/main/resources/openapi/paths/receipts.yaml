@@ -203,7 +203,7 @@ paths:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
 
   /v1/receipts/{id}/reject:
-    post:
+    delete:
       summary: Reject receipt extraction result
       description: |
         Reject the OCR extraction result. Receipt must be in PENDING status.
@@ -218,12 +218,6 @@ paths:
             type: string
             format: uuid
           description: Job ID returned from upload
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              $ref: '../schemas/requests.yaml#/components/schemas/ReceiptRejectRequest'
       responses:
         '200':
           description: Receipt rejected successfully
