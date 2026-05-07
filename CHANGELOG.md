@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.6.0] - 2026-05-07
+
+### Changed
+- **Shopping optimize response** — Added `unit` field to ShoppingItem example in OpenAPI spec for item unit of measurement
 ## [1.5.1] - 2026-05-06
 
 ### Changed
