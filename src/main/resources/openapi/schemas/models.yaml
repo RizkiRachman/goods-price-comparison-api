@@ -119,6 +119,7 @@ components:
           - productName: "Ultra Milk Plain Slim 200ml"
             price: 5400.00
             quantity: 1.0
+            unit: KG
         subtotal: 94900.00
         estimatedTime: "15 mins"
       properties:
@@ -155,6 +156,7 @@ components:
         productName: "Ultra Milk Plain Slim 200ml"
         price: 5400.00
         quantity: 1.0
+        unit: KG
       properties:
         productName:
           type: string
@@ -170,6 +172,10 @@ components:
           format: double
           description: Quantity to purchase
           example: 1.0
+        unit:
+          type: string
+          description: Unit of product
+          example: KG
 
     ShoppingSavings:
       type: object

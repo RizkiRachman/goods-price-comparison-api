@@ -162,6 +162,7 @@ components:
               - productName: "Ultra Milk Plain Slim 200ml"
                 price: 5400.00
                 quantity: 1.0
+                unit: PIECE
             subtotal: 94900.00
             estimatedTime: "15 mins"
         savings:
