@@ -4,6 +4,30 @@ info:
   version: 1.0.0
 
 paths:
+  /v1/receipts:
+    post:
+      summary: Create goods receipt
+      description: |
+        Create a new goods receipt with manual entry of store, items, and pricing.
+      operationId: createReceipt
+      tags:
+        - Receipts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/ReceiptCreateRequest'
+      responses:
+        '201':
+          description: Goods receipt created successfully
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
   /v1/receipts/upload:
     post:
       summary: Upload receipt image for OCR processing

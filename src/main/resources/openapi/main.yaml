@@ -71,6 +71,8 @@ paths:
     $ref: './paths/system.yaml#/paths/~1v1~1health'
   /v1/metrics:
     $ref: './paths/system.yaml#/paths/~1v1~1metrics'
+  /v1/receipts:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts'
   /v1/receipts/upload:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1upload'
   /v1/receipts/{id}/status:
@@ -153,6 +155,8 @@ components:
       $ref: './schemas/requests.yaml#/components/schemas/CreatePriceRecordRequest'
     UpdatePriceRecordRequest:
       $ref: './schemas/requests.yaml#/components/schemas/UpdatePriceRecordRequest'
+    ReceiptCreateRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/ReceiptCreateRequest'
 
     # Response schemas
     ReceiptUploadResponse:
@@ -185,6 +189,8 @@ components:
     # Model schemas
     ReceiptItem:
       $ref: './schemas/models.yaml#/components/schemas/ReceiptItem'
+    ReceiptData:
+      $ref: './schemas/models.yaml#/components/schemas/ReceiptData'
     PriceResult:
       $ref: './schemas/models.yaml#/components/schemas/PriceResult'
     PriceResultV2:

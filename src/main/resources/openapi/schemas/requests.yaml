@@ -107,28 +107,18 @@ components:
           items:
             $ref: './models.yaml#/components/schemas/ReceiptItem'
 
+    ReceiptData:
+      $ref: './models.yaml#/components/schemas/ReceiptData'
+
+    ReceiptCreateRequest:
+      description: Request body for creating a new goods receipt
+      allOf:
+        - $ref: '#/components/schemas/ReceiptData'
+
     ReceiptCorrectRequest:
-      type: object
       description: Corrections to apply to the receipt extraction result. Only available when status is pending_approval.
-      properties:
-        storeName:
-          type: string
-          example: "DIAMOND"
-        storeLocation:
-          type: string
-          example: "Poins Square"
-        date:
-          type: string
-          format: date
-          example: "2026-03-29"
-        totalAmount:
-          type: number
-          format: double
-          example: 1207206.00
-        items:
-          type: array
-          items:
-            $ref: './models.yaml#/components/schemas/ReceiptItem'
+      allOf:
+        - $ref: '#/components/schemas/ReceiptData'
 
     ReceiptRejectRequest:
       type: object
