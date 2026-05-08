@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.6.0
+  version: 1.7.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -141,6 +141,29 @@ paths:
               $ref: '#/components/headers/X-RateLimit-Limit'
             X-RateLimit-Remaining:
               $ref: '#/components/headers/X-RateLimit-Remaining'
+  /v1/receipts:
+    post:
+      summary: Create goods receipt
+      description: |
+        Create a new goods receipt with manual entry of store, items, and pricing.
+      operationId: createReceipt
+      tags:
+        - Receipts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptCreateRequest'
+      responses:
+        '201':
+          description: Goods receipt created successfully
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1/receipts/upload:
     post:
       summary: Upload receipt image for OCR processing
@@ -2036,6 +2059,10 @@ components:
           example: in_stock
         status:
           $ref: '#/components/schemas/EntityStatus'
+    ReceiptCreateRequest:
+      description: Request body for creating a new goods receipt
+      allOf:
+        - $ref: '#/components/schemas/ReceiptData'
     ReceiptUploadResponse:
       type: object
       example:
@@ -2526,6 +2553,32 @@ components:
           type: string
           description: Unit of measurement
           example: bottle
+    ReceiptData:
+      type: object
+      description: Reusable receipt data fields for create, correct, and other receipt operations
+      properties:
+        storeName:
+          type: string
+          description: Store name
+          example: DIAMOND
+        storeLocation:
+          type: string
+          description: Store location
+          example: Poins Square
+        date:
+          type: string
+          format: date
+          description: Receipt date
+          example: '2026-03-29'
+        totalAmount:
+          type: number
+          format: double
+          description: Total receipt amount
+          example: 1207206
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceiptItem'
     PriceResult:
       type: object
       example:
@@ -3136,27 +3189,9 @@ components:
         status:
           $ref: '#/components/schemas/Status'
     ReceiptCorrectRequest:
-      type: object
       description: Corrections to apply to the receipt extraction result. Only available when status is pending_approval.
-      properties:
-        storeName:
-          type: string
-          example: DIAMOND
-        storeLocation:
-          type: string
-          example: Poins Square
-        date:
-          type: string
-          format: date
-          example: '2026-03-29'
-        totalAmount:
-          type: number
-          format: double
-          example: 1207206
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReceiptItem'
+      allOf:
+        - $ref: '#/components/schemas/ReceiptData'
     ReceiptRejectResponse:
       type: object
       example:

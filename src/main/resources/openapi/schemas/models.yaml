@@ -43,6 +43,33 @@ components:
           description: Unit of measurement
           example: "bottle"
 
+    ReceiptData:
+      type: object
+      description: Reusable receipt data fields for create, correct, and other receipt operations
+      properties:
+        storeName:
+          type: string
+          description: Store name
+          example: "DIAMOND"
+        storeLocation:
+          type: string
+          description: Store location
+          example: "Poins Square"
+        date:
+          type: string
+          format: date
+          description: Receipt date
+          example: "2026-03-29"
+        totalAmount:
+          type: number
+          format: double
+          description: Total receipt amount
+          example: 1207206.00
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReceiptItem'
+
     PriceResult:
       type: object
       example:
