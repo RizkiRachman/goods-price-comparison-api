@@ -13,10 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+## [1.7.1] - 2026-05-12
+
+### Changed
+- **Create receipt response** — Changed `POST /v1/receipts` status from `201` to `200` and added full receipt data in response body (matches `GET /v1/receipts/{id}/results` schema)
+
 ## [1.7.0] - 2026-05-08
 
 ### Added
-- **Goods receipt creation** — Added `POST /v1/receipts` endpoint for manual goods receipt entry (returns 201)
+- **Goods receipt creation** — Added `POST /v1/receipts` endpoint for manual goods receipt entry
 - **ReceiptData schema** — New reusable base schema used by both `ReceiptCreateRequest` and `ReceiptCorrectRequest`
 
 ## [1.6.0] - 2026-05-07
