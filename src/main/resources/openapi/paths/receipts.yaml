@@ -19,8 +19,12 @@ paths:
             schema:
               $ref: '../schemas/requests.yaml#/components/schemas/ReceiptCreateRequest'
       responses:
-        '201':
+        '200':
           description: Goods receipt created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/ReceiptResultResponse'
         '400':
           description: Invalid request data
           content:
