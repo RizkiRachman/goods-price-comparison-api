@@ -265,3 +265,50 @@ paths:
             application/json:
               schema:
                 $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+
+  /v1/receipts/{receiptId}/bill-split:
+    post:
+      summary: Split a bill based on receipt
+      description: |
+        Compute a bill split for a receipt. Two modes:
+        - **RATIO**: Equal split among N participants. Only `numberOfParticipants` is needed.
+        - **SELECTION**: Item-based split. Each participant selects products and quantities they ordered.
+          Unselected items are split equally among participants who did not select any items.
+
+        Results are cached for 15 minutes. No persistent storage.
+      operationId: splitBill
+      tags:
+        - Receipts
+      parameters:
+        - name: receiptId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Receipt ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '../schemas/requests.yaml#/components/schemas/BillSplitRequest'
+      responses:
+        '200':
+          description: Bill split computed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/responses.yaml#/components/schemas/BillSplitResponse'
+        '400':
+          description: Invalid split request data
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'
+        '404':
+          description: Receipt not found
+          content:
+            application/json:
+              schema:
+                $ref: '../schemas/common.yaml#/components/schemas/ErrorResponse'

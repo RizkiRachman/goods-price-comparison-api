@@ -31,7 +31,7 @@ info:
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
 
-  version: 1.7.1
+  version: 1.8.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -63,6 +63,10 @@ tags:
     description: Price alert subscriptions
   - name: Admin
     description: Internal admin operations and job triggers
+  - name: Categories
+    description: Category management for product classification
+  - name: Units
+    description: Measurement unit management
 
 paths:
   /v1/version:
@@ -83,8 +87,18 @@ paths:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1approve'
   /v1/receipts/{id}/correct:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1correct'
+  /v1/categories:
+    $ref: './paths/categories.yaml#/paths/~1v1~1categories'
+  /v1/categories/{categoryId}:
+    $ref: './paths/categories.yaml#/paths/~1v1~1categories~1{categoryId}'
+  /v1/units:
+    $ref: './paths/units.yaml#/paths/~1v1~1units'
+  /v1/units/{unitId}:
+    $ref: './paths/units.yaml#/paths/~1v1~1units~1{unitId}'
   /v1/admin/jobs/{jobName}:
     $ref: './paths/admin.yaml#/paths/~1v1~1admin~1jobs~1{jobName}'
+  /v1/receipts/{receiptId}/bill-split:
+    $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{receiptId}~1bill-split'
   /v1/receipts/{id}/reject:
     $ref: './paths/receipts.yaml#/paths/~1v1~1receipts~1{id}~1reject'
   /v1/prices/search:
@@ -141,6 +155,18 @@ components:
       $ref: './schemas/requests.yaml#/components/schemas/ShoppingOptimizeRequest'
     ShoppingPreferences:
       $ref: './schemas/requests.yaml#/components/schemas/ShoppingPreferences'
+    CreateCategoryRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/CreateCategoryRequest'
+    UpdateCategoryRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/UpdateCategoryRequest'
+    CreateUnitRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/CreateUnitRequest'
+    UpdateUnitRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/UpdateUnitRequest'
+    BillSplitRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/BillSplitRequest'
+    BillSplitOrder:
+      $ref: './schemas/requests.yaml#/components/schemas/BillSplitOrder'
     AlertSubscriptionRequest:
       $ref: './schemas/requests.yaml#/components/schemas/AlertSubscriptionRequest'
     CreateProductRequest:
@@ -183,6 +209,12 @@ components:
       $ref: './schemas/responses.yaml#/components/schemas/PriceRecordListResponse'
     ProductStorePriceListResponse:
       $ref: './schemas/responses.yaml#/components/schemas/ProductStorePriceListResponse'
+    CategoryListResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/CategoryListResponse'
+    UnitListResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/UnitListResponse'
+    BillSplitResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/BillSplitResponse'
     AdminJobTriggerResponse:
       $ref: './schemas/responses.yaml#/components/schemas/AdminJobTriggerResponse'
 
@@ -211,6 +243,14 @@ components:
       $ref: './schemas/models.yaml#/components/schemas/ProductDetail'
     Store:
       $ref: './schemas/models.yaml#/components/schemas/Store'
+    Category:
+      $ref: './schemas/models.yaml#/components/schemas/Category'
+    Unit:
+      $ref: './schemas/models.yaml#/components/schemas/Unit'
+    BillSplitParticipant:
+      $ref: './schemas/models.yaml#/components/schemas/BillSplitParticipant'
+    BillSplitItem:
+      $ref: './schemas/models.yaml#/components/schemas/BillSplitItem'
     Promotion:
       $ref: './schemas/models.yaml#/components/schemas/Promotion'
     PriceRecord:
