@@ -167,6 +167,8 @@ components:
       $ref: './schemas/requests.yaml#/components/schemas/BillSplitRequest'
     BillSplitOrder:
       $ref: './schemas/requests.yaml#/components/schemas/BillSplitOrder'
+    BillSplitOrderDetail:
+      $ref: './schemas/requests.yaml#/components/schemas/BillSplitOrderDetail'
     AlertSubscriptionRequest:
       $ref: './schemas/requests.yaml#/components/schemas/AlertSubscriptionRequest'
     CreateProductRequest:

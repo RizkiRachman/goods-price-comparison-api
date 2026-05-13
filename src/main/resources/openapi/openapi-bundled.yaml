@@ -2288,8 +2288,18 @@ components:
         numberOfParticipants: 3
         orders:
           - name: Alice
-            productId: 1
-            quantity: 2
+            details:
+              - name: Product Name
+                productId: 1
+                quantity: 1
+              - name: Product Name
+                productId: 1
+                quantity: 1
+          - name: John
+            details:
+              - name: Product Name
+                productId: 1
+                quantity: 1
       properties:
         type:
           type: string
@@ -2316,28 +2326,52 @@ components:
       description: An item selection by a participant in SELECTION mode
       example:
         name: Alice
-        productId: 1
-        quantity: 2
+        details:
+          - name: Product Name
+            productId: 1
+            quantity: 1
+          - name: Product Name
+            productId: 1
+            quantity: 1
       properties:
         name:
           type: string
           description: Participant name
           example: Alice
-          minLength: 1
-          maxLength: 100
+        details:
+          type: array
+          description: Product selections for this participant (used when type=SELECTION)
+          items:
+            $ref: '#/components/schemas/BillSplitOrderDetail'
+      required:
+        - name
+    BillSplitOrderDetail:
+      type: object
+      description: A single product selection within a participant's order
+      example:
+        name: Product Name
+        productId: 1
+        quantity: 1
+      properties:
+        name:
+          type: string
+          description: Product name
+          example: Product Name
         productId:
           type: integer
           format: int64
-          description: Product ID (required when type=SELECTION)
+          description: Product ID
           example: 1
         quantity:
           type: number
           format: double
-          description: Quantity selected (required when type=SELECTION)
+          description: Quantity selected
           minimum: 0
-          example: 2
+          example: 1
       required:
         - name
+        - productId
+        - quantity
     AlertSubscriptionRequest:
       type: object
       properties:
