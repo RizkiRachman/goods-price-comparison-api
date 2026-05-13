@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.7.1
+  version: 1.8.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -60,6 +60,10 @@ tags:
     description: Price alert subscriptions
   - name: Admin
     description: Internal admin operations and job triggers
+  - name: Categories
+    description: Category management for product classification
+  - name: Units
+    description: Measurement unit management
 paths:
   /v1/version:
     get:
@@ -361,6 +365,356 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/categories:
+    get:
+      summary: List categories
+      description: |
+        Retrieve a paginated list of categories with optional search.
+      operationId: listCategories
+      tags:
+        - Categories
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search categories by name or ID (partial match)
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityStatus'
+          description: Filter by entity status
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - name
+              - createdAt
+            default: name
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+          description: Sort direction
+      responses:
+        '200':
+          description: Categories retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryListResponse'
+    post:
+      summary: Create a category
+      description: Create a new product category
+      operationId: createCategory
+      tags:
+        - Categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCategoryRequest'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+          headers:
+            Location:
+              description: URL of the created category
+              schema:
+                type: string
+                format: uri
+                example: http://localhost:8080/v1/categories/FOOD
+        '400':
+          description: Invalid category data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Category with this ID already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/categories/{categoryId}:
+    get:
+      summary: Get a category by ID
+      description: Retrieve detailed information about a specific category
+      operationId: getCategory
+      tags:
+        - Categories
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Category ID (uppercase, e.g. FOOD, DAIRY)
+      responses:
+        '200':
+          description: Category retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a category
+      description: Update an existing category's information
+      operationId: updateCategory
+      tags:
+        - Categories
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Category ID (uppercase, e.g. FOOD, DAIRY)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCategoryRequest'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid category data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Category not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/units:
+    get:
+      summary: List units
+      description: |
+        Retrieve a paginated list of measurement units with optional
+        filtering by type and search query.
+      operationId: listUnits
+      tags:
+        - Units
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Search units by name, symbol, or ID (partial match)
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - WEIGHT
+              - VOLUME
+              - QUANTITY
+          description: Filter by unit type
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/EntityStatus'
+          description: Filter by entity status
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - id
+              - name
+              - type
+              - createdAt
+            default: name
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+          description: Sort direction
+      responses:
+        '200':
+          description: Units retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitListResponse'
+    post:
+      summary: Create a unit
+      description: Create a new measurement unit
+      operationId: createUnit
+      tags:
+        - Units
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUnitRequest'
+      responses:
+        '201':
+          description: Unit created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+          headers:
+            Location:
+              description: URL of the created unit
+              schema:
+                type: string
+                format: uri
+                example: http://localhost:8080/v1/units/KG
+        '400':
+          description: Invalid unit data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Unit with this ID already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/units/{unitId}:
+    get:
+      summary: Get a unit by ID
+      description: Retrieve detailed information about a specific measurement unit
+      operationId: getUnit
+      tags:
+        - Units
+      parameters:
+        - name: unitId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unit ID (uppercase, e.g. KG, L, PCS)
+      responses:
+        '200':
+          description: Unit retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+        '404':
+          description: Unit not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Update a unit
+      description: Update an existing measurement unit's information
+      operationId: updateUnit
+      tags:
+        - Units
+      parameters:
+        - name: unitId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unit ID (uppercase, e.g. KG, L, PCS)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUnitRequest'
+      responses:
+        '200':
+          description: Unit updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
+        '400':
+          description: Invalid unit data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Unit not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /v1/admin/jobs/{jobName}:
     post:
       summary: Trigger a scheduled job
@@ -391,6 +745,52 @@ paths:
                 $ref: '#/components/schemas/AdminJobTriggerResponse'
         '400':
           description: Invalid job name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v1/receipts/{receiptId}/bill-split:
+    post:
+      summary: Split a bill based on receipt
+      description: |
+        Compute a bill split for a receipt. Two modes:
+        - **RATIO**: Equal split among N participants. Only `numberOfParticipants` is needed.
+        - **SELECTION**: Item-based split. Each participant selects products and quantities they ordered.
+          Unselected items are split equally among participants who did not select any items.
+
+        Results are cached for 15 minutes. No persistent storage.
+      operationId: splitBill
+      tags:
+        - Receipts
+      parameters:
+        - name: receiptId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Receipt ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillSplitRequest'
+      responses:
+        '200':
+          description: Bill split computed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillSplitResponse'
+        '400':
+          description: Invalid split request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Receipt not found
           content:
             application/json:
               schema:
@@ -1759,6 +2159,185 @@ components:
           type: boolean
           default: true
           description: Whether to prioritize lowest price over convenience
+    CreateCategoryRequest:
+      type: object
+      description: Request body for creating a new category
+      properties:
+        id:
+          type: string
+          description: Category ID (uppercase, e.g. FOOD, DAIRY)
+          example: FOOD
+          minLength: 1
+          maxLength: 50
+          pattern: ^[A-Z][A-Z0-9_]*$
+        name:
+          type: string
+          description: Category display name
+          example: Food
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          description: Optional category description
+          example: Food and grocery items
+          maxLength: 500
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+      required:
+        - id
+        - name
+    UpdateCategoryRequest:
+      type: object
+      description: Request body for updating an existing category
+      properties:
+        name:
+          type: string
+          description: Category display name
+          example: Food
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          description: Optional category description
+          example: Food and grocery items
+          maxLength: 500
+          nullable: true
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+    CreateUnitRequest:
+      type: object
+      description: Request body for creating a new measurement unit
+      properties:
+        id:
+          type: string
+          description: Unit ID (uppercase, e.g. KG, L, PCS)
+          example: KG
+          minLength: 1
+          maxLength: 50
+          pattern: ^[A-Z][A-Z0-9_]*$
+        name:
+          type: string
+          description: Unit display name
+          example: Kilogram
+          minLength: 1
+          maxLength: 100
+        symbol:
+          type: string
+          description: Short symbol for display
+          example: kg
+          maxLength: 10
+        type:
+          type: string
+          enum:
+            - WEIGHT
+            - VOLUME
+            - QUANTITY
+          description: Type of measurement
+          example: WEIGHT
+        description:
+          type: string
+          description: Optional unit description
+          example: Metric unit of mass
+          maxLength: 500
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+      required:
+        - id
+        - name
+        - type
+    UpdateUnitRequest:
+      type: object
+      description: Request body for updating an existing measurement unit
+      properties:
+        name:
+          type: string
+          description: Unit display name
+          example: Kilogram
+          minLength: 1
+          maxLength: 100
+        symbol:
+          type: string
+          description: Short symbol for display
+          example: kg
+          maxLength: 10
+          nullable: true
+        type:
+          type: string
+          enum:
+            - WEIGHT
+            - VOLUME
+            - QUANTITY
+          description: Type of measurement
+          example: WEIGHT
+        description:
+          type: string
+          description: Optional unit description
+          example: Metric unit of mass
+          maxLength: 500
+          nullable: true
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+    BillSplitRequest:
+      type: object
+      description: |
+        Request body for splitting a bill.
+        - **RATIO**: Equal split among N participants. Only `numberOfParticipants` is needed.
+        - **SELECTION**: Item-based split. Provide `orders` with participant product selections.
+      example:
+        type: SELECTION
+        numberOfParticipants: 3
+        orders:
+          - name: Alice
+            productId: 1
+            quantity: 2
+      properties:
+        type:
+          type: string
+          enum:
+            - RATIO
+            - SELECTION
+          description: Split mode
+          example: SELECTION
+        numberOfParticipants:
+          type: integer
+          description: Number of participants to split the bill among
+          minimum: 1
+          example: 3
+        orders:
+          type: array
+          description: Item selections per participant (required when type=SELECTION)
+          items:
+            $ref: '#/components/schemas/BillSplitOrder'
+      required:
+        - type
+        - numberOfParticipants
+    BillSplitOrder:
+      type: object
+      description: An item selection by a participant in SELECTION mode
+      example:
+        name: Alice
+        productId: 1
+        quantity: 2
+      properties:
+        name:
+          type: string
+          description: Participant name
+          example: Alice
+          minLength: 1
+          maxLength: 100
+        productId:
+          type: integer
+          format: int64
+          description: Product ID (required when type=SELECTION)
+          example: 1
+        quantity:
+          type: number
+          format: double
+          description: Quantity selected (required when type=SELECTION)
+          minimum: 0
+          example: 2
+      required:
+        - name
     AlertSubscriptionRequest:
       type: object
       properties:
@@ -2500,6 +3079,118 @@ components:
             $ref: '#/components/schemas/ProductWithStorePrice'
         pagination:
           $ref: '#/components/schemas/Pagination'
+    CategoryListResponse:
+      type: object
+      description: Paginated list of categories
+      example:
+        data:
+          - id: FOOD
+            name: Food
+            description: Food and grocery items
+            status: approved
+            createdAt: '2026-01-01T00:00:00Z'
+            updatedAt: '2026-03-29T10:00:00Z'
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 10
+          totalPages: 1
+          hasNext: false
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of category records
+          items:
+            $ref: '#/components/schemas/Category'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    UnitListResponse:
+      type: object
+      description: Paginated list of measurement units
+      example:
+        data:
+          - id: KG
+            name: Kilogram
+            symbol: kg
+            type: WEIGHT
+            description: Metric unit of mass
+            status: approved
+            createdAt: '2026-01-01T00:00:00Z'
+            updatedAt: '2026-03-29T10:00:00Z'
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 15
+          totalPages: 1
+          hasNext: false
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of unit records
+          items:
+            $ref: '#/components/schemas/Unit'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    BillSplitResponse:
+      type: object
+      description: Computed bill split result
+      example:
+        receiptId: 550e8400-e29b-41d4-a716-446655440000
+        type: SELECTION
+        numberOfParticipants: 3
+        totalAmount: 100000
+        unassignedTotal: 70000
+        participants:
+          - name: Alice
+            items:
+              - productId: 1
+                productName: Ultra Milk Plain Slim 200ml
+                quantity: 2
+                unitPrice: 5600
+                subtotal: 11200
+            subtotal: 30000
+          - name: Participant 2
+            items: []
+            subtotal: 35000
+          - name: Participant 3
+            items: []
+            subtotal: 35000
+      properties:
+        receiptId:
+          type: string
+          format: uuid
+          description: Receipt identifier
+          example: 550e8400-e29b-41d4-a716-446655440000
+        type:
+          type: string
+          enum:
+            - RATIO
+            - SELECTION
+          description: Split mode used
+          example: SELECTION
+        numberOfParticipants:
+          type: integer
+          description: Number of participants in the split
+          example: 3
+        totalAmount:
+          type: number
+          format: double
+          description: Total receipt amount
+          example: 100000
+        unassignedTotal:
+          type: number
+          format: double
+          description: |
+            Total value of items not assigned to any participant.
+            0 for RATIO mode or when all items are assigned in SELECTION mode.
+          example: 70000
+        participants:
+          type: array
+          description: Per-participant breakdown
+          items:
+            $ref: '#/components/schemas/BillSplitParticipant'
     AdminJobTriggerResponse:
       type: object
       example:
@@ -3021,6 +3712,153 @@ components:
           format: date-time
           description: Record creation timestamp
           example: '2026-01-01T00:00:00Z'
+    Category:
+      type: object
+      description: Product category entity
+      example:
+        id: FOOD
+        name: Food
+        description: Food and grocery items
+        status: approved
+        createdAt: '2026-01-01T00:00:00Z'
+        updatedAt: '2026-03-29T10:00:00Z'
+      properties:
+        id:
+          type: string
+          description: Category ID (uppercase, e.g. FOOD, DAIRY)
+          example: FOOD
+        name:
+          type: string
+          description: Category display name
+          example: Food
+        description:
+          type: string
+          description: Optional category description
+          nullable: true
+          example: Food and grocery items
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: '2026-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2026-03-29T10:00:00Z'
+    Unit:
+      type: object
+      description: Measurement unit entity
+      example:
+        id: KG
+        name: Kilogram
+        symbol: kg
+        type: WEIGHT
+        description: Metric unit of mass
+        status: approved
+        createdAt: '2026-01-01T00:00:00Z'
+        updatedAt: '2026-03-29T10:00:00Z'
+      properties:
+        id:
+          type: string
+          description: Unit ID (uppercase, e.g. KG, L, PCS)
+          example: KG
+        name:
+          type: string
+          description: Unit display name
+          example: Kilogram
+        symbol:
+          type: string
+          description: Short symbol for display
+          example: kg
+        type:
+          type: string
+          enum:
+            - WEIGHT
+            - VOLUME
+            - QUANTITY
+          description: Type of measurement
+          example: WEIGHT
+        description:
+          type: string
+          description: Optional unit description
+          nullable: true
+          example: Metric unit of mass
+        status:
+          $ref: '#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: '2026-01-01T00:00:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2026-03-29T10:00:00Z'
+    BillSplitParticipant:
+      type: object
+      description: Per-participant breakdown in a bill split
+      example:
+        name: Alice
+        items:
+          - productId: 1
+            productName: Ultra Milk Plain Slim 200ml
+            quantity: 2
+            unitPrice: 5600
+            subtotal: 11200
+        subtotal: 11200
+      properties:
+        name:
+          type: string
+          description: Participant name or auto-generated "Participant N" for RATIO mode
+          example: Alice
+        items:
+          type: array
+          description: Selected items breakdown. Empty for non-selecting participants.
+          items:
+            $ref: '#/components/schemas/BillSplitItem'
+        subtotal:
+          type: number
+          format: double
+          description: Amount this participant owes
+          example: 11200
+    BillSplitItem:
+      type: object
+      description: Item assigned to a participant in a bill split
+      example:
+        productId: 1
+        productName: Ultra Milk Plain Slim 200ml
+        quantity: 2
+        unitPrice: 5600
+        subtotal: 11200
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product identifier
+          example: 1
+        productName:
+          type: string
+          description: Product name
+          example: Ultra Milk Plain Slim 200ml
+        quantity:
+          type: number
+          format: double
+          description: Quantity assigned to this participant
+          example: 2
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600
+        subtotal:
+          type: number
+          format: double
+          description: Line total for this item
+          example: 11200
     Promotion:
       type: object
       description: Promotion or discount offer

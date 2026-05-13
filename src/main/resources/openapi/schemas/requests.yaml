@@ -278,6 +278,183 @@ components:
         status:
           $ref: './common.yaml#/components/schemas/EntityStatus'
 
+    CreateCategoryRequest:
+      type: object
+      description: Request body for creating a new category
+      properties:
+        id:
+          type: string
+          description: Category ID (uppercase, e.g. FOOD, DAIRY)
+          example: "FOOD"
+          minLength: 1
+          maxLength: 50
+          pattern: "^[A-Z][A-Z0-9_]*$"
+        name:
+          type: string
+          description: Category display name
+          example: "Food"
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          description: Optional category description
+          example: "Food and grocery items"
+          maxLength: 500
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+      required:
+        - id
+        - name
+
+    UpdateCategoryRequest:
+      type: object
+      description: Request body for updating an existing category
+      properties:
+        name:
+          type: string
+          description: Category display name
+          example: "Food"
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          description: Optional category description
+          example: "Food and grocery items"
+          maxLength: 500
+          nullable: true
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+
+    CreateUnitRequest:
+      type: object
+      description: Request body for creating a new measurement unit
+      properties:
+        id:
+          type: string
+          description: Unit ID (uppercase, e.g. KG, L, PCS)
+          example: "KG"
+          minLength: 1
+          maxLength: 50
+          pattern: "^[A-Z][A-Z0-9_]*$"
+        name:
+          type: string
+          description: Unit display name
+          example: "Kilogram"
+          minLength: 1
+          maxLength: 100
+        symbol:
+          type: string
+          description: Short symbol for display
+          example: "kg"
+          maxLength: 10
+        type:
+          type: string
+          enum: [WEIGHT, VOLUME, QUANTITY]
+          description: Type of measurement
+          example: "WEIGHT"
+        description:
+          type: string
+          description: Optional unit description
+          example: "Metric unit of mass"
+          maxLength: 500
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+      required:
+        - id
+        - name
+        - type
+
+    UpdateUnitRequest:
+      type: object
+      description: Request body for updating an existing measurement unit
+      properties:
+        name:
+          type: string
+          description: Unit display name
+          example: "Kilogram"
+          minLength: 1
+          maxLength: 100
+        symbol:
+          type: string
+          description: Short symbol for display
+          example: "kg"
+          maxLength: 10
+          nullable: true
+        type:
+          type: string
+          enum: [WEIGHT, VOLUME, QUANTITY]
+          description: Type of measurement
+          example: "WEIGHT"
+        description:
+          type: string
+          description: Optional unit description
+          example: "Metric unit of mass"
+          maxLength: 500
+          nullable: true
+        status:
+          $ref: './common.yaml#/components/schemas/EntityStatus'
+
+    BillSplitOrder:
+      type: object
+      description: An item selection by a participant in SELECTION mode
+      example:
+        name: "Alice"
+        productId: 1
+        quantity: 2.0
+      properties:
+        name:
+          type: string
+          description: Participant name
+          example: "Alice"
+          minLength: 1
+          maxLength: 100
+        productId:
+          type: integer
+          format: int64
+          description: Product ID (required when type=SELECTION)
+          example: 1
+        quantity:
+          type: number
+          format: double
+          description: Quantity selected (required when type=SELECTION)
+          minimum: 0
+          example: 2.0
+      required:
+        - name
+
+    BillSplitRequest:
+      type: object
+      description: |
+        Request body for splitting a bill.
+        - **RATIO**: Equal split among N participants. Only `numberOfParticipants` is needed.
+        - **SELECTION**: Item-based split. Provide `orders` with participant product selections.
+      example:
+        type: "SELECTION"
+        numberOfParticipants: 3
+        orders:
+          - name: "Alice"
+            productId: 1
+            quantity: 2.0
+      properties:
+        type:
+          type: string
+          enum: [RATIO, SELECTION]
+          description: Split mode
+          example: "SELECTION"
+        numberOfParticipants:
+          type: integer
+          description: Number of participants to split the bill among
+          minimum: 1
+          example: 3
+        orders:
+          type: array
+          description: Item selections per participant (required when type=SELECTION)
+          items:
+            $ref: '#/components/schemas/BillSplitOrder'
+      required:
+        - type
+        - numberOfParticipants
+
     CreatePriceRecordRequest:
       type: object
       description: Request body for recording a new price

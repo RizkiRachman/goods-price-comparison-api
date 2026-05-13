@@ -474,6 +474,119 @@ components:
           description: Last update timestamp
           example: "2026-03-29T10:00:00Z"
 
+    CategoryListResponse:
+      type: object
+      description: Paginated list of categories
+      example:
+        data:
+          - id: "FOOD"
+            name: "Food"
+            description: "Food and grocery items"
+            status: approved
+            createdAt: "2026-01-01T00:00:00Z"
+            updatedAt: "2026-03-29T10:00:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 10
+          totalPages: 1
+          hasNext: false
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of category records
+          items:
+            $ref: './models.yaml#/components/schemas/Category'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
+
+    UnitListResponse:
+      type: object
+      description: Paginated list of measurement units
+      example:
+        data:
+          - id: "KG"
+            name: "Kilogram"
+            symbol: "kg"
+            type: WEIGHT
+            description: "Metric unit of mass"
+            status: approved
+            createdAt: "2026-01-01T00:00:00Z"
+            updatedAt: "2026-03-29T10:00:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 15
+          totalPages: 1
+          hasNext: false
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of unit records
+          items:
+            $ref: './models.yaml#/components/schemas/Unit'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
+
+    BillSplitResponse:
+      type: object
+      description: Computed bill split result
+      example:
+        receiptId: "550e8400-e29b-41d4-a716-446655440000"
+        type: "SELECTION"
+        numberOfParticipants: 3
+        totalAmount: 100000.00
+        unassignedTotal: 70000.00
+        participants:
+          - name: "Alice"
+            items:
+              - productId: 1
+                productName: "Ultra Milk Plain Slim 200ml"
+                quantity: 2.0
+                unitPrice: 5600.00
+                subtotal: 11200.00
+            subtotal: 30000.00
+          - name: "Participant 2"
+            items: []
+            subtotal: 35000.00
+          - name: "Participant 3"
+            items: []
+            subtotal: 35000.00
+      properties:
+        receiptId:
+          type: string
+          format: uuid
+          description: Receipt identifier
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        type:
+          type: string
+          enum: [RATIO, SELECTION]
+          description: Split mode used
+          example: "SELECTION"
+        numberOfParticipants:
+          type: integer
+          description: Number of participants in the split
+          example: 3
+        totalAmount:
+          type: number
+          format: double
+          description: Total receipt amount
+          example: 100000.00
+        unassignedTotal:
+          type: number
+          format: double
+          description: |
+            Total value of items not assigned to any participant.
+            0 for RATIO mode or when all items are assigned in SELECTION mode.
+          example: 70000.00
+        participants:
+          type: array
+          description: Per-participant breakdown
+          items:
+            $ref: './models.yaml#/components/schemas/BillSplitParticipant'
+
     ProductStorePriceListResponse:
       type: object
       description: Paginated list of products with store-specific prices

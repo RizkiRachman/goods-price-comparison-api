@@ -433,6 +433,154 @@ components:
           description: Record creation timestamp
           example: "2026-03-01T00:00:00Z"
 
+    Category:
+      type: object
+      description: Product category entity
+      example:
+        id: "FOOD"
+        name: "Food"
+        description: "Food and grocery items"
+        status: approved
+        createdAt: "2026-01-01T00:00:00Z"
+        updatedAt: "2026-03-29T10:00:00Z"
+      properties:
+        id:
+          type: string
+          description: Category ID (uppercase, e.g. FOOD, DAIRY)
+          example: "FOOD"
+        name:
+          type: string
+          description: Category display name
+          example: "Food"
+        description:
+          type: string
+          description: Optional category description
+          nullable: true
+          example: "Food and grocery items"
+        status:
+          $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-01-01T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-03-29T10:00:00Z"
+
+    Unit:
+      type: object
+      description: Measurement unit entity
+      example:
+        id: "KG"
+        name: "Kilogram"
+        symbol: "kg"
+        type: WEIGHT
+        description: "Metric unit of mass"
+        status: approved
+        createdAt: "2026-01-01T00:00:00Z"
+        updatedAt: "2026-03-29T10:00:00Z"
+      properties:
+        id:
+          type: string
+          description: Unit ID (uppercase, e.g. KG, L, PCS)
+          example: "KG"
+        name:
+          type: string
+          description: Unit display name
+          example: "Kilogram"
+        symbol:
+          type: string
+          description: Short symbol for display
+          example: "kg"
+        type:
+          type: string
+          enum: [WEIGHT, VOLUME, QUANTITY]
+          description: Type of measurement
+          example: "WEIGHT"
+        description:
+          type: string
+          description: Optional unit description
+          nullable: true
+          example: "Metric unit of mass"
+        status:
+          $ref: '../schemas/common.yaml#/components/schemas/EntityStatus'
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-01-01T00:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-03-29T10:00:00Z"
+
+    BillSplitParticipant:
+      type: object
+      description: Per-participant breakdown in a bill split
+      example:
+        name: "Alice"
+        items:
+          - productId: 1
+            productName: "Ultra Milk Plain Slim 200ml"
+            quantity: 2.0
+            unitPrice: 5600.00
+            subtotal: 11200.00
+        subtotal: 11200.00
+      properties:
+        name:
+          type: string
+          description: Participant name or auto-generated "Participant N" for RATIO mode
+          example: "Alice"
+        items:
+          type: array
+          description: Selected items breakdown. Empty for non-selecting participants.
+          items:
+            $ref: '#/components/schemas/BillSplitItem'
+        subtotal:
+          type: number
+          format: double
+          description: Amount this participant owes
+          example: 11200.00
+
+    BillSplitItem:
+      type: object
+      description: Item assigned to a participant in a bill split
+      example:
+        productId: 1
+        productName: "Ultra Milk Plain Slim 200ml"
+        quantity: 2.0
+        unitPrice: 5600.00
+        subtotal: 11200.00
+      properties:
+        productId:
+          type: integer
+          format: int64
+          description: Product identifier
+          example: 1
+        productName:
+          type: string
+          description: Product name
+          example: "Ultra Milk Plain Slim 200ml"
+        quantity:
+          type: number
+          format: double
+          description: Quantity assigned to this participant
+          example: 2.0
+        unitPrice:
+          type: number
+          format: double
+          description: Price per unit
+          example: 5600.00
+        subtotal:
+          type: number
+          format: double
+          description: Line total for this item
+          example: 11200.00
+
     PriceRecord:
       type: object
       description: Price snapshot for a product at a store
