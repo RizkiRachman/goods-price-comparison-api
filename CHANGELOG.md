@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.1] - 2026-05-12
+
 ### Added
 - **BillSplitOrderDetail schema** — New schema for individual product selections within a participant's order
 - **nested orders structure** — `orders[]` now uses `details[]` array to group multiple products per participant, improving readability

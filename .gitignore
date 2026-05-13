@@ -91,3 +91,4 @@ temp/
 .claude/
 .opencode/
 opencode.json
+.lean-ctx/
