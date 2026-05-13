@@ -1,262 +1,167 @@
-# Goods Price Comparison API
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a id="readme-top"></a>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-OpenAPI specification and generated DTOs for the Goods Price Comparison Service.
 
-**API-First Design** | **Path Versioning** | **Automated Code Generation**
 
-[![CI/CD](https://github.com/RizkiRachman/goods-price-comparison-api/actions/workflows/ci.yml/badge.svg)](https://github.com/RizkiRachman/goods-price-comparison-api/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/RizkiRachman/goods-price-comparison-api/actions/workflows/codeql.yml/badge.svg)](https://github.com/RizkiRachman/goods-price-comparison-api/actions/workflows/codeql.yml)
-[![OpenAPI](https://img.shields.io/badge/OpenAPI-3.0.3-green)](https://spec.openapis.org/oas/v3.0.3)
-[![Java](https://img.shields.io/badge/Java-17-blue)](https://adoptium.net/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+<!-- PROJECT SHIELDS -->
+<!--
+*** I'm using markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+*** See the bottom of this document for the declaration of the reference variables
+*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
 
----
 
-## Table of Contents
 
-- [Quick Start](#quick-start)
-- [Project Tour (For Everyone!)](#project-tour-for-everyone)
-- [Project Structure](#project-structure)
-- [API Versioning](#api-versioning)
-- [Development Workflow](#development-workflow)
-- [Quality Standards](#quality-standards)
-- [Local Development with Podman Desktop](#local-development-with-podman-desktop)
-- [Using as Dependency](#using-as-dependency)
-- [Contributing](#contributing)
-- [CI/CD Pipeline](#cicd-pipeline)
-- [Makefile Commands](#makefile-commands)
-- [Changelog](#changelog)
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/RizkiRachman/goods-price-comparison-api">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
----
+<h3 align="center">Goods Price Comparison API</h3>
 
-## Quick Start
+  <p align="center">
+    OpenAPI specification and generated DTOs for the Goods Price Comparison Service.
+    <br />
+    <a href="https://github.com/RizkiRachman/goods-price-comparison-api"><strong>Explore the docs</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/RizkiRachman/goods-price-comparison-api/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    &middot;
+    <a href="https://github.com/RizkiRachman/goods-price-comparison-api/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+  </p>
+</div>
+
+
+
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#api-specification">API Specification</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
+
+
+
+<!-- ABOUT THE PROJECT -->
+## About The Project
+
+This is an **API-first/contract-first** project. The single source of truth is `src/main/resources/openapi/main.yaml`. Java DTOs and Spring controller interfaces are auto-generated from the OpenAPI specification using the OpenAPI Generator Maven plugin.
+
+The generated JAR is consumed as a Maven dependency by `goods-price-comparison-service` (separate repo). This repo does not contain service implementation code -- only the contract and generated artifacts.
+
+**Key Features:**
+* **Path-based versioning** - Multiple API versions coexist (`/v1/`, `/v2/`)
+* **Automated code generation** - OpenAPI spec generates Java DTOs and Spring controller interfaces
+* **Strict quality gates** - Spectral linting, Checkstyle, SpotBugs, and JaCoCo coverage
+* **CI/CD ready** - GitHub Actions workflows for build, test, publish, and release
+* **Container support** - Docker/Podman for consistent builds
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+### Built With
+
+This section lists the major frameworks and tools used to build this project.
+
+* [![Java][Java-shield]][Java-url]
+* [![Spring Boot][SpringBoot-shield]][SpringBoot-url]
+* [![OpenAPI][OpenAPI-shield]][OpenAPI-url]
+* [![Maven][Maven-shield]][Maven-url]
+* [![Spectral][Spectral-shield]][Spectral-url]
+* [![Podman][Podman-shield]][Podman-url]
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- GETTING STARTED -->
+## Getting Started
+
+This section provides instructions on setting up the project locally.
 
 ### Prerequisites
 
 Choose your setup:
 
 **Option A: CLI Tools (Recommended for CI/CD)**
-- **Java** 17+ ([Download](https://adoptium.net/))
-- **Maven** 3.9+ (`brew install maven`)
-- **Spectral** CLI (`brew install spectral-cli`)
+* **Java** 17+ - [Download](https://adoptium.net/)
+* **Maven** 3.9+ - `brew install maven`
+* **Spectral** CLI - `brew install spectral-cli`
 
 **Option B: Container (Podman/Desktop)**
-- **Podman Desktop** ([Download](https://podman-desktop.io/downloads)) - GUI with dashboard
-  - Includes Podman CLI automatically
-  - Visual container/image management
-  - One-click build and run
-- Or **Podman CLI** only: `brew install podman`
+* **Podman Desktop** - [Download](https://podman-desktop.io/downloads)
+  * Includes Podman CLI automatically
+  * Visual container/image management
+* Or **Podman CLI** only - `brew install podman`
 
-### One-Command Setup
+### Installation
 
-```bash
-# Clone, lint, build, and install
-git clone <repository-url> && cd goods-price-comparison-api
-spectral lint src/main/resources/openapi/main.yaml
-mvn clean install
-```
-
-Done! The API JAR is now in your local Maven repository.
-
----
-
-## Project Tour (For Everyone!)
-
-**New to this project?** Start here! 👋
-
-We have a beginner-friendly guide that explains:
-- 📖 [What this project does](docs/PROJECT_TOUR.md#what-is-this-project)
-- 📁 [What each file does](docs/PROJECT_TOUR.md#file-by-file-explanation)
-- 🤖 [What the automation tools do](docs/PROJECT_TOUR.md#what-do-these-tools-do)
-- 🎯 [How the team works together](docs/PROJECT_TOUR.md#how-does-the-team-work)
-- 📚 [Simple explanations of technical terms](docs/PROJECT_TOUR.md#glossary-simple-terms)
-
-**No coding experience required!** This guide explains everything in plain English.
-
-👉 **[Read the Project Tour](docs/PROJECT_TOUR.md)**
-
----
-
-## Project Structure
-
-```mermaid
-flowchart TD
-    root["📁 openapi/"] --> main["main.yaml - Entry point"]
-    root --> paths["paths/ - API endpoints"]
-    root --> schemas["schemas/ - Data models"]
-    
-    paths --> receipts["receipts.yaml"]
-    paths --> prices["prices.yaml"]
-    paths --> shopping["shopping.yaml"]
-    paths --> products["products.yaml"]
-    paths --> alerts["alerts.yaml"]
-    paths --> stores["stores.yaml"]
-    paths --> system["system.yaml"]
-    
-    schemas --> common["common.yaml - Errors, dates, pagination, status"]
-    schemas --> requests["requests.yaml"]
-    schemas --> responses["responses.yaml"]
-    schemas --> models["models.yaml"]
-    schemas --> v2["v2/prices.yaml"]
-```
-
----
-
-## API Versioning
-
-**Path-based versioning** - Multiple versions coexist:
-
-```
-/v1/prices/search    # Stable - Basic search
-/v2/prices/search    # Beta - Pagination, predictions, history
-```
-
-| Version | Status | Key Features |
-|---------|--------|--------------|
-| **v1** | Stable | Product, store & price CRUD, price search, receipt OCR, shopping optimization, price alerts |
-| **v2** | Beta | Enhanced price search with pagination, predictions, filters |
-
-**Breaking changes?** Only in new major versions. Deprecated versions supported for 30 days.
-
----
-
-## Development Workflow
-
-### Modifying the API
-
-```bash
-# 1. Edit OpenAPI files (paths/*.yaml or schemas/*.yaml)
-
-# 2. Lint (MUST PASS - blocks build if errors)
-spectral lint src/main/resources/openapi/main.yaml --ruleset .spectral.yaml
-
-# 3. Generate code
-mvn clean compile
-
-# 4. Verify
-mvn test
-
-# 5. Install locally
-mvn clean install
-```
-
-### Available Commands
-
-```bash
-mvn clean compile    # Generate DTOs from OpenAPI
-mvn test             # Run all tests
-mvn verify           # Full quality check (tests + coverage + linting)
-mvn clean install    # Build and install to local repo
-```
-
-### Spectral Linting (Required)
-
-Enforces API standards. Rules include:
-- ✅ All operations must have `operationId` (camelCase)
-- ✅ All operations must have descriptions
-- ✅ All operations must have tags
-- ✅ Path parameters must have descriptions
-- ✅ No empty descriptions
-
-Run before every commit:
-```bash
-spectral lint src/main/resources/openapi/main.yaml
-```
-
----
-
-## Quality Standards
-
-Every PR must pass:
-
-```mermaid
-flowchart LR
-    A[Push/PR] --> B[Lint]
-    B --> C[Build & Test]
-    C --> D[Quality Check]
-    D --> E[Publish]
-    D --> F[Container Build]
-    
-    style A fill:#fff
-    style B fill:#ffeb3b
-    style C fill:#4caf50
-    style D fill:#2196f3
-    style E fill:#9c27b0
-    style F fill:#ff9800
-```
-
-| Stage | Command | Requirement |
-|-------|---------|-------------|
-| **Lint** | `spectral lint` | 0 errors |
-| **Build** | `mvn clean compile` | 0 errors |
-| **Test** | `mvn test` | 100% pass |
-| **Coverage** | `mvn jacoco:report` | ≥90% |
-| **Checkstyle** | `mvn checkstyle:check` | 0 violations |
-| **SpotBugs** | `mvn spotbugs:check` | 0 high priority |
-
----
-
-## Local Development with Podman Desktop
-
-Prefer a GUI? Use **Podman Desktop** for visual container management.
-
-### Setup
-
-1. **Install Podman Desktop**
-   ```bash
-   brew install podman-desktop
-   # Or download from: https://podman-desktop.io/downloads
+1. Clone the repo
+   ```sh
+   git clone https://github.com/RizkiRachman/goods-price-comparison-api.git
+   ```
+2. Navigate to the project directory
+   ```sh
+   cd goods-price-comparison-api
+   ```
+3. Verify the environment
+   ```sh
+   make dev-setup
+   ```
+4. Build and install
+   ```sh
+   make build
+   make install
    ```
 
-2. **Initialize Podman machine** (macOS/Windows only)
-   ```bash
-   podman machine init
-   podman machine start
-   ```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Building with Podman Desktop
 
-**Option 1: GUI (Point & Click)**
-1. Open Podman Desktop
-2. Go to "Images" → "Build"
-3. Select `Dockerfile` in your project root
-4. Click "Build" - watch the dashboard show progress
-5. Find your image under "Images" tab
 
-**Option 2: CLI (Terminal)**
-```bash
-# Build container image
-podman build -t goods-price-comparison-api:latest .
+<!-- USAGE EXAMPLES -->
+## Usage
 
-# Run linting in container
-podman run --rm goods-price-comparison-api:latest spectral lint src/main/resources/openapi/main.yaml
+This project is a contract-first API specification. The generated JAR provides Java DTOs and controller interfaces for the service implementation.
 
-# Build and extract JAR
-podman run --rm -v $(pwd)/output:/output goods-price-comparison-api:latest cp /output/*.jar /output/
-```
-
-### Podman Desktop Benefits
-
-- **Visual Dashboard** - See all containers, images, and pods
-- **Logs Viewer** - Click to view build logs in real-time
-- **Port Forwarding** - GUI for exposing ports
-- **Image Layers** - Inspect layer sizes and contents
-- **Kubernetes** - Deploy to local k8s with one click
-
----
-
-## Using as Dependency
-
-### Published Artifacts
-
-Every merge to `main` automatically publishes:
-
-| Artifact | Location | URL |
-|----------|----------|-----|
-| **Maven Package** | GitHub Packages | `https://github.com/RizkiRachman/goods-price-comparison-api/packages` |
-| **Container Image** | GitHub Container Registry | `ghcr.io/rizkirachman/goods-price-comparison-api:latest` |
-
-### Using Maven Package
+### Using as Maven Dependency
 
 Add GitHub Packages repository to your `pom.xml`:
 
@@ -273,7 +178,7 @@ Add GitHub Packages repository to your `pom.xml`:
     <dependency>
         <groupId>com.example</groupId>
         <artifactId>goods-price-comparison-api</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.7.0</version>
     </dependency>
 </dependencies>
 ```
@@ -291,7 +196,7 @@ Add GitHub Packages repository to your `pom.xml`:
 
 ### Using Container Image
 
-```bash
+```sh
 # Pull from GitHub Container Registry
 docker pull ghcr.io/rizkirachman/goods-price-comparison-api:latest
 
@@ -310,18 +215,55 @@ PriceSearchRequest request = new PriceSearchRequest();
 request.setProductName("Ultra Milk");
 ```
 
----
+### Available Make Commands
 
-## Contributing
+```sh
+make help          # Show all available commands
+make lint          # Run Spectral linting
+make build         # Build project (includes linting)
+make test          # Run all tests
+make install       # Install to local Maven repo
+make clean         # Clean build artifacts
+make ci-check      # Run all CI checks locally
+make coverage      # Generate JaCoCo coverage report
+make info          # Show project information
+```
 
-### Pre-PR Checklist
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-- [ ] Spectral linting passes (`spectral lint src/main/resources/openapi/main.yaml`)
-- [ ] `mvn clean compile -q` passes
-- [ ] `mvn test` passes (100%)
-- [ ] Coverage ≥90% (100% for new code)
-- [ ] Checkstyle passes
-- [ ] SpotBugs passes (0 high priority)
+
+
+<!-- API SPECIFICATION -->
+## API Specification
+
+### Versioning
+
+**Path-based versioning** - Multiple versions coexist:
+
+```
+/v1/prices/search    # Stable - Basic search
+/v2/prices/search    # Beta - Pagination, predictions, history
+```
+
+| Version | Status | Key Features |
+|---------|--------|--------------|
+| **v1** | Stable | Product, store & price CRUD, price search, receipt OCR, shopping optimization, price alerts |
+| **v2** | Beta | Enhanced price search with pagination, predictions, filters |
+
+**Breaking changes?** Only in new major versions. Deprecated versions supported for 30 days.
+
+### Quality Standards
+
+Every PR must pass:
+
+| Stage | Command | Requirement |
+|-------|---------|-------------|
+| **Lint** | `make lint` | 0 errors |
+| **Build** | `make build` | 0 errors |
+| **Test** | `make test` | 100% pass |
+| **Coverage** | `make coverage` | >=90% |
+| **Checkstyle** | `mvn checkstyle:check` | 0 violations |
+| **SpotBugs** | `mvn spotbugs:check` | 0 high priority |
 
 ### Where to Edit
 
@@ -331,151 +273,134 @@ request.setProductName("Ultra Milk");
 | Add/modify DTOs | `src/main/resources/openapi/schemas/*.yaml` |
 | API conventions | `.spectral.yaml` |
 
-**Don't edit generated code!** It's regenerated on every build.
+**Don't edit generated code!** It is regenerated on every build.
 
----
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## CI/CD Pipeline
 
-This project uses **GitHub Actions** for automated testing and deployment.
 
-### Active Workflows
+<!-- ROADMAP -->
+## Roadmap
 
-| Workflow | Purpose | Status |
-|----------|---------|--------|
-| **CI/CD** | Build, test, and publish artifacts | ✅ Active |
-| **CodeQL** | Security vulnerability scanning | ✅ Active |
+- [x] OpenAPI specification with 28 endpoints
+- [x] Products CRUD - full catalog management
+- [x] Stores CRUD - retail store management with geolocation
+- [x] Price Records CRUD - nested under products with direct access
+- [x] Unified `EntityStatus` lifecycle across all entities
+- [x] Pagination support on all list endpoints
+- [x] Split-by-resource structure for maintainability
+- [x] CI/CD pipeline with GitHub Actions
+- [x] Container support (Docker/Podman)
+- [x] Automatic Postman collection generation
+- [x] Health and metrics endpoints
+- [ ] Enhanced v2 endpoints with advanced filtering
+- [ ] Async receipt OCR processing
+- [ ] Multi-language support for store/product names
 
-### What Runs Automatically
+See the [open issues](https://github.com/RizkiRachman/goods-price-comparison-api/issues) for a full list of proposed features and known issues.
 
-On every **Pull Request** and **Push to main/develop**:
-1. ✅ OpenAPI specification linting (Spectral)
-2. ✅ Maven build and tests
-3. ✅ Code quality checks (Checkstyle, SpotBugs)
-4. ✅ Security analysis (CodeQL)
-5. ✅ Artifact publishing (GitHub Packages)
-6. ✅ Container image build (GHCR)
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Access Published Artifacts
 
-- **Maven Package:** `https://github.com/RizkiRachman/goods-price-comparison-api/packages`
-- **Container Image:** `ghcr.io/rizkirachman/goods-price-comparison-api:latest`
-  - **Multi-platform:** Supports both AMD64 (Intel) and ARM64 (Apple Silicon)
-  - Works on Linux servers, Intel Macs, and Apple Silicon Macs (M1/M2/M3)
-   - **Size:** ~17MB (ultra-minimal Alpine-based, just holds JAR artifact)
 
-### Modifying Workflows
+<!-- CONTRIBUTING -->
+## Contributing
 
-See [docs/GITHUB_WORKFLOWS.md](docs/GITHUB_WORKFLOWS.md) for detailed documentation on:
-- Workflow structure and jobs
-- How to update and improve workflows
-- Best practices and troubleshooting
-- Adding new workflows
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
----
+If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+Don't forget to give the project a star! Thanks again!
 
-## Documentation
+### Pre-PR Checklist
 
-- **OpenAPI Spec**: View in `src/main/resources/openapi/main.yaml`
-- **GitHub Workflows**: See [docs/GITHUB_WORKFLOWS.md](docs/GITHUB_WORKFLOWS.md) for CI/CD documentation
-- **AI Guidelines**: See [.ai/AGENTS.md](.ai/AGENTS.md)
-- **Full API Docs**: See [goods-price-comparison-service/docs/API.md](../goods-price-comparison-service/docs/API.md)
+- [ ] Spectral linting passes (`make lint`)
+- [ ] `make build` passes
+- [ ] `make test` passes (100%)
+- [ ] Coverage >=90% (100% for new code)
+- [ ] Checkstyle passes
+- [ ] SpotBugs passes (0 high priority)
 
----
+### Branch Naming
 
-## Architecture
-
-```mermaid
-flowchart LR
-    subgraph API["📦 API Project (This Repo)"]
-        A["OpenAPI Spec"] --> B["OpenAPI Generator"]
-        B --> C["Java DTOs"]
-    end
-    
-    C -->|Maven Dependency| D
-    
-    subgraph Service["📦 Service Project"]
-        D["Implements API using DTOs"]
-    end
-    
-    style API fill:#e1f5fe,stroke:#333
-    style Service fill:#f3e5f5,stroke:#333
+Always create a feature branch from `main`:
+```sh
+git checkout -b feat/add-new-endpoint
 ```
 
----
+Commit format: `type(scope): description`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `ci`
 
-## Makefile Commands
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'feat(scope): add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Use the `Makefile` for convenient command shortcuts:
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-```bash
-make help          # Show all available commands
-make lint          # Run Spectral linting
-make build         # Build project (includes linting)
-make test          # Run all tests
-make install       # Install to local Maven repo
-make clean         # Clean build artifacts
-make ci-check      # Run all CI checks locally
-```
 
-### Podman Commands
 
-```bash
-make podman-build    # Build container image
-make podman-lint     # Run linting in container
-make podman-test     # Run tests in container
-make podman-extract  # Extract JAR from container
-make podman-clean    # Remove Podman images
-```
+<!-- LICENSE -->
+## License
 
-### Docker Compose
+Distributed under the MIT License. See `LICENSE` for more information.
 
-```bash
-# Build and run with docker-compose
-docker-compose up api-builder    # Build and extract JAR
-docker-compose up spectral-lint  # Run linting
-docker-compose up api-test       # Run tests
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-# Or with Podman
-docker-compose up api-builder    # Podman supports docker-compose too!
-```
 
----
 
-## Changelog
+<!-- CONTACT -->
+## Contact
 
-See [CHANGELOG.md](CHANGELOG.md) for a detailed history of changes and version updates.
+Rizki Rachman - rizkifaizalr@gmail.com
 
-### Recent Changes (v1.3.0)
+Project Link: [https://github.com/RizkiRachman/goods-price-comparison-api](https://github.com/RizkiRachman/goods-price-comparison-api)
 
-- ✅ OpenAPI specification with **28 endpoints**
-- ✅ Products CRUD — full catalog management
-- ✅ Stores CRUD — retail store management with geolocation
-- ✅ Price Records CRUD — nested under products with direct access
-- ✅ Unified `EntityStatus` lifecycle across all entities (8 states)
-- ✅ Pagination support on all list endpoints
-- ✅ Split-by-resource structure for maintainability
-- ✅ CI/CD pipeline with GitHub Actions
-- ✅ Container support (Docker/Podman)
-- ✅ Automatic Postman collection generation
-- ✅ Health and metrics endpoints
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
----
 
-## Contributors
 
-| Name | Email | Role |
-|------|-------|------|
-| **Rizki Rachman** | rizkifaizalr@gmail.com | Project Owner & Lead Developer |
+<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
 
-Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Use this space to list resources you find helpful and would like to give credit to.
 
----
+* [OpenAPI Specification](https://spec.openapis.org/oas/v3.0.3)
+* [OpenAPI Generator](https://openapi-generator.tech/)
+* [Spring Boot](https://spring.io/projects/spring-boot)
+* [Spectral](https://docs.stoplight.io/spectral)
+* [Stoplight](https://stoplight.io/)
+* [Choose an Open Source License](https://choosealicense.com)
+* [Img Shields](https://shields.io)
 
-**Tech Stack:** OpenAPI 3.0 | Java 17 | Maven | Spring Boot | Spectral
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-**Version:** 1.4.1 (API v1)
 
-**License:** MIT
 
-*Built with API-First Design Principles*
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/RizkiRachman/goods-price-comparison-api.svg?style=for-the-badge
+[contributors-url]: https://github.com/RizkiRachman/goods-price-comparison-api/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/RizkiRachman/goods-price-comparison-api.svg?style=for-the-badge
+[forks-url]: https://github.com/RizkiRachman/goods-price-comparison-api/network/members
+[stars-shield]: https://img.shields.io/github/stars/RizkiRachman/goods-price-comparison-api.svg?style=for-the-badge
+[stars-url]: https://github.com/RizkiRachman/goods-price-comparison-api/stargazers
+[issues-shield]: https://img.shields.io/github/issues/RizkiRachman/goods-price-comparison-api.svg?style=for-the-badge
+[issues-url]: https://github.com/RizkiRachman/goods-price-comparison-api/issues
+[license-shield]: https://img.shields.io/github/license/RizkiRachman/goods-price-comparison-api.svg?style=for-the-badge
+[license-url]: https://github.com/RizkiRachman/goods-price-comparison-api/blob/main/LICENSE
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/rizkirachman
+
+[Java-shield]: https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white
+[Java-url]: https://adoptium.net/
+[SpringBoot-shield]: https://img.shields.io/badge/Spring_Boot-3.2-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white
+[SpringBoot-url]: https://spring.io/projects/spring-boot
+[OpenAPI-shield]: https://img.shields.io/badge/OpenAPI-3.0.3-85EA2D?style=for-the-badge&logo=swagger&logoColor=black
+[OpenAPI-url]: https://spec.openapis.org/oas/v3.0.3
+[Maven-shield]: https://img.shields.io/badge/Maven-3.9+-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white
+[Maven-url]: https://maven.apache.org/
+[Spectral-shield]: https://img.shields.io/badge/Spectral-Linting-6B4C9A?style=for-the-badge&logo=stoplight&logoColor=white
+[Spectral-url]: https://docs.stoplight.io/spectral
+[Podman-shield]: https://img.shields.io/badge/Podman-Desktop-892CA0?style=for-the-badge&logo=podman&logoColor=white
+[Podman-url]: https://podman-desktop.io/
