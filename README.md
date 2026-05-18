@@ -282,7 +282,7 @@ Every PR must pass:
 <!-- ROADMAP -->
 ## Roadmap
 
-- [x] OpenAPI specification with 28 endpoints
+- [x] OpenAPI specification with 31 endpoints
 - [x] Products CRUD - full catalog management
 - [x] Stores CRUD - retail store management with geolocation
 - [x] Price Records CRUD - nested under products with direct access

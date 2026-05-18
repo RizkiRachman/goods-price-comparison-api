@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-05-18
+
+### Added
+- **Feedback & Questions endpoints** — New `/v1/feedback-questions` resource for user submissions
+  - `POST /v1/feedback-questions` — Submit feedback or question
+  - `GET /v1/feedback-questions` — List all submissions with pagination
+  - `GET /v1/feedback-questions/{id}` — Get submission by UUID
+- **FeedbackQuestion model** — Schema with `id` (UUID), `userName`, `userEmail`, `type` (feedback/question), `message`, `createdAt`, `updatedAt`
+
 ## [1.8.1] - 2026-05-12
 
 ### Added

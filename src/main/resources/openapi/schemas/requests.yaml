@@ -606,3 +606,35 @@ components:
           example: "in_stock"
         status:
           $ref: './common.yaml#/components/schemas/EntityStatus'
+
+    CreateFeedbackQuestionRequest:
+      type: object
+      description: Request body for submitting feedback or a question
+      properties:
+        userName:
+          type: string
+          description: User's display name
+          example: "John Doe"
+          minLength: 1
+          maxLength: 100
+        userEmail:
+          type: string
+          format: email
+          description: User's email address
+          example: "john@example.com"
+        type:
+          type: string
+          enum: [feedback, question]
+          description: Submission type
+          example: "feedback"
+        message:
+          type: string
+          description: Feedback or question content
+          example: "Great app! Would love to see price history charts."
+          minLength: 1
+          maxLength: 5000
+      required:
+        - userName
+        - userEmail
+        - type
+        - message

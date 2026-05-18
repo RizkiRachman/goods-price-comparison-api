@@ -676,3 +676,49 @@ components:
           format: date-time
           description: Last update timestamp
           example: "2026-03-29T14:30:00Z"
+
+    FeedbackQuestion:
+      type: object
+      description: User feedback or question submission
+      example:
+        id: "550e8400-e29b-41d4-a716-446655440000"
+        userName: "John Doe"
+        userEmail: "john@example.com"
+        type: "feedback"
+        message: "Great app! Would love to see price history charts."
+        createdAt: "2026-05-18T10:30:00Z"
+        updatedAt: "2026-05-18T10:30:00Z"
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        userName:
+          type: string
+          description: User's display name
+          example: "John Doe"
+        userEmail:
+          type: string
+          format: email
+          description: User's email address
+          example: "john@example.com"
+        type:
+          type: string
+          enum: [feedback, question]
+          description: Submission type
+          example: "feedback"
+        message:
+          type: string
+          description: Feedback or question content
+          example: "Great app! Would love to see price history charts."
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: "2026-05-18T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-05-18T10:30:00Z"

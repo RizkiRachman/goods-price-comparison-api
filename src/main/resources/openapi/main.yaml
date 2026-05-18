@@ -31,7 +31,7 @@ info:
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
 
-  version: 1.8.1
+  version: 1.9.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -67,6 +67,8 @@ tags:
     description: Category management for product classification
   - name: Units
     description: Measurement unit management
+  - name: FeedbackQuestions
+    description: User feedback and question submissions
 
 paths:
   /v1/version:
@@ -123,6 +125,10 @@ paths:
     $ref: './paths/stores.yaml#/paths/~1v1~1stores~1{storeId}'
   /v1/alerts/subscribe:
     $ref: './paths/alerts.yaml#/paths/~1v1~1alerts~1subscribe'
+  /v1/feedback-questions:
+    $ref: './paths/feedback-questions.yaml#/paths/~1v1~1feedback-questions'
+  /v1/feedback-questions/{id}:
+    $ref: './paths/feedback-questions.yaml#/paths/~1v1~1feedback-questions~1{id}'
 
 components:
   schemas:
@@ -185,6 +191,8 @@ components:
       $ref: './schemas/requests.yaml#/components/schemas/UpdatePriceRecordRequest'
     ReceiptCreateRequest:
       $ref: './schemas/requests.yaml#/components/schemas/ReceiptCreateRequest'
+    CreateFeedbackQuestionRequest:
+      $ref: './schemas/requests.yaml#/components/schemas/CreateFeedbackQuestionRequest'
 
     # Response schemas
     ReceiptUploadResponse:
@@ -219,6 +227,8 @@ components:
       $ref: './schemas/responses.yaml#/components/schemas/BillSplitResponse'
     AdminJobTriggerResponse:
       $ref: './schemas/responses.yaml#/components/schemas/AdminJobTriggerResponse'
+    FeedbackQuestionListResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/FeedbackQuestionListResponse'
 
     # Model schemas
     ReceiptItem:
@@ -257,6 +267,8 @@ components:
       $ref: './schemas/models.yaml#/components/schemas/Promotion'
     PriceRecord:
       $ref: './schemas/models.yaml#/components/schemas/PriceRecord'
+    FeedbackQuestion:
+      $ref: './schemas/models.yaml#/components/schemas/FeedbackQuestion'
 
   headers:
     X-RateLimit-Limit:

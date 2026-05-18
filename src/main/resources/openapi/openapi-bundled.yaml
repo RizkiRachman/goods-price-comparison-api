@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.8.1
+  version: 1.9.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -64,6 +64,8 @@ tags:
     description: Category management for product classification
   - name: Units
     description: Measurement unit management
+  - name: FeedbackQuestions
+    description: User feedback and question submissions
 paths:
   /v1/version:
     get:
@@ -1751,6 +1753,120 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/feedback-questions:
+    post:
+      summary: Submit feedback or question
+      description: Create a new feedback or question submission from a user
+      operationId: createFeedbackQuestion
+      tags:
+        - FeedbackQuestions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFeedbackQuestionRequest'
+      responses:
+        '201':
+          description: Feedback/question created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackQuestion'
+          headers:
+            Location:
+              description: URL of the created resource
+              schema:
+                type: string
+                format: uri
+                example: http://localhost:8080/v1/feedback-questions/550e8400-e29b-41d4-a716-446655440000
+        '400':
+          description: Invalid request data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: List feedback and questions
+      description: |
+        Retrieve a paginated list of all feedback and question submissions
+        with optional sorting.
+      operationId: listFeedbackQuestions
+      tags:
+        - FeedbackQuestions
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - createdAt
+              - type
+            default: createdAt
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          description: Sort direction
+      responses:
+        '200':
+          description: Feedback/questions retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackQuestionListResponse'
+  /v1/feedback-questions/{id}:
+    get:
+      summary: Get feedback/question by ID
+      description: Retrieve a specific feedback or question submission by its unique identifier
+      operationId: getFeedbackQuestion
+      tags:
+        - FeedbackQuestions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Feedback/question unique identifier
+      responses:
+        '200':
+          description: Feedback/question retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackQuestion'
+        '404':
+          description: Feedback/question not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     DateRange:
@@ -2680,6 +2796,39 @@ components:
       description: Request body for creating a new goods receipt
       allOf:
         - $ref: '#/components/schemas/ReceiptData'
+    CreateFeedbackQuestionRequest:
+      type: object
+      description: Request body for submitting feedback or a question
+      properties:
+        userName:
+          type: string
+          description: User's display name
+          example: John Doe
+          minLength: 1
+          maxLength: 100
+        userEmail:
+          type: string
+          format: email
+          description: User's email address
+          example: john@example.com
+        type:
+          type: string
+          enum:
+            - feedback
+            - question
+          description: Submission type
+          example: feedback
+        message:
+          type: string
+          description: Feedback or question content
+          example: Great app! Would love to see price history charts.
+          minLength: 1
+          maxLength: 5000
+      required:
+        - userName
+        - userEmail
+        - type
+        - message
     ReceiptUploadResponse:
       type: object
       example:
@@ -3245,6 +3394,33 @@ components:
           format: date-time
           description: Timestamp when the job was triggered
           example: '2026-05-05T10:30:00Z'
+    FeedbackQuestionListResponse:
+      type: object
+      description: Paginated list of feedback/questions
+      example:
+        data:
+          - id: 550e8400-e29b-41d4-a716-446655440000
+            userName: John Doe
+            userEmail: john@example.com
+            type: feedback
+            message: Great app! Would love to see price history charts.
+            createdAt: '2026-05-18T10:30:00Z'
+            updatedAt: '2026-05-18T10:30:00Z'
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 50
+          totalPages: 3
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of feedback/question records
+          items:
+            $ref: '#/components/schemas/FeedbackQuestion'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     ReceiptItem:
       type: object
       example:
@@ -4040,6 +4216,53 @@ components:
           format: date-time
           description: Last update timestamp
           example: '2026-03-29T14:30:00Z'
+    FeedbackQuestion:
+      type: object
+      description: User feedback or question submission
+      example:
+        id: 550e8400-e29b-41d4-a716-446655440000
+        userName: John Doe
+        userEmail: john@example.com
+        type: feedback
+        message: Great app! Would love to see price history charts.
+        createdAt: '2026-05-18T10:30:00Z'
+        updatedAt: '2026-05-18T10:30:00Z'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier
+          example: 550e8400-e29b-41d4-a716-446655440000
+        userName:
+          type: string
+          description: User's display name
+          example: John Doe
+        userEmail:
+          type: string
+          format: email
+          description: User's email address
+          example: john@example.com
+        type:
+          type: string
+          enum:
+            - feedback
+            - question
+          description: Submission type
+          example: feedback
+        message:
+          type: string
+          description: Feedback or question content
+          example: Great app! Would love to see price history charts.
+        createdAt:
+          type: string
+          format: date-time
+          description: Record creation timestamp
+          example: '2026-05-18T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2026-05-18T10:30:00Z'
     Status:
       type: string
       description: Processing status for async operations

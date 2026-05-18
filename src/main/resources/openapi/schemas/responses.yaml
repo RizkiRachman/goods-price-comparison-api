@@ -624,3 +624,31 @@ components:
             $ref: '#/components/schemas/ProductWithStorePrice'
         pagination:
           $ref: './common.yaml#/components/schemas/Pagination'
+
+    FeedbackQuestionListResponse:
+      type: object
+      description: Paginated list of feedback/questions
+      example:
+        data:
+          - id: "550e8400-e29b-41d4-a716-446655440000"
+            userName: "John Doe"
+            userEmail: "john@example.com"
+            type: "feedback"
+            message: "Great app! Would love to see price history charts."
+            createdAt: "2026-05-18T10:30:00Z"
+            updatedAt: "2026-05-18T10:30:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 50
+          totalPages: 3
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of feedback/question records
+          items:
+            $ref: './models.yaml#/components/schemas/FeedbackQuestion'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
