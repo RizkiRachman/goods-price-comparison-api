@@ -31,7 +31,7 @@ info:
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
 
-  version: 1.9.0
+  version: 1.10.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -63,6 +63,8 @@ tags:
     description: Price alert subscriptions
   - name: Admin
     description: Internal admin operations and job triggers
+  - name: ActivityLogs
+    description: Activity log records for user actions
   - name: Categories
     description: Category management for product classification
   - name: Units
@@ -129,6 +131,10 @@ paths:
     $ref: './paths/feedback-questions.yaml#/paths/~1v1~1feedback-questions'
   /v1/feedback-questions/{id}:
     $ref: './paths/feedback-questions.yaml#/paths/~1v1~1feedback-questions~1{id}'
+  /v1/activity-logs:
+    $ref: './paths/activity-logs.yaml#/paths/~1v1~1activity-logs'
+  /v1/activity-logs/{id}:
+    $ref: './paths/activity-logs.yaml#/paths/~1v1~1activity-logs~1{id}'
 
 components:
   schemas:
@@ -229,6 +235,8 @@ components:
       $ref: './schemas/responses.yaml#/components/schemas/AdminJobTriggerResponse'
     FeedbackQuestionListResponse:
       $ref: './schemas/responses.yaml#/components/schemas/FeedbackQuestionListResponse'
+    ActivityLogListResponse:
+      $ref: './schemas/responses.yaml#/components/schemas/ActivityLogListResponse'
 
     # Model schemas
     ReceiptItem:
@@ -269,6 +277,8 @@ components:
       $ref: './schemas/models.yaml#/components/schemas/PriceRecord'
     FeedbackQuestion:
       $ref: './schemas/models.yaml#/components/schemas/FeedbackQuestion'
+    ActivityLog:
+      $ref: './schemas/models.yaml#/components/schemas/ActivityLog'
 
   headers:
     X-RateLimit-Limit:

@@ -652,3 +652,30 @@ components:
             $ref: './models.yaml#/components/schemas/FeedbackQuestion'
         pagination:
           $ref: './common.yaml#/components/schemas/Pagination'
+
+    ActivityLogListResponse:
+      type: object
+      description: Paginated list of activity logs
+      example:
+        data:
+          - id: "550e8400-e29b-41d4-a716-446655440000"
+            type: RECEIPT
+            action: CREATE
+            description: "Receipt uploaded for OCR processing"
+            createdAt: "2026-05-18T10:30:00Z"
+            updatedAt: "2026-05-18T10:30:00Z"
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 100
+          totalPages: 5
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of activity log records
+          items:
+            $ref: './models.yaml#/components/schemas/ActivityLog'
+        pagination:
+          $ref: './common.yaml#/components/schemas/Pagination'
