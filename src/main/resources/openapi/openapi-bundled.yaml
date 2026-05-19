@@ -30,7 +30,7 @@ info:
     - **Stable**: Production ready, fully supported
     - **Deprecated**: Still functional but will be removed
     - **Sunset**: No longer available
-  version: 1.9.0
+  version: 1.10.0
   x-api-id: goods-price-comparison-api
   x-api-version: v1
   contact:
@@ -60,6 +60,8 @@ tags:
     description: Price alert subscriptions
   - name: Admin
     description: Internal admin operations and job triggers
+  - name: ActivityLogs
+    description: Activity log records for user actions
   - name: Categories
     description: Category management for product classification
   - name: Units
@@ -1867,6 +1869,128 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /v1/activity-logs:
+    get:
+      summary: List activity logs
+      description: |
+        Retrieve a paginated list of activity logs with optional
+        filtering by type, action, and date range.
+      operationId: listActivityLogs
+      tags:
+        - ActivityLogs
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+          description: Page number
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+          description: Number of items per page
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - RECEIPT
+              - PRODUCT
+              - STORE
+              - PRICE_RECORD
+              - CATEGORY
+              - UNIT
+              - FEEDBACK_QUESTION
+              - ALERT
+          description: Filter by feature type
+        - name: action
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - CREATE
+              - UPDATE
+              - DELETE
+          description: Filter by operation type
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: Start date for activity logs
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date-time
+          description: End date for activity logs
+        - name: sortBy
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - createdAt
+              - type
+              - action
+            default: createdAt
+          description: Field to sort by
+        - name: sortOrder
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          description: Sort direction
+      responses:
+        '200':
+          description: Activity logs retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLogListResponse'
+  /v1/activity-logs/{id}:
+    get:
+      summary: Get activity log by ID
+      description: Retrieve a specific activity log record by its unique identifier
+      operationId: getActivityLog
+      tags:
+        - ActivityLogs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Activity log unique identifier
+      responses:
+        '200':
+          description: Activity log retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLog'
+        '404':
+          description: Activity log not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     DateRange:
@@ -3421,6 +3545,32 @@ components:
             $ref: '#/components/schemas/FeedbackQuestion'
         pagination:
           $ref: '#/components/schemas/Pagination'
+    ActivityLogListResponse:
+      type: object
+      description: Paginated list of activity logs
+      example:
+        data:
+          - id: 550e8400-e29b-41d4-a716-446655440000
+            type: RECEIPT
+            action: CREATE
+            description: Receipt uploaded for OCR processing
+            createdAt: '2026-05-18T10:30:00Z'
+            updatedAt: '2026-05-18T10:30:00Z'
+        pagination:
+          page: 1
+          pageSize: 20
+          totalItems: 100
+          totalPages: 5
+          hasNext: true
+          hasPrevious: false
+      properties:
+        data:
+          type: array
+          description: Array of activity log records
+          items:
+            $ref: '#/components/schemas/ActivityLog'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     ReceiptItem:
       type: object
       example:
@@ -4257,6 +4407,57 @@ components:
           type: string
           format: date-time
           description: Record creation timestamp
+          example: '2026-05-18T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: '2026-05-18T10:30:00Z'
+    ActivityLog:
+      type: object
+      description: Record of a user activity event
+      example:
+        id: 550e8400-e29b-41d4-a716-446655440000
+        type: RECEIPT
+        action: CREATE
+        description: Receipt uploaded for OCR processing
+        createdAt: '2026-05-18T10:30:00Z'
+        updatedAt: '2026-05-18T10:30:00Z'
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique activity log identifier
+          example: 550e8400-e29b-41d4-a716-446655440000
+        type:
+          type: string
+          enum:
+            - RECEIPT
+            - PRODUCT
+            - STORE
+            - PRICE_RECORD
+            - CATEGORY
+            - UNIT
+            - FEEDBACK_QUESTION
+            - ALERT
+          description: Feature or entity that was acted upon
+          example: RECEIPT
+        action:
+          type: string
+          enum:
+            - CREATE
+            - UPDATE
+            - DELETE
+          description: Operation performed on the feature
+          example: CREATE
+        description:
+          type: string
+          description: Human-readable description of the activity
+          example: Receipt uploaded for OCR processing
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the activity occurred
           example: '2026-05-18T10:30:00Z'
         updatedAt:
           type: string

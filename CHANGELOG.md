@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-05-19
+
+### Added
+- **Activity Log endpoints** — New `/v1/activity-logs` resource for tracking user actions
+  - `GET /v1/activity-logs` — List activity logs with pagination and filtering by type, action, and date range
+  - `GET /v1/activity-logs/{id}` — Get activity log by UUID
+- **ActivityLog model** — Schema with `id` (UUID), `type` (feature: RECEIPT, PRODUCT, STORE, PRICE_RECORD, CATEGORY, UNIT, FEEDBACK_QUESTION, ALERT), `action` (operation: CREATE, UPDATE, DELETE), `description`, `createdAt`, `updatedAt`
+
 ## [1.9.0] - 2026-05-18
 
 ### Added

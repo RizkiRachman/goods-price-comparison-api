@@ -722,3 +722,44 @@ components:
           format: date-time
           description: Last update timestamp
           example: "2026-05-18T10:30:00Z"
+
+    ActivityLog:
+      type: object
+      description: Record of a user activity event
+      example:
+        id: "550e8400-e29b-41d4-a716-446655440000"
+        type: RECEIPT
+        action: CREATE
+        description: "Receipt uploaded for OCR processing"
+        createdAt: "2026-05-18T10:30:00Z"
+        updatedAt: "2026-05-18T10:30:00Z"
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique activity log identifier
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        type:
+          type: string
+          enum: [RECEIPT, PRODUCT, STORE, PRICE_RECORD, CATEGORY, UNIT, FEEDBACK_QUESTION, ALERT]
+          description: Feature or entity that was acted upon
+          example: "RECEIPT"
+        action:
+          type: string
+          enum: [CREATE, UPDATE, DELETE]
+          description: Operation performed on the feature
+          example: "CREATE"
+        description:
+          type: string
+          description: Human-readable description of the activity
+          example: "Receipt uploaded for OCR processing"
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the activity occurred
+          example: "2026-05-18T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          description: Last update timestamp
+          example: "2026-05-18T10:30:00Z"
